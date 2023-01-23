@@ -5,6 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Laravel</title>
+        <script src= {{asset("/lib/jquery.min.js")}}></script>
+        <script src={{ asset("/lib/jquery.plugin.js") }}></script>
+        <script src="{{ asset('js/app.js') }}"></script>
+
+        @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -68,7 +73,7 @@
 
                             <div class="ml-12">
                                 <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Laracasts offers thousands of video tutorials on Laravel, PHP, and JavaScript development. Check them out, see for yourself, and massively level up your development skills in the process.
+                                    Laravel has wonderful, Laracasts offers thousands of video tutorials on Laravel, PHP, and JavaScript development. Check them out, see for yourself, and massively level up your development skills in the process.
                                 </div>
                             </div>
                         </div>
@@ -128,5 +133,10 @@
                 </div>
             </div>
         </div>
+    <script type="module">
+        $(document).ready(function() {
+            console.log("ready!");
+        });
+    </script>
     </body>
 </html>
