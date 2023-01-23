@@ -5,6 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Laravel</title>
+        <script src= {{asset("/lib/jquery.min.js")}}></script>
+        <script src={{ asset("/lib/jquery.plugin.js") }}></script>
+        <script src="{{ asset('js/app.js') }}"></script>
+
+        @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -128,5 +133,10 @@
                 </div>
             </div>
         </div>
+    <script type="module">
+        $(document).ready(function() {
+            console.log("ready!");
+        });
+    </script>
     </body>
 </html>
