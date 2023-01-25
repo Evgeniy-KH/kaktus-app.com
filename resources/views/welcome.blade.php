@@ -9,6 +9,7 @@
         <script src={{ asset("/lib/jquery.plugin.js") }}></script>
         <script src="{{ asset('js/app.js') }}"></script>
 
+
         @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
         <!-- Fonts -->

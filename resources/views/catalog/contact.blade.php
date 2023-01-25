@@ -2,238 +2,130 @@
 
 @section('content')
 
-    <div class="row mb-4">
-        <h2 class="col-6 tm-text-primary">
-            Latest Photos
-        </h2>
-        <div class="col-6 d-flex justify-content-end align-items-center">
-            <form action="" class="tm-text-primary">
-                Page <input type="text" value="1" size="1" class="tm-input-paging tm-text-primary"> of 200
-            </form>
-        </div>
-    </div>
-    <div class="row tm-mb-90 tm-gallery">
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-            <figure class="effect-ming tm-video-item">
-                <img src="img/img-03.jpg" alt="Image" class="img-fluid">
-                <figcaption class="d-flex align-items-center justify-content-center">
-                    <h2>Clocks</h2>
-                    <a href="photo-detail.html">View more</a>
-                </figcaption>
-            </figure>
-            <div class="d-flex justify-content-between tm-text-gray">
-                <span class="tm-text-gray-light">18 Oct 2020</span>
-                <span>9,906 views</span>
-            </div>
-        </div>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-            <figure class="effect-ming tm-video-item">
-                <img src="img/img-04.jpg" alt="Image" class="img-fluid">
-                <figcaption class="d-flex align-items-center justify-content-center">
-                    <h2>Plants</h2>
-                    <a href="photo-detail.html">View more</a>
-                </figcaption>
-            </figure>
-            <div class="d-flex justify-content-between tm-text-gray">
-                <span class="tm-text-gray-light">14 Oct 2020</span>
-                <span>16,100 views</span>
-            </div>
-        </div>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-            <figure class="effect-ming tm-video-item">
-                <img src="img/img-05.jpg" alt="Image" class="img-fluid">
-                <figcaption class="d-flex align-items-center justify-content-center">
-                    <h2>Morning</h2>
-                    <a href="photo-detail.html">View more</a>
-                </figcaption>
-            </figure>
-            <div class="d-flex justify-content-between tm-text-gray">
-                <span class="tm-text-gray-light">12 Oct 2020</span>
-                <span>12,460 views</span>
-            </div>
-        </div>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-            <figure class="effect-ming tm-video-item">
-                <img src="img/img-06.jpg" alt="Image" class="img-fluid">
-                <figcaption class="d-flex align-items-center justify-content-center">
-                    <h2>Pinky</h2>
-                    <a href="photo-detail.html">View more</a>
-                </figcaption>
-            </figure>
-            <div class="d-flex justify-content-between tm-text-gray">
-                <span class="tm-text-gray-light">10 Oct 2020</span>
-                <span>11,402 views</span>
-            </div>
-        </div>
+    <div class="container-fluid tm-mt-60">
+        <div class="row tm-mb-50">
+            <div class="col-lg-4 col-12 mb-5">
+                <h2 class="tm-text-primary mb-5">Contact Page</h2>
+                <form id="contact-form" action="" method="POST" class="tm-contact-form mx-auto">
+                    <div class="form-group">
+                        <input type="text" name="name" class="form-control rounded-0" placeholder="Name" required />
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="email" class="form-control rounded-0" placeholder="Email" required />
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" id="contact-select" name="inquiry">
+                            <option value="-">Subject</option>
+                            <option value="sales">Sales &amp; Marketing</option>
+                            <option value="creative">Creative Design</option>
+                            <option value="uiux">UI / UX</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea rows="8" name="message" class="form-control rounded-0" placeholder="Message" required=></textarea>
+                    </div>
 
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-            <figure class="effect-ming tm-video-item">
-                <img src="img/img-01.jpg" alt="Image" class="img-fluid">
-                <figcaption class="d-flex align-items-center justify-content-center">
-                    <h2>Hangers</h2>
-                    <a href="photo-detail.html">View more</a>
-                </figcaption>
-            </figure>
-            <div class="d-flex justify-content-between tm-text-gray">
-                <span class="tm-text-gray-light">24 Sep 2020</span>
-                <span>16,008 views</span>
+                    <div class="form-group tm-text-right">
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-4 col-12 mb-5">
+                <div class="tm-address-col">
+                    <h2 class="tm-text-primary mb-5">Our Address</h2>
+                    <p class="tm-mb-50">Quisque eleifend mi et nisi eleifend pretium. Duis porttitor accumsan arcu id rhoncus. Praesent fermentum venenatis ipsum, eget vestibulum purus. </p>
+                    <p class="tm-mb-50">Nulla ut scelerisque elit, in fermentum ante. Aliquam congue mattis erat, eget iaculis enim posuere nec. Quisque risus turpis, tempus in iaculis.</p>
+                    <address class="tm-text-gray tm-mb-50">
+                        120-240 Fusce eleifend varius tempus<br>
+                        Duis consectetur at ligula 10660
+                    </address>
+                    <ul class="tm-contacts">
+                        <li>
+                            <a href="#" class="tm-text-gray">
+                                <i class="fas fa-envelope"></i>
+                                Email: info@company.com
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="tm-text-gray">
+                                <i class="fas fa-phone"></i>
+                                Tel: 010-020-0340
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="tm-text-gray">
+                                <i class="fas fa-globe"></i>
+                                URL: www.company.com
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4 col-12">
+                <h2 class="tm-text-primary mb-5">Our Location</h2>
+                <!-- Map -->
+                <div class="mapouter mb-4">
+                    <div class="gmap-canvas">
+                        <iframe width="100%" height="520" id="gmap-canvas"
+                                src="https://maps.google.com/maps?q=Av.+L%C3%BAcio+Costa,+Rio+de+Janeiro+-+RJ,+Brazil&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                                frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-            <figure class="effect-ming tm-video-item">
-                <img src="img/img-02.jpg" alt="Image" class="img-fluid">
-                <figcaption class="d-flex align-items-center justify-content-center">
-                    <h2>Perfumes</h2>
-                    <a href="photo-detail.html">View more</a>
-                </figcaption>
-            </figure>
-            <div class="d-flex justify-content-between tm-text-gray">
-                <span class="tm-text-gray-light">20 Sep 2020</span>
-                <span>12,860 views</span>
+        <div class="row tm-mb-74 tm-people-row">
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12 mb-5">
+                <img src="img/people-1.jpg" alt="Image" class="mb-4 img-fluid">
+                <h2 class="tm-text-primary mb-4">Ryan White</h2>
+                <h3 class="tm-text-secondary h5 mb-4">Chief Executive Officer</h3>
+                <p class="mb-4">
+                    Mauris ante tellus, feugiat nec metus non, bibendum semper velit. Praesent laoreet urna id tristique fermentum. Morbi venenatis dui quis diam mollis pellentesque.
+                </p>
+                <ul class="tm-social pl-0 mb-0">
+                    <li><a href="https://facebook.com"><i class="fab fa-facebook"></i></a></li>
+                    <li><a href="https://twitter.com"><i class="fab fa-twitter"></i></a></li>
+                    <li><a href="https://linkedin.com"><i class="fab fa-linkedin"></i></a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12 mb-5">
+                <img src="img/people-2.jpg" alt="Image" class="mb-4 img-fluid">
+                <h2 class="tm-text-primary mb-4">Catherine Pinky</h2>
+                <h3 class="tm-text-secondary h5 mb-4">Chief Marketing Officer</h3>
+                <p class="mb-4">
+                    Sed faucibus nec velit finibus accumsan. Sed varius augue et leo pharetra, in varius lacus eleifend. Quisque ut eleifend lacus.
+                </p>
+                <ul class="tm-social pl-0 mb-0">
+                    <li><a href="https://facebook.com"><i class="fab fa-facebook"></i></a></li>
+                    <li><a href="https://twitter.com"><i class="fab fa-twitter"></i></a></li>
+                    <li><a href="https://linkedin.com"><i class="fab fa-linkedin"></i></a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12 mb-5">
+                <img src="img/people-3.jpg" alt="Image" class="mb-4 img-fluid">
+                <h2 class="tm-text-primary mb-4">Johnny Brief</h2>
+                <h3 class="tm-text-secondary h5 mb-4">Accounting Executive</h3>
+                <p class="mb-4">
+                    Sed faucibus nec velit finibus accumsan. Sed varius augue et leo pharetra, in varius lacus eleifend. Quisque ut eleifend lacus.
+                </p>
+                <ul class="tm-social pl-0 mb-0">
+                    <li><a href="https://facebook.com"><i class="fab fa-facebook"></i></a></li>
+                    <li><a href="https://twitter.com"><i class="fab fa-twitter"></i></a></li>
+                    <li><a href="https://linkedin.com"><i class="fab fa-linkedin"></i></a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12 mb-5">
+                <img src="img/people-4.jpg" alt="Image" class="mb-4 img-fluid">
+                <h2 class="tm-text-primary mb-4">George Nelson</h2>
+                <h3 class="tm-text-secondary h5 mb-4">Creative Art Director #C69</h3>
+                <p class="mb-4">
+                    Nunc convallis facilisis congue. Curabitur gravida rutrum justo sed pulvinar. Pellentesque ac ante in erat bibendum dignissim.
+                </p>
+                <ul class="tm-social pl-0 mb-0">
+                    <li><a href="https://facebook.com"><i class="fab fa-facebook"></i></a></li>
+                    <li><a href="https://twitter.com"><i class="fab fa-twitter"></i></a></li>
+                    <li><a href="https://linkedin.com"><i class="fab fa-linkedin"></i></a></li>
+                </ul>
             </div>
         </div>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-            <figure class="effect-ming tm-video-item">
-                <img src="img/img-07.jpg" alt="Image" class="img-fluid">
-                <figcaption class="d-flex align-items-center justify-content-center">
-                    <h2>Bus</h2>
-                    <a href="photo-detail.html">View more</a>
-                </figcaption>
-            </figure>
-            <div class="d-flex justify-content-between tm-text-gray">
-                <span class="tm-text-gray-light">16 Sep 2020</span>
-                <span>10,900 views</span>
-            </div>
-        </div>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-            <figure class="effect-ming tm-video-item">
-                <img src="img/img-08.jpg" alt="Image" class="img-fluid">
-                <figcaption class="d-flex align-items-center justify-content-center">
-                    <h2>New York</h2>
-                    <a href="photo-detail.html">View more</a>
-                </figcaption>
-            </figure>
-            <div class="d-flex justify-content-between tm-text-gray">
-                <span class="tm-text-gray-light">12 Sep 2020</span>
-                <span>11,300 views</span>
-            </div>
-        </div>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-            <figure class="effect-ming tm-video-item">
-                <img src="img/img-09.jpg" alt="Image" class="img-fluid">
-                <figcaption class="d-flex align-items-center justify-content-center">
-                    <h2>Abstract</h2>
-                    <a href="photo-detail.html">View more</a>
-                </figcaption>
-            </figure>
-            <div class="d-flex justify-content-between tm-text-gray">
-                <span class="tm-text-gray-light">10 Sep 2020</span>
-                <span>42,700 views</span>
-            </div>
-        </div>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-            <figure class="effect-ming tm-video-item">
-                <img src="img/img-10.jpg" alt="Image" class="img-fluid">
-                <figcaption class="d-flex align-items-center justify-content-center">
-                    <h2>Flowers</h2>
-                    <a href="photo-detail.html">View more</a>
-                </figcaption>
-            </figure>
-            <div class="d-flex justify-content-between tm-text-gray">
-                <span class="tm-text-gray-light">8 Sep 2020</span>
-                <span>11,402 views</span>
-            </div>
-        </div>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-            <figure class="effect-ming tm-video-item">
-                <img src="img/img-11.jpg" alt="Image" class="img-fluid">
-                <figcaption class="d-flex align-items-center justify-content-center">
-                    <h2>Rosy</h2>
-                    <a href="photo-detail.html">View more</a>
-                </figcaption>
-            </figure>
-            <div class="d-flex justify-content-between tm-text-gray">
-                <span class="tm-text-gray-light">4 Sep 2020</span>
-                <span>32,906 views</span>
-            </div>
-        </div>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-            <figure class="effect-ming tm-video-item">
-                <img src="img/img-12.jpg" alt="Image" class="img-fluid">
-                <figcaption class="d-flex align-items-center justify-content-center">
-                    <h2>Rocki</h2>
-                    <a href="photo-detail.html">View more</a>
-                </figcaption>
-            </figure>
-            <div class="d-flex justify-content-between tm-text-gray">
-                <span class="tm-text-gray-light">28 Aug 2020</span>
-                <span>50,700 views</span>
-            </div>
-        </div>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-            <figure class="effect-ming tm-video-item">
-                <img src="img/img-13.jpg" alt="Image" class="img-fluid">
-                <figcaption class="d-flex align-items-center justify-content-center">
-                    <h2>Purple</h2>
-                    <a href="photo-detail.html">View more</a>
-                </figcaption>
-            </figure>
-            <div class="d-flex justify-content-between tm-text-gray">
-                <span class="tm-text-gray-light">22 Aug 2020</span>
-                <span>107,510 views</span>
-            </div>
-        </div>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-            <figure class="effect-ming tm-video-item">
-                <img src="img/img-14.jpg" alt="Image" class="img-fluid">
-                <figcaption class="d-flex align-items-center justify-content-center">
-                    <h2>Sea</h2>
-                    <a href="photo-detail.html">View more</a>
-                </figcaption>
-            </figure>
-            <div class="d-flex justify-content-between tm-text-gray">
-                <span class="tm-text-gray-light">14 Aug 2020</span>
-                <span>118,006 views</span>
-            </div>
-        </div>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-            <figure class="effect-ming tm-video-item">
-                <img src="img/img-15.jpg" alt="Image" class="img-fluid">
-                <figcaption class="d-flex align-items-center justify-content-center">
-                    <h2>Turtle</h2>
-                    <a href="photo-detail.html">View more</a>
-                </figcaption>
-            </figure>
-            <div class="d-flex justify-content-between tm-text-gray">
-                <span class="tm-text-gray-light">9 Aug 2020</span>
-                <span>121,300 views</span>
-            </div>
-        </div>
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-            <figure class="effect-ming tm-video-item">
-                <img src="img/img-16.jpg" alt="Image" class="img-fluid">
-                <figcaption class="d-flex align-items-center justify-content-center">
-                    <h2>Peace</h2>
-                    <a href="photo-detail.html">View more</a>
-                </figcaption>
-            </figure>
-            <div class="d-flex justify-content-between tm-text-gray">
-                <span class="tm-text-gray-light">3 Aug 2020</span>
-                <span>21,204 views</span>
-            </div>
-        </div>
-    </div> <!-- row -->
-    <div class="row tm-mb-90">
-        <div class="col-12 d-flex justify-content-between align-items-center tm-paging-col">
-            <a href="javascript:void(0);" class="btn btn-primary tm-btn-prev mb-2 disabled">Previous</a>
-            <div class="tm-paging d-flex">
-                <a href="javascript:void(0);" class="active tm-paging-link">1</a>
-                <a href="javascript:void(0);" class="tm-paging-link">2</a>
-                <a href="javascript:void(0);" class="tm-paging-link">3</a>
-                <a href="javascript:void(0);" class="tm-paging-link">4</a>
-            </div>
-            <a href="javascript:void(0);" class="btn btn-primary tm-btn-next">Next Page</a>
-        </div>
-    </div><!-- container-fluid, tm-container-content -->
-
+    </div> <!
 @endsection
