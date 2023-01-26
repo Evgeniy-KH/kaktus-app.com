@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 
-
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Http\Request;
 use App\Models\User;
-
 
 
 class SocialController extends Controller
@@ -18,17 +16,18 @@ class SocialController extends Controller
     {
         return Socialite::driver('facebook')->redirect();
     }
+
     public function loginWithFacebook()
     {
         try {
-
             $user = Socialite::driver('facebook')->user();
             $isUser = User::where('fb_id', $user->id)->first();
 
-            if($isUser){
+            if ($isUser) {
                 Auth::login($isUser);
+
                 return redirect('/dashboard');
-            }else{
+            } else {
                 $createUser = User::create([
                     'name' => $user->name,
                     'email' => $user->email,
@@ -37,6 +36,7 @@ class SocialController extends Controller
                 ]);
 
                 Auth::login($createUser);
+
                 return redirect('/dashboard');
             }
 
