@@ -1,11 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
+        <div class="col-lg-4 col-12 mb-5">
+            <h2 class="tm-text-primary mb-3" style="text-align: center; font-weight: bold;">{{ __('Reset Password') }}</h2>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -14,14 +13,14 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('password.email') }}">
+                    <form method="POST" action="{{ route('password.email') }}"  class="tm-contact-form mx-auto">
                         @csrf
 
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+                        <div class="form-group mb-3">
+                            <label for="email" class="col-form-label text-md-end tm-text-primary">{{ __('Email Address') }}</label>
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                            <div >
+                                <input id="email" type="email" class="form-control rounded-0 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -31,9 +30,9 @@
                             </div>
                         </div>
 
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                        <div class="form-group mb-0">
+                            <div>
+                                <button type="submit" class="btn btn-primary" style="background-color: #0397ed; border: none">
                                     {{ __('Send Password Reset Link') }}
                                 </button>
                             </div>
