@@ -23,7 +23,7 @@
                 <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
                     @auth
                 <li class="nav-item">
-                    <a class="nav-link nav-link-1 active" aria-current="page" href="{{ url('/home') }}">Home</a>
+                    <a class="nav-link nav-link-1 active" aria-current="page" href="{{ url('/home') }}"> Home page </a>
                 </li>
                     @else
                 <li class="nav-item">
