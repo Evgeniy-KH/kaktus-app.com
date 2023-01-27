@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Http\Controllers\PersonalController;
 use App\Http\Controllers\SocialController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,10 +24,10 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/catalog',  function () {
-    return view('catalog.index');
-});
-
 Route::get('auth/facebook', [SocialController::class, 'facebookRedirect']);
 Route::get('auth/facebook/callback', [SocialController::class, 'loginWithFacebook']);
+
+Route::group(['namespace'=>'App\Http\Controllers', 'prefix' => 'personal','middleware' => ['auth']], function () {
+    Route::get('{personal}/edit', [PersonalController::class, 'edit']);
+});
 

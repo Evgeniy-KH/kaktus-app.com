@@ -44,10 +44,14 @@
 
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle nav-link-3" role="button" data-bs-toggle="dropdown"
-                               aria-haspopup="true" aria-expanded="false" v-pre v-pre>
+                               aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ Auth::user()->name }}
                             </a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" id="personal-edit" data-id="{{ Auth::user()->id }}"
+                                   href="personal/{{ Auth::user()->id }}/edit ">
+                                    {{ __('Edit') }}
+                                </a>
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -57,6 +61,8 @@
                                     @csrf
                                 </form>
                             </div>
+
+
                         </li>
                     @endif
                 </ul>
@@ -70,18 +76,16 @@
         @yield('content')
     </div>
 
-    <footer class="tm-bg-gray pt-5 pb-3 tm-text-gray tm-footer" style="position: absolute; bottom: 0;
-  width: 100%;">
+    <footer class="ttm-bg-gray pt-5 pb-3 tm-text-gray tm-footer">
         <div class="container-fluid tm-container-small">
         </div>
     </footer>
-
-    <script src={{ asset("js/plugins.js") }}></script>
-    <script type="module">
-        $(window).on("load", function () {
-            $('body').addClass('loaded');
-            console.log("loaded");
-        });
-    </script>
 </body>
+
+<script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
+
+<script src={{ asset("js/plugins.js") }}></script>
+
+
 </html>
