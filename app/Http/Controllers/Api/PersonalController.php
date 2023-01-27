@@ -59,6 +59,7 @@ class PersonalController extends Controller
         $fileName = time() . '.' . $file->getClientOriginalExtension();
         $file->storeAs('public/images', $fileName);
         $user->update(['image' => $fileName]);
+
         $returnData = User::find($id);;
 
         return response()->json($returnData);
