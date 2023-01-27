@@ -81,27 +81,22 @@
                                 profile photo</h3>
                         </div>
                         <div class="card-body">
-                            <div class="w-75 mb-2">
-                                <img src="" alt="preview_image" id="preview-photo"
-                                     class="w-50">
+                            <div class="w-75 mb-2" id="preview-photo">
+{{--                                <img src="{{ asset('/storage/images/'.Auth::user()->image)}}" alt="preview_image"--}}
+{{--                                     class="w-50">--}}
                             </div>
                             <div class="form-group">
-                                <label for="profile-photo"
+                                <label for="image"
                                        class=" col-form-label tm-text-primary">{{ __('New Profile Photo') }}</label>
-                                <div>
-                                    <input id="profile-photo" type="file"
-                                           class="custom-file-input form-control rounded-0 @error('password') is-invalid @enderror"
+                                <div id="input-group-image">
+                                    <input id="image" type="file"
+                                           class="custom-file-input form-control rounded-0"
                                            name="profile-photo">
-                                    @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
                                 </div>
                             </div>
                             <div class="row mb-0">
                                 <div class="col-md-6 offset-md-8">
-                                    <button type="submit" class="btn btn-primary" id="profile-photo-update"
+                                    <button type="submit" class="btn btn-primary" id="btn-update-image"
                                             style="background-color:#009999; border: none">
                                         {{ __('Update profile-photo') }}
                                     </button>
@@ -124,16 +119,19 @@
         });
 
         function initFill(id) {
-            // $('#old-password').val('');
-            // $('#password').val('');
-            // $('#password-confirm').val('');
+
+            $('#old-password').val('');
+            $('#password').val('');
+            $('#password-confirm').val('');
+            $('#image').val('')
+
             $.ajax({
                 url: `/api/personal/${id}/edit`,
                 method: 'get',
                 dataType: 'json',
                 success: function (data) {
                     $('#name').val(data.name);
-                    console.log('data.name');
+                    $('#preview-photo').append('<img src="{{ asset('/storage/images/'.Auth::user()->image) }}"  width="200" class="img-fluid img-thumbnail">');
                 },
                 error: function (data) {
                     if (data.status === 422) {
@@ -144,7 +142,7 @@
                     }
                 },
             });
-        };
+        }
 
         $(document).ready(function () {
             let id = $('#edit-card').attr('data-id');
@@ -197,6 +195,47 @@
                                     $('#password-confirm').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
                                     $('#input-group-password-confirm').append(rowError);
+                                }
+                            });
+                        }
+                    },
+                });
+            });
+
+            $('#btn-update-image').on("click", function () {
+                $('.is-invalid').removeClass('is-invalid');
+                $(".invalid-feedback").remove();
+
+                let image = $('#image')[0].files[0];
+                let formData = new FormData();
+
+                formData.append('image', image);
+
+
+                $.ajax({
+                    url: `/api/personal/image/${id}`,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        if (data.id) {
+                            console.log(data);
+                            let id = data.id
+                            initFill(id);
+                            alert('Image uploaded successfully');
+                        }
+                    },
+                    error: function (data) {
+                        if (data.status === 422) {
+                            var errors = data.responseJSON.errors;
+                            console.log(errors);
+                            $.each(errors, function (key, value) {
+                                console.log(key);
+                                if (key === 'image') {
+                                    $('#image').addClass('is-invalid');
+                                    let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
+                                    $('#input-group-image').append(rowError);
                                 }
                             });
                         }
