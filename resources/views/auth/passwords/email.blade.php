@@ -32,7 +32,7 @@
 
                         <div class="form-group mb-0">
                             <div>
-                                <button type="submit" class="btn btn-primary" style="background-color: #0397ed; border: none">
+                                <button type="submit" class="btn btn-primary" style="background-color: #009999; border: none">
                                     {{ __('Send Password Reset Link') }}
                                 </button>
                             </div>

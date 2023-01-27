@@ -4,7 +4,7 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdatePasswordRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,9 @@ class UpdatePasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'old_password' => ['required', 'string', 'min:8'],
-            'password' => ['required', 'string', 'min:8','confirmed'],
+            'name' => ["required", "string"],
+            'email' => ["required", "string", "email"],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
     }
 }
