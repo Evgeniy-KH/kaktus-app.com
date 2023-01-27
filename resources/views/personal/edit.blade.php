@@ -9,6 +9,33 @@
                     <div class="card mb-3">
                         <div class="card-header">
                             <h3 class="tm-text-primary mt-2" style="text-align: center; font-weight: bold;">Edit
+                                Personal Info</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="name"
+                                       class=" col-form-label text-md-end tm-text-primary"> {{ __('Name') }}</label>
+                                <div>
+                                    <input id="name" type="text"
+                                           class="form-control rounded-0"
+                                           name="name"
+                                           value="">
+                                </div>
+                            </div>
+                            <div class="row mb-0">
+                                <div class="col-md-6 offset-md-8">
+                                    <button type="submit" class="btn btn-primary" id="personal-info-update"
+                                            style="background-color:#009999; border: none; ">
+                                        {{ __('Save changes') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h3 class="tm-text-primary mt-2" style="text-align: center; font-weight: bold;">Edit
                                 password</h3>
                         </div>
                         <div class="card-body">
@@ -42,36 +69,6 @@
                                     <button type="submit" class="btn btn-primary" id="btn-update-password"
                                             style="background-color:#009999; border: none">
                                         {{ __('Update password') }}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card mb-3">
-                        <div class="card-header">
-                            <h3 class="tm-text-primary mt-2" style="text-align: center; font-weight: bold;">Edit
-                                Personal Info</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="name"
-                                       class=" col-form-label text-md-end tm-text-primary"> {{ __('Name') }}</label>
-                                <div>
-{{--                                    <input id="name" type="text"--}}
-{{--                                           class="form-control rounded-0"--}}
-{{--                                           name="name"--}}
-{{--                                           value="">--}}
-                                    <input id="name" type="text"
-                                           class="form-control rounded-0 @error('name') is-invalid @enderror" name="name"
-                                           value="" required autocomplete="name">
-                                </div>
-                            </div>
-                            <div class="row mb-0">
-                                <div class="col-md-6 offset-md-8">
-                                    <button type="submit" class="btn btn-primary" id="personal-info-update"
-                                            style="background-color:#009999; border: none; ">
-                                        {{ __('Save changes') }}
                                     </button>
                                 </div>
                             </div>
