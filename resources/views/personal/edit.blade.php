@@ -22,6 +22,13 @@
                                            value="">
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <label for="dob"
+                                       class=" col-form-label text-md-end tm-text-primary">{{ __('Birthday') }}</label>
+                                <input id="dob" class="form-control" type="date"/>
+                            </div>
+
                             <div class="row mb-0">
                                 <div class="col-md-6 offset-md-8">
                                     <button type="submit" class="btn btn-primary" id="personal-info-update"
@@ -82,8 +89,8 @@
                         </div>
                         <div class="card-body">
                             <div class="w-75 mb-2" id="preview-photo">
-{{--                                <img src="{{ asset('/storage/images/'.Auth::user()->image)}}" alt="preview_image"--}}
-{{--                                     class="w-50">--}}
+                                {{--                                <img src="{{ asset('/storage/images/'.Auth::user()->image)}}" alt="preview_image"--}}
+                                {{--                                     class="w-50">--}}
                             </div>
                             <div class="form-group">
                                 <label for="image"
@@ -129,7 +136,9 @@
                 method: 'get',
                 dataType: 'json',
                 success: function (data) {
+                    console.log(data);
                     $('#name').val(data.name);
+                    $('#dob').val(data.dob);
                     $('#preview-photo').append('<img src="{{ asset('/storage/images/'.Auth::user()->image) }}"  width="200" class="img-fluid img-thumbnail">');
                 },
                 error: function (data) {
@@ -171,6 +180,57 @@
                             let id = data.id
                             initFill(id);
                             alert('Password has beed updated successfully');
+                        }
+                        // location.reload();
+                    },
+                    error: function (data) {
+                        if (data.status === 422) {
+                            var errors = data.responseJSON.errors;
+                            console.log(errors);
+                            $.each(errors, function (key, value) {
+                                console.log(key);
+                                if (key === 'current_password') {
+                                    $('#current_password').addClass('is-invalid');
+                                    let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
+                                    $('#input-group-current_password').append(rowError);
+                                } else if (key === 'password') {
+                                    $('#password').addClass('is-invalid');
+                                    let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
+                                    $('#input-group-password').append(rowError);
+                                } else if (key === 'password_confirmation') {
+                                    $('#password-confirm').addClass('is-invalid');
+                                    let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
+                                    $('#input-group-password-confirm').append(rowError);
+                                }
+                            });
+                        }
+                    },
+                });
+            });
+
+            $('#personal-info-update').on("click", function () {
+                $('.name').removeClass('is-invalid');
+                $(".invalid-feedback").remove();
+
+                let name = $('#name').val();
+                let dob = $('#dob').val();
+                console.log(name, dob)
+
+                $.ajax({
+                    url: `/api/personal/personal/${id}`,
+                    type: 'PATCH',
+                    data: {
+                        _method: 'PATCH',
+                        'name': name,
+                        'dob': dob,
+                    },
+                    dataType: 'json',
+
+                    success: function (data) {
+                        if (data.id) {
+                            let id = data.id
+                            initFill(id);
+                            alert('Personal info has beed updated successfully');
                         }
                         // location.reload();
                     },

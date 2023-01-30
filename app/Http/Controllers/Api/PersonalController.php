@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UpdatePasswordRequest;
+use App\Http\Requests\User\UpdatePersonalRequest;
 use App\Http\Requests\User\UpdatePhotoRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,6 +23,21 @@ class PersonalController extends Controller
 
         return response()->json($user);
 
+    }
+
+    public function updatePersonal(int $id, UpdatePersonalRequest $request): \Illuminate\Http\JsonResponse
+    {
+        $user = User::find($id);
+        $data = $request->validated();
+
+        $name = $data['name'];
+        $dob = $data['dob'];
+
+        $user->update(compact('name', 'dob'));
+
+        $returnData = $user;
+
+        return response()->json($returnData);
     }
 
     public function updatePassword(int $id, UpdatePasswordRequest $request): \Illuminate\Http\JsonResponse

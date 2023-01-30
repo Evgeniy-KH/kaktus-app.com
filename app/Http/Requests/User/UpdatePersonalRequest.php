@@ -24,7 +24,8 @@ class UpdatePersonalRequest extends FormRequest
     public function rules()
     {
         return [
-            'image' => ["required", "file"],
+            'name' => ["required", "string"],
+            'dob' => ["required", "string"],
         ];
     }
 }

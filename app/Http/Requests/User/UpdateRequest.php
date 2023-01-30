@@ -26,6 +26,7 @@ class UpdateRequest extends FormRequest
         return [
             'name' => ["required", "string"],
             'email' => ["required", "string", "email"],
+            'dob' => ["required", "string"],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
     }
