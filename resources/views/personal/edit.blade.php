@@ -41,12 +41,12 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <div>
-                                    <label for="old-password"
+                                    <label for="current_password"
                                            class=" col-form-label  tm-text-primary">{{ __('Old Password') }}</label>
-                                    <div id="input-group-old-password">
-                                        <input id="old-password" type="password"
+                                    <div id="input-group-current_password">
+                                        <input id="current_password" type="password"
                                                class="form-control rounded-0"
-                                               name="password" required autocomplete="old-password">
+                                               name="password" required autocomplete="current_password">
                                     </div>
                                 </div>
                                 <label for="password"
@@ -119,8 +119,7 @@
         });
 
         function initFill(id) {
-
-            $('#old-password').val('');
+            $('#current_password').val('');
             $('#password').val('');
             $('#password-confirm').val('');
             $('#image').val('')
@@ -153,9 +152,7 @@
                 $('.is-invalid').removeClass('is-invalid');
                 $(".invalid-feedback").remove();
 
-                console.log("update password");
-
-                let old_password = $('#old-password').val();
+                let current_password = $('#current_password').val();
                 let password = $('#password').val();
                 let password_confirmation = $('#password-confirm').val();
 
@@ -164,7 +161,7 @@
                     type: 'PATCH',
                     data: {
                         _method: 'PATCH',
-                        'old_password': old_password,
+                        'current_password': current_password,
                         'password': password,
                         'password_confirmation': password_confirmation
                     },
@@ -183,10 +180,10 @@
                             console.log(errors);
                             $.each(errors, function (key, value) {
                                 console.log(key);
-                                if (key === 'old_password') {
-                                    $('#old-password').addClass('is-invalid');
+                                if (key === 'current_password') {
+                                    $('#current_password').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
-                                    $('#input-group-old-password').append(rowError);
+                                    $('#input-group-current_password').append(rowError);
                                 } else if (key === 'password') {
                                     $('#password').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
@@ -219,7 +216,6 @@
                     contentType: false,
                     success: function (data) {
                         if (data.id) {
-                            console.log(data);
                             let id = data.id
                             initFill(id);
                             alert('Image uploaded successfully');
@@ -228,9 +224,8 @@
                     error: function (data) {
                         if (data.status === 422) {
                             var errors = data.responseJSON.errors;
-                            console.log(errors);
+
                             $.each(errors, function (key, value) {
-                                console.log(key);
                                 if (key === 'image') {
                                     $('#image').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
@@ -241,8 +236,6 @@
                     },
                 });
             });
-
-
         });
     </script>
 @endsection
