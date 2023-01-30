@@ -29,7 +29,7 @@ class PersonalController extends Controller
         $data = $request->validated();
         $user = User::find($id);
 
-        if (Hash::check($data['old_password'], $user->password)) {
+        if (Hash::check($data['current_password'], $user->password)) {
             $user->update([
                 'password' => Hash::make($data['password'])
             ]);
