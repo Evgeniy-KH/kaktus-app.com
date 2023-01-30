@@ -208,7 +208,7 @@
 
                 let image = $('#image')[0].files[0];
                 let formData = new FormData();
-                
+
                 formData.append('image', image);
 
                 $.ajax({
