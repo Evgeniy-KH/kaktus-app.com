@@ -205,7 +205,7 @@
 <script src={{ asset("js/plugins.js") }}></script>
 <script type="text/javascript" src="{{ asset('js/jquery-3.6.3.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/moment.js') }}"></script>
-<script type="text/javascript" src="{{ asset('bootstrap-5.2.3-dist/js/bootstrap.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bootstrap-5.2.3-dist/js/bootstrap.bundle.js') }}"></script>
 <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
