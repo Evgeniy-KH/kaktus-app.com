@@ -15,20 +15,20 @@
                             <div class="form-group">
                                 <label for="name"
                                        class=" col-form-label text-md-end tm-text-primary"> {{ __('Name') }}</label>
-                                <div>
+                                <div id="input-group-name">
                                     <input id="name" type="text"
                                            class="form-control rounded-0"
                                            name="name"
                                            value="">
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <label for="dob"
                                        class=" col-form-label text-md-end tm-text-primary">{{ __('Birthday') }}</label>
-                                <input id="dob" class="form-control" type="date"/>
+                                <div class="input-group-dob">
+                                    <input id="dob" class="form-control" type="date"/>
+                                </div>
                             </div>
-
                             <div class="row mb-0">
                                 <div class="col-md-6 offset-md-8">
                                     <button type="submit" class="btn btn-primary" id="personal-info-update"
@@ -136,7 +136,6 @@
                 method: 'get',
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
                     $('#name').val(data.name);
                     $('#dob').val(data.dob);
                     $('#preview-photo').append('<img src="{{ asset('/storage/images/'.Auth::user()->image) }}"  width="200" class="img-fluid img-thumbnail">');
@@ -210,11 +209,11 @@
 
             $('#personal-info-update').on("click", function () {
                 $('.name').removeClass('is-invalid');
+                $('.dob').removeClass('is-invalid');
                 $(".invalid-feedback").remove();
 
                 let name = $('#name').val();
                 let dob = $('#dob').val();
-                console.log(name, dob)
 
                 $.ajax({
                     url: `/api/personal/personal/${id}`,
@@ -225,7 +224,6 @@
                         'dob': dob,
                     },
                     dataType: 'json',
-
                     success: function (data) {
                         if (data.id) {
                             let id = data.id
@@ -240,18 +238,14 @@
                             console.log(errors);
                             $.each(errors, function (key, value) {
                                 console.log(key);
-                                if (key === 'current_password') {
-                                    $('#current_password').addClass('is-invalid');
+                                if (key === 'name') {
+                                    $('#name').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
-                                    $('#input-group-current_password').append(rowError);
-                                } else if (key === 'password') {
-                                    $('#password').addClass('is-invalid');
+                                    $('#input-group-name').append(rowError);
+                                } else if (key === 'dob') {
+                                    $('#dob').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
-                                    $('#input-group-password').append(rowError);
-                                } else if (key === 'password_confirmation') {
-                                    $('#password-confirm').addClass('is-invalid');
-                                    let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
-                                    $('#input-group-password-confirm').append(rowError);
+                                    $('#input-group-dob').append(rowError);
                                 }
                             });
                         }
