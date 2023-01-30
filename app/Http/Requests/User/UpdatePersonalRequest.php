@@ -25,7 +25,7 @@ class UpdatePersonalRequest extends FormRequest
     {
         return [
             'name' => ["required", "string"],
-            'dob' => ["required", "string"],
+            'birthday' => ["required", "date"],
         ];
     }
 }

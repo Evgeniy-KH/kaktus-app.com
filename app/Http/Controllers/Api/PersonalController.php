@@ -10,6 +10,7 @@ use App\Http\Requests\User\UpdatePasswordRequest;
 use App\Http\Requests\User\UpdatePersonalRequest;
 use App\Http\Requests\User\UpdatePhotoRequest;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -31,9 +32,12 @@ class PersonalController extends Controller
         $data = $request->validated();
 
         $name = $data['name'];
-        $dob = $data['dob'];
+        $birthday = Carbon::createFromFormat('m/d/Y', $data['birthday'])->format('Y-m-d');
 
-        $user->update(compact('name', 'dob'));
+        $user->update([
+            'name' => $name,
+            'birthday' => $birthday
+        ]);
 
         $returnData = $user;
 

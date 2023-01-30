@@ -23,16 +23,20 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="dob"
+                                <label for="birthday_at"
                                        class=" col-form-label text-md-end tm-text-primary">{{ __('Birthday') }}</label>
-                                <div class="input-group-dob">
-                                    <input id="dob" class="form-control" type="date"/>
+                                <div d="input-group-birthday">
+                                    <div class="input-group date" id="datepicker">
+                                        <input type="text" class="form-control" name="birthday" id="birthday">
+                                        <span class="input-group-append">
+                                            </span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row mb-0">
-                                <div class="col-md-6 offset-md-8">
+                                <div class="col-md-6 offset-md-6">
                                     <button type="submit" class="btn btn-primary" id="personal-info-update"
-                                            style="background-color:#009999; border: none; ">
+                                            style="background-color:#009999; border: none; font-size: 15px ; font-size: 15px">
                                         {{ __('Save changes') }}
                                     </button>
                                 </div>
@@ -72,9 +76,9 @@
                                 </div>
                             </div>
                             <div class="row mb-0">
-                                <div class="col-md-6 offset-md-8">
+                                <div class="col-md-6 offset-md-6">
                                     <button type="submit" class="btn btn-primary" id="btn-update-password"
-                                            style="background-color:#009999; border: none">
+                                            style="background-color:#009999; border: none; font-size: 15px ">
                                         {{ __('Update password') }}
                                     </button>
                                 </div>
@@ -102,15 +106,14 @@
                                 </div>
                             </div>
                             <div class="row mb-0">
-                                <div class="col-md-6 offset-md-8">
+                                <div class="col-md-6 offset-md-6">
                                     <button type="submit" class="btn btn-primary" id="btn-update-image"
-                                            style="background-color:#009999; border: none">
+                                            style="background-color:#009999; border: none; font-size: 15px ">
                                         {{ __('Update profile-photo') }}
                                     </button>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -128,6 +131,7 @@
         function initFill(id) {
             $('#current_password').val('');
             $('#password').val('');
+            $('#birthday').val('');
             $('#password-confirm').val('');
             $('#image').val('')
 
@@ -136,8 +140,9 @@
                 method: 'get',
                 dataType: 'json',
                 success: function (data) {
+
                     $('#name').val(data.name);
-                    $('#dob').val(data.dob);
+                    $('#birthday').val(data.birthday);
                     $('#preview-photo').append('<img src="{{ asset('/storage/images/'.Auth::user()->image) }}"  width="200" class="img-fluid img-thumbnail">');
                 },
                 error: function (data) {
@@ -152,6 +157,10 @@
         }
 
         $(document).ready(function () {
+
+            $('#datepicker').datepicker({format: 'mm/dd/yyyy'
+            });
+
             let id = $('#edit-card').attr('data-id');
 
             initFill(id);
@@ -209,11 +218,11 @@
 
             $('#personal-info-update').on("click", function () {
                 $('.name').removeClass('is-invalid');
-                $('.dob').removeClass('is-invalid');
+                $('.birthday').removeClass('is-invalid');
                 $(".invalid-feedback").remove();
 
                 let name = $('#name').val();
-                let dob = $('#dob').val();
+                let birthday = $('#birthday').val();
 
                 $.ajax({
                     url: `/api/personal/personal/${id}`,
@@ -221,7 +230,7 @@
                     data: {
                         _method: 'PATCH',
                         'name': name,
-                        'dob': dob,
+                        'birthday': birthday,
                     },
                     dataType: 'json',
                     success: function (data) {
@@ -242,7 +251,7 @@
                                     $('#name').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
                                     $('#input-group-name').append(rowError);
-                                } else if (key === 'dob') {
+                                } else if (key === 'birthday') {
                                     $('#dob').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
                                     $('#input-group-dob').append(rowError);
