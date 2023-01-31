@@ -13,193 +13,179 @@
     <link rel="stylesheet" href={{ asset("css/bootstrap.min.css") }}>
     <link rel="stylesheet" href={{ asset("fontawesome/css/all.min.css") }}>
     <link rel="stylesheet" href={{ asset("css/templatemo-style.css") }}>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href={{ asset("plugins/fontawesome-free/css/all.min.css") }}>
+    <!-- Ionicons -->
+    <link rel="stylesheet" href={{ asset("https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css") }}>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href={{ asset("plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css") }}>
+    <!-- iCheck -->
+    <link rel="stylesheet" href={{ asset("plugins/icheck-bootstrap/icheck-bootstrap.min.css") }}>
+    <!-- Theme style -->
+    <link rel="stylesheet" href={{ asset("dist/css/adminlte.min.css") }}>
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href={{ asset("plugins/overlayScrollbars/css/OverlayScrollbars.min.css") }}>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 </head>
-<body>
-<div id="app">
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ml-auto ms-auto">
-                    @guest
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+    <div id="app">
 
-                        @if (Route::has('login'))
-                            <li class="nav-item">
-                                <a class="nav-link nav-link-3" href="{{ route('login') }}">Login</a>
-                            </li>
-                        @endif
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+                        @guest
 
-                        @if (Route::has('register'))
-                            <li class="nav-item">
-                                <a class="nav-link nav-link-3" href="{{ route('register') }}">Register</a>
-                            </li>
-                        @endif
-
-                    @endguest
-
-                    @if (auth()->user())
-                            @if(Auth::user()->image)
-                                <img class="image rounded-circle" src="{{asset('/storage/images/'.Auth::user()->image)}}" alt="profile_image" style="width: 80px;height: 80px; padding: 10px; margin: 0px; ">
+                            @if (Route::has('login'))
+                                <li class="nav-item">
+                                    <a class="nav-link nav-link-3" href="{{ route('login') }}">Login</a>
+                                </li>
                             @endif
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle nav-link-3" role="button" data-bs-toggle="dropdown"
-                               aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->name }}
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" id="personal-edit" data-id="{{ Auth::user()->id }}"
-                                   href="personal/{{ Auth::user()->id }}/edit ">
-                                    {{ __('Edit') }}
+
+                            @if (Route::has('register'))
+                                <li class="nav-item">
+                                    <a class="nav-link nav-link-3" href="{{ route('register') }}">Register</a>
+                                </li>
+                            @endif
+
+                        @endguest
+
+                        @if (auth()->user())
+                            @if(Auth::user()->image)
+                                <img class="image rounded-circle"
+                                     src="{{asset('/storage/images/'.Auth::user()->image)}}"
+                                     alt="profile_image" style="width: 80px;height: 80px; padding: 10px; margin: 0px; ">
+                            @endif
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle nav-link-3" role="button" data-bs-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ Auth::user()->name }}
                                 </a>
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                   onclick="event.preventDefault();
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" id="personal-edit" data-id="{{ Auth::user()->id }}"
+                                       href="personal/{{ Auth::user()->id }}/edit ">
+                                        {{ __('Edit') }}
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
-                                </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </div>
+                                        {{ __('Logout') }}
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                </div>
 
 
-                        </li>
-                    @endif
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll"
-         data-image-src={{ asset("img/hero.jpg") }}>
-    </div>
-    <div class="container-fluid">
-        <div class="row flex-nowrap">
-            <div class="col-auto col-md-1 col-xl-1  px-0 tm-bg-gray tm-text-gray ">
-                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 tm-text-gray min-vh-100">
-                    <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-decoration-none">
-                        <span class="fs-5 d-none d-sm-inline">Menu</span>
-                    </a>
-                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link align-middle px-0">
-                                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span> </a>
-                            <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
-                                <li class="w-100">
-                                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1 </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2 </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Orders</span></a>
-                        </li>
-                        <li>
-                            <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
-                                <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline">Bootstrap</span></a>
-                            <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
-                                <li class="w-100">
-                                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Products</span> </a>
-                            <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                                <li class="w-100">
-                                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 1</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 2</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 3</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 4</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customers</span> </a>
-                        </li>
-                    </ul>
-                    <hr>
-                    <div class="dropdown pb-4">
-                        <a href="#" class="d-flex align-items-center  text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
-                            <span class="d-none d-sm-inline mx-1">loser</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                            <li><a class="dropdown-item" href="#">New project...</a></li>
-                            <li><a class="dropdown-item" href="#">Settings</a></li>
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#">Sign out</a></li>
-                        </ul>
-                    </div>
+                        @endif
+                    </ul>
                 </div>
             </div>
-            <div class="col py-3">
-                @yield('content')
-            </div>
+        </nav>
+
+        <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll"
+             data-image-src={{ asset("img/hero.jpg") }}>
+            <form class="d-flex tm-search-form">
+                <input class="form-control tm-search-input form-control-sidebar" type="search" placeholder="Search" aria-label="Search"
+                       style="
+    width: 360px;
+    border-radius: 0;
+    padding: 12px 15px;
+    color: #009999;
+     height: 50px;
+    border: none;"
+                >
+                <button class="btn btn-outline-success tm-search-btn" type="submit" style="color: white;
+    background-color: #009999;
+    border: none;
+    width: 100px;
+    height: 50px;
+    margin-left: -1px;">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
         </div>
+        < <!-- Main Sidebar Container -->
+        <aside class="main-sidebar tm-bg-gray elevation-2" style=" width: 200px">
+            <!-- Sidebar -->
+            <div class="sidebar">
+{{--                <!-- SidebarSearch Form -->--}}
+{{--                <div class="form-inline mt-3">--}}
+{{--                    <div class="input-group" data-widget="sidebar-search">--}}
+{{--                        <input class="form-control form-control-sidebar" type="search" placeholder="Search"--}}
+{{--                               aria-label="Search">--}}
+{{--                        <div class="input-group-append">--}}
+{{--                            <button class="btn btn-sidebar">--}}
+{{--                                <i class="fas fa-search fa-fw"></i>--}}
+{{--                            </button>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                        data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+                             with font-awesome or any other icon font library -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon far fa-plus-square"></i>
+                                <p class="tm-text-primary">
+                                    Dishes
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="pages/mailbox/mailbox.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Create</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/mailbox/read-mail.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Read</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+        <!-- Main content -->
+        <div class="content-wrapper" style="background-color: white">
+            <section class="content">
+                <div class="container-fluid tm-container-content tm-mt-60">
+                    @yield('content')
+                </div>
+            </section>
+        </div>
+        <footer class="main-footer" style="margin-left: 200px;">
+            <strong>Created by TatianaKhr <a href="https://github.com/TatianaKhr">GitHub</a>.</strong>
+            <div class="float-right d-none d-sm-inline-block">
+                <b>2022</b>
+            </div>
+        </footer>
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+
     </div>
 
-    <footer class="tm-bg-gray pt-5 pb-3 tm-text-gray tm-footer">
-        <div class="container-fluid tm-container-small">
-            <div class="row">
-                <div class="col-lg-6 col-md-12 col-12 px-5 mb-5">
-                    <h3 class="tm-text-primary mb-4 tm-footer-title">About Catalog-Z</h3>
-                    <p>Catalog-Z is free <a rel="sponsored" href="https://v5.getbootstrap.com/">Bootstrap 5</a> Alpha 2 HTML Template for video and photo websites. You can freely use this TemplateMo layout for a front-end integration with any kind of CMS website.</p>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12 px-5 mb-5">
-                    <h3 class="tm-text-primary mb-4 tm-footer-title">Our Links</h3>
-                    <ul class="tm-footer-links pl-0">
-                        <li><a href="#">Advertise</a></li>
-                        <li><a href="#">Support</a></li>
-                        <li><a href="#">Our Company</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12 px-5 mb-5">
-                    <ul class="tm-social-links d-flex justify-content-end pl-0 mb-5">
-                        <li class="mb-2"><a href="https://facebook.com"><i class="fab fa-facebook"></i></a></li>
-                        <li class="mb-2"><a href="https://twitter.com"><i class="fab fa-twitter"></i></a></li>
-                        <li class="mb-2"><a href="https://instagram.com"><i class="fab fa-instagram"></i></a></li>
-                        <li class="mb-2"><a href="https://pinterest.com"><i class="fab fa-pinterest"></i></a></li>
-                    </ul>
-                    <a href="#" class="tm-text-gray text-right d-block mb-2">Terms of Use</a>
-                    <a href="#" class="tm-text-gray text-right d-block">Privacy Policy</a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-8 col-md-7 col-12 px-5 mb-3">
-                    Copyright 2020 Catalog-Z Company. All rights reserved.
-                </div>
-                <div class="col-lg-4 col-md-5 col-12 px-5 text-right">
-                    Designed by <a href="https://templatemo.com" class="tm-text-gray" rel="sponsored" target="_parent">TemplateMo</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+
+</div>
 </body>
 
 <script src={{ asset("js/plugins.js") }}></script>
@@ -208,8 +194,8 @@
 <script type="text/javascript" src="{{ asset('bootstrap-5.2.3-dist/js/bootstrap.bundle.js') }}"></script>
 <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-
-
+<!-- AdminLTE App -->
+<script src={{ asset("dist/js/adminlte.js") }}></script>
 
 
 </html>
