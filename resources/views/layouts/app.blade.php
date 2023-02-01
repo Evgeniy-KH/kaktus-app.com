@@ -92,7 +92,7 @@
 
         <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll"
              data-image-src={{ asset("img/hero.jpg") }}>
-            <form class="d-flex tm-search-form">
+            <form class="d-flex tm-search-form" id="search-form">
                 <input class="form-control tm-search-input form-control-sidebar" type="search" placeholder="Search" aria-label="Search"
                        style="
     width: 360px;
@@ -138,12 +138,12 @@
                             <a href="#" class="nav-link">
                                 <i class="nav-icon far fa-plus-square"></i>
                                 <p class="tm-text-primary">
-                                    Dishes
+                                    Recipes
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="pages/mailbox/mailbox.html" class="nav-link">
+                                    <a href="/recipes/create" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Create</p>
                                     </a>

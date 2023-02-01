@@ -101,7 +101,7 @@
                                        class=" col-form-label tm-text-primary">{{ __('New Profile Photo') }}</label>
                                 <div id="input-group-image">
                                     <input id="image" type="file"
-                                           class="custom-file-input form-control rounded-0"
+                                           class="form-control rounded-0"
                                            name="profile-photo">
                                 </div>
                             </div>

@@ -9,11 +9,16 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 
-class RecipesController extends Controller
+class RecipeController extends Controller
 {
-    public function edit (int $id): View
+    public function index (): View
     {
-        return view('personal.edit', compact('id'));
+
+    }
+
+    public function create (): View
+    {
+        return view('recipes.create');
     }
 
 }
