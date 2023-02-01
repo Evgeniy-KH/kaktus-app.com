@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use App\Http\Controllers\PersonalController;
-use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\SocialController;
+use App\Http\Controllers\User\PersonalController;
+use App\Http\Controllers\User\DishController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,8 +33,8 @@ Route::group(['namespace'=>'App\Http\Controllers', 'prefix' => 'personal','middl
 });
 
 Route::group(['namespace'=>'App\Http\Controllers', 'prefix' => 'recipes','middleware' => ['auth']], function () {
-    Route::get('/', [RecipeController::class,'index'])->name('admin.recipes.index');
-    Route::get('/create', [RecipeController::class,'create'])->name('admin.recipes.create');
+    Route::get('/', [DishController::class,'index'])->name('admin.recipes.index');
+    Route::get('/create', [DishController::class,'create'])->name('admin.recipes.create');
 //    Route::recipes('/', 'StoreController')->name('admin.recipes.store');
 //    Route::get('/{recipes}', 'ShowController')->name('admin.recipes.show');
 //    Route::get('/{recipes}/edit', 'EditController')->name('admin.recipes.edit');

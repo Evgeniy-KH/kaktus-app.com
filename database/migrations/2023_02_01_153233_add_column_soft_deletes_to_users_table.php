@@ -13,14 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('recipes', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->text('direction');
-            $table->tinyText('description');
-            $table->decimal('price', 9, 2);
+        Schema::table('users', function (Blueprint $table) {
             $table->softDeletes();
-            $table->timestamps();
         });
     }
 
@@ -31,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('recipes');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

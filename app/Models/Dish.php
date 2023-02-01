@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Recipe extends Model
+class Dish extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -14,9 +14,9 @@ class Recipe extends Model
     protected $table = 'recipes';
     protected $guarded = false;
 
-    public function RecipeImage(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function DishImages(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(RecipeImage::class, 'recipe_id','id');
+        return $this->hasMany(DishImage::class, 'recipe_id','id');
     }
 
     public function tags(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
