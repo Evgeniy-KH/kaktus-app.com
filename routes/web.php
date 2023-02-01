@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\PersonalController;
+use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\SocialController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,5 +30,15 @@ Route::get('auth/facebook/callback', [SocialController::class, 'loginWithFaceboo
 
 Route::group(['namespace'=>'App\Http\Controllers', 'prefix' => 'personal','middleware' => ['auth']], function () {
     Route::get('{personal}/edit', [PersonalController::class, 'edit']);
+});
+
+Route::group(['namespace'=>'App\Http\Controllers', 'prefix' => 'recipes','middleware' => ['auth']], function () {
+    Route::get('/', [RecipeController::class,'index'])->name('admin.recipes.index');
+    Route::get('/create', [RecipeController::class,'create'])->name('admin.recipes.create');
+//    Route::recipes('/', 'StoreController')->name('admin.recipes.store');
+//    Route::get('/{recipes}', 'ShowController')->name('admin.recipes.show');
+//    Route::get('/{recipes}/edit', 'EditController')->name('admin.recipes.edit');
+//    Route::patch('/{recipes}', 'UpdateController')->name('admin.recipes.update');
+//    Route::delete('/{recipes}', 'DeleteController')->name('admin.recipes.delete');
 });
 
