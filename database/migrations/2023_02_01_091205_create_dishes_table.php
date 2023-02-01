@@ -13,13 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('recipes', function (Blueprint $table) {
+        Schema::create('dishes', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->string('title');
             $table->text('ingredients');
             $table->tinyText('description');
             $table->decimal('price', 9, 2);
             $table->softDeletes();
+            $table->index('user_id','dishes_user_idx');
+            $table->foreign('user_id', 'dishes_user_fk')->on('users')->references('id');
             $table->timestamps();
         });
     }
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('recipes');
+        Schema::dropIfExists('dishes');
     }
 };

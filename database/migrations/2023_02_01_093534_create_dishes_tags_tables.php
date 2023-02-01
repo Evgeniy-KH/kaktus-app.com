@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('recipes_tags', function (Blueprint $table) {
+        Schema::create('dishes_tags', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('recipe_id');
             $table->unsignedSmallInteger('tag_id');
             $table->timestamps();
             $table->index('recipe_id','recipe_tag_recipe_idx');
-            $table->foreign('recipe_id', 'recipe_tag_recipe_fk')->on('recipes')->references('id');
+            $table->foreign('recipe_id', 'recipe_tag_recipe_fk')->on('dishes')->references('id');
             $table->index('tag_id','recipe_tag_tag_idx');
             $table->foreign('tag_id', 'recipe_tag_tag_fk')->on('tags')->references('id');
 
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('recipes_tags_tables');
+        Schema::dropIfExists('dishes_tags_tables');
     }
 };

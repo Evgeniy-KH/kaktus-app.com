@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 
-class DIshController extends Controller
+class DishController extends Controller
 {
     public function create (): View
     {
