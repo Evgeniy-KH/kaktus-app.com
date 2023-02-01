@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('recipes', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('direction');
+            $table->text('ingredients');
             $table->tinyText('description');
             $table->decimal('price', 9, 2);
             $table->softDeletes();
