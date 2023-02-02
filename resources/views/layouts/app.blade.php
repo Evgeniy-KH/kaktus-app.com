@@ -132,6 +132,14 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
+                        <li class="nav-item">
+                            <a href="/home" class="nav-link">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p class="tm-text-primary">
+                                    Home
+                                </p>
+                            </a>
+                        </li>
                         <!-- Add icons to the links using the .nav-icon class
                              with font-awesome or any other icon font library -->
                         <li class="nav-item">
@@ -143,7 +151,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="/recipes/create" class="nav-link">
+                                    <a href="/personal/dish/create" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Create</p>
                                     </a>
