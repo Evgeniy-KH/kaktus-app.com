@@ -6,24 +6,14 @@ namespace App\Http\Controllers\User\Dish;
 
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Dish\StoreRequest;
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Auth;
+use App\Service\DishService;
 
-class BasedController extends Controller
+class BaseController extends Controller
 {
-    public function create(): View
+    public $service;
+
+    public function __construct(DishService $service)
     {
-        $user = Auth::user();
-        return view('recipes.create', compact('user'));
+        $this->service = $service;
     }
-
-    public function store(StoreRequest $request)
-    {
-        $data = $request->validated();
-        dd($data);
-
-
-    }
-
 }

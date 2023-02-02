@@ -12,6 +12,9 @@ class DishImage extends Model
     const TYPE_PREVIEW = 0;
     const TYPE_MAIN = 1;
 
+    protected $guarded = false;
+
+
     public static function getTypes(): array
     {
         return [

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\SocialController;
+use App\Http\Controllers\User\Dish\DishController;
 use App\Http\Controllers\User\PersonalController;
-use App\Http\Controllers\User\DishController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,17 +28,19 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('auth/facebook', [SocialController::class, 'facebookRedirect']);
 Route::get('auth/facebook/callback', [SocialController::class, 'loginWithFacebook']);
 
-Route::group(['namespace'=>'App\Http\Controllers', 'prefix' => 'personal','middleware' => ['auth']], function () {
+Route::group(['namespace'=>'App\Http\Controllers\User', 'prefix' => 'personal','middleware' => ['auth']], function () {
     Route::get('{personal}/edit', [PersonalController::class, 'edit']);
-});
 
-Route::group(['namespace'=>'App\Http\Controllers', 'prefix' => 'recipes','middleware' => ['auth']], function () {
-    Route::get('/', [DishController::class,'index'])->name('admin.recipes.index');
-    Route::get('/create', [DishController::class,'create'])->name('admin.recipes.create');
-//    Route::recipes('/', 'StoreController')->name('admin.recipes.store');
-//    Route::get('/{recipes}', 'ShowController')->name('admin.recipes.show');
+    Route::group(['prefix' => 'dish'], function () {
+        Route::get('/', [DishController::class,'index'])->name('personal.dish.index');
+        Route::get('/create', [DishController::class,'create'])->name('personal.dish.create');
+        Route::post('/', [DishController::class,'store'])->name('personal.dish.store');
+// Route::get('/{recipes}', 'ShowController')->name('admin.recipes.show');
 //    Route::get('/{recipes}/edit', 'EditController')->name('admin.recipes.edit');
 //    Route::patch('/{recipes}', 'UpdateController')->name('admin.recipes.update');
 //    Route::delete('/{recipes}', 'DeleteController')->name('admin.recipes.delete');
+    });
+
+
 });
 

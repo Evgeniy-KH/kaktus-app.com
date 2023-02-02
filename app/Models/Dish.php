@@ -11,17 +11,18 @@ class Dish extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $table = 'recipes';
+    protected $table = 'dishes';
     protected $guarded = false;
 
-    public function DishImages(): \Illuminate\Database\Eloquent\Relations\HasMany
+
+    public function dishImages(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(DishImage::class, 'recipe_id','id');
+        return $this->hasMany(DishImage::class, 'dish_id','id');
     }
 
     public function tags(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Tag::class,'recipes_tags', 'recipe_id', 'tag_id');
+        return $this->belongsToMany(Tag::class,'dishes_tags', 'dish_id', 'tag_id');
     }
 
 }
