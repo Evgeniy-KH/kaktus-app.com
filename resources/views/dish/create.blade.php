@@ -47,6 +47,20 @@
                         </div>
 
                         <div class="row mb-3">
+
+                            <label for="tags"
+                                   class=" col-form-label  tm-text-primary">{{ __('Tags') }}</label>
+                            <div id="input-group-tags">
+{{--                                <select name="tag_ids[]" class="select2" multiple="multiple"--}}
+{{--                                        data-placeholder="Select a Tag" style="width: 100%;">--}}
+{{--                                        <option--}}
+{{--                                            {{ is_array( old('tag_ids')) && in_array($tag->id, old('tag_ids')) ? ' selected' : ''}} value="{{ $tag->id }}"--}}
+{{--                                        >{{ $tag->title }}</option>--}}
+{{--                                </select>--}}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
                             <label for="preview_image"
                                    class=" col-form-label tm-text-primary">{{ __('Add the preview image') }}</label>
                             <div id="input-group-preview_image">
@@ -93,30 +107,33 @@
                 console.log('Create new recipes')
 
                 $('#create_dish_button').on("click", function () {
-                    // $('.name').removeClass('is-invalid');
-                    // $('.birthday').removeClass('is-invalid');
-                    // $(".invalid-feedback").remove();
 
-                    let id_user = $('#dish_card').attr('data-id');
-                    let title = $('#title').val();
-                    let description = $('#description').val();
-                    let ingredients = $('#ingredients').val();
-                    let price = $('#price').val();
-                    let preview_image = $('#preview_image')[0].files[0];
-                    let main_image = $('#main_image')[0].files[0];
+                   //  let id_user = $('#dish_card').attr('data-id');
+                   //  let title = $('#title').val();
+                   //  let description = $('#description').val();
+                   //  let ingredients = $('#ingredients').val();
+                   //  let price = $('#price').val();
+                   //  let preview_image = $('#preview_image')[0].files[0];
+                   //  let main_image = $('#main_image')[0].files[0];
+                   // // let tags_ids = $('#tags').val();
 
-                    console.log(id_user,title,description,ingredients,price,main_image,preview_image);
+                    var formData = new FormData();
+
+                    formData.append("user_id", $('#dish_card').attr('data-id'));
+                    formData.append("title", $('#title').val());
+                    formData.append("description", $('#description').val());
+                    formData.append("ingredients", $('#ingredients').val());
+                    formData.append("price", $('#price').val());
+                    formData.append("preview_image", $('#preview_image')[0].files[0]);
+                    formData.append("main_image", $('#main_image')[0].files[0]);
 
 
                     $.ajax({
-                        url: `/api/personal/personal/${id}`,
-                        type: 'PATCH',
-                        data: {
-                            _method: 'PATCH',
-                            'name': name,
-                            'birthday': birthday,
-                        },
-                        dataType: 'json',
+                        url: `/personal/dish`,
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
                         success: function (data) {
                             if (data.id) {
                                 let id = data.id
