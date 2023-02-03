@@ -33,11 +33,6 @@ class HomeController extends Controller
     {
         $dishes = Dish::with('getDishImages')->get();
 
-//        foreach ($dishes as $dish) {
-//            $newDate = $dish->created_at = Carbon::createFromFormat('Y-m-d H:i:s', $dish->created_at)->format('d/m/Y');
-//            $dish['new_data'] = $newDate;
-//        }
-
         $returnData = $dishes;
 
         return response()->json($returnData);
