@@ -123,8 +123,8 @@
 
                     formData.append("user_id", $('#dish_card').attr('data-id'));
                     formData.append("title", $('#title').val());
-                    formData.append("description", $('#description').val().replace("\n", ""));
-                    formData.append("ingredients", $('#ingredients').val().replace("\n", ""));
+                    formData.append("description", $('#description').val());
+                    formData.append("ingredients", $('#ingredients').val());
                     formData.append("price", $('#price').val());
                     formData.append("preview_image", $('#preview_image')[0].files[0]);
                     formData.append("main_image", $('#main_image')[0].files[0]);

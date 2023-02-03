@@ -38,4 +38,15 @@ class HomeController extends Controller
         return response()->json($returnData);
     }
 
+    public function show(int $id)
+    {
+        return view('dish', compact('id'));
+    }
+
+    public function showDish(int $id)
+    {
+        $dish = Dish::with('getDishImages')->findOrFail($id);
+
+        return response()->json($dish);
+    }
 }
