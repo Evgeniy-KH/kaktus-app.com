@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('title');
             $table->text('ingredients');
-            $table->tinyText('description');
+            $table->text('description');
             $table->decimal('price', 9, 2);
             $table->softDeletes();
             $table->index('user_id','dishes_user_idx');

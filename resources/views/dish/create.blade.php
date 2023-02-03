@@ -63,7 +63,7 @@
                         <div class="row mb-3">
                             <label for="preview_image"
                                    class=" col-form-label tm-text-primary">{{ __('Add the preview image') }}</label>
-                            <div id="input-group-preview_image">
+                            <div id="input-group-preview-image">
                                 <input id="preview_image" type="file"
                                        class="form-control rounded-0"
                                        name="preview_image" style="border: none">
@@ -73,7 +73,7 @@
                         <div class="row mb-3 ">
                             <label for="main_image"
                                    class=" col-form-label tm-text-primary">{{ __('Add the main image') }}</label>
-                            <div id="input-group-main_image">
+                            <div id="input-group-main-image">
                                 <input id="main_image" type="file"
                                        class="form-control rounded-0"
                                        name="main_image" style="border: none">
@@ -118,11 +118,13 @@
                    // // let tags_ids = $('#tags').val();
 
                     var formData = new FormData();
+                    //  let description = $('#description').val();
+                    //  let ingredients = $('#ingredients').val();
 
                     formData.append("user_id", $('#dish_card').attr('data-id'));
                     formData.append("title", $('#title').val());
-                    formData.append("description", $('#description').val());
-                    formData.append("ingredients", $('#ingredients').val());
+                    formData.append("description", $('#description').val().replace("\n", ""));
+                    formData.append("ingredients", $('#ingredients').val().replace("\n", ""));
                     formData.append("price", $('#price').val());
                     formData.append("preview_image", $('#preview_image')[0].files[0]);
                     formData.append("main_image", $('#main_image')[0].files[0]);
@@ -135,12 +137,9 @@
                         processData: false,
                         contentType: false,
                         success: function (data) {
-                            if (data.id) {
-                                let id = data.id
-                                initFill(id);
-                                alert('Personal info has beed updated successfully');
-                            }
-                            // location.reload();
+                                alert('New dish has been create successfully');
+                                location.reload();
+
                         },
                         error: function (data) {
                             if (data.status === 422) {
@@ -148,14 +147,30 @@
                                 console.log(errors);
                                 $.each(errors, function (key, value) {
                                     console.log(key);
-                                    if (key === 'name') {
-                                        $('#name').addClass('is-invalid');
+                                    if (key === 'title') {
+                                        $('#title').addClass('is-invalid');
                                         let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
-                                        $('#input-group-name').append(rowError);
-                                    } else if (key === 'birthday') {
-                                        $('#dob').addClass('is-invalid');
+                                        $('#input-group-title').append(rowError);
+                                    } else if (key === 'description') {
+                                        $('#description').addClass('is-invalid');
                                         let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
-                                        $('#input-group-dob').append(rowError);
+                                        $('#input-group-description').append(rowError);
+                                    } else if (key === 'ingredients') {
+                                        $('#ingredients').addClass('is-invalid');
+                                        let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
+                                        $('#input-group-ingredients').append(rowError);
+                                    } else if (key === 'price') {
+                                        $('#price').addClass('is-invalid');
+                                        let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
+                                        $('#input-group-price').append(rowError);
+                                    } else if (key === 'preview_image') {
+                                        $('#preview_image').addClass('is-invalid');
+                                        let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
+                                        $('#input-group-preview-image').append(rowError);
+                                    } else if (key === 'main_image') {
+                                        $('#main_image').addClass('is-invalid');
+                                        let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
+                                        $('#input-group-main-image').append(rowError);
                                     }
                                 });
                             }

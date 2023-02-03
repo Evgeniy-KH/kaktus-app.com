@@ -40,7 +40,7 @@ class DishService
             foreach ($allImages as $image) {
                 $image['dish_id'] = $dish->id;
                 $image = DishImage::firstOrCreate($image);
-                $dish->dishImages()->save($image);
+                $dish->getDishImages()->save($image);
             }
 
             Db::commit();
