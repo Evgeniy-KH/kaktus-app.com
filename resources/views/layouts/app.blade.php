@@ -69,7 +69,7 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" id="personal-edit" data-id="{{ Auth::user()->id }}"
-                                       href="personal/{{ Auth::user()->id }}/edit ">
+                                       href="personal/{{ Auth::user()->id }}/edit">
                                         {{ __('Edit') }}
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
