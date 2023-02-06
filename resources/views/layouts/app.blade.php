@@ -194,6 +194,17 @@
 
 
 </div>
+
+<style>
+    html {
+        overflow:   scroll;
+    }
+
+    ::-webkit-scrollbar {
+        width: 0px;
+        background: transparent; /* make scrollbar transparent */
+    }
+</style>
 </body>
 
 <script src={{ asset("js/plugins.js") }}></script>

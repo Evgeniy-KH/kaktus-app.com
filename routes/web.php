@@ -38,9 +38,9 @@ Route::group(['namespace'=>'App\Http\Controllers\User', 'prefix' => 'personal','
         Route::get('/', [DishController::class,'index'])->name('personal.dish.index');
         Route::get('/create', [DishController::class,'create'])->name('personal.dish.create');
         Route::post('/', [DishController::class,'store'])->name('personal.dish.store');
-// Route::get('/{recipes}', 'ShowController')->name('admin.recipes.show');
-//    Route::get('/{recipes}/edit', 'EditController')->name('admin.recipes.edit');
-//    Route::patch('/{recipes}', 'UpdateController')->name('admin.recipes.update');
+        Route::get('/{dish}/edit', [DishController::class,'editView'])->name('personal.dish.edit');
+        Route::get('/{dish}/editData', [DishController::class,'editData']);
+        Route::patch('/{dish}', [DishController::class,'update'])->name('personal.dish.update');
 //    Route::delete('/{recipes}', 'DeleteController')->name('admin.recipes.delete');
     });
 

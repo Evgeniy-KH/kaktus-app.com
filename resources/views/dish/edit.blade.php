@@ -5,18 +5,17 @@
         <div class="row justify-content-center">
             <div class="col-lg-6 col-12 mb-5">
                 <div class="row mb-3" >
-                    <h2 class="col-12 tm-text-primary">Your new Recipes</h2>
+                    <h2 class="col-12 tm-text-primary">Edit your Recipes</h2>
                 </div>
-                <div class="card mb-3 tm-bg-gray elevation-3" id="dish_card" data-id="{{ $user->id }}">
+                <div class="card mb-3 tm-bg-gray elevation-3" id="dish_card" data-id="{{ $dishId }}">
                     <div class="tm-video-details">
-
                         <div class="row mb-3">
                             <label for="title"
                                    class=" col-form-label text-md-end tm-text-primary">{{ __('Dish title') }}</label>
                             <div id="input-group-title">
-                                <input id="title" type="text"
-                                       class="form-control rounded-0" name="title"
-                                       value="{{ old('title') }}" required autocomplete="Recipe title" autofocus>
+{{--                                <input id="title" type="text"--}}
+{{--                                       class="form-control rounded-0" name="title"--}}
+{{--                                       value="{{ old('title') }}" required autocomplete="Recipe title" autofocus>--}}
                             </div>
                         </div>
 
@@ -24,8 +23,8 @@
                             <label for="description"
                                    class=" col-form-label  tm-text-primary">{{ __('Description') }}</label>
                             <div id="input-group-description">
-                        <textarea id="description" class="form-control rounded-0"
-                                  name="description" required autocomplete="description"> {{ old('description') }} </textarea>
+{{--                        <textarea id="description" class="form-control rounded-0"--}}
+{{--                                  name="description" required autocomplete="description"> {{ old('description') }} </textarea>--}}
                             </div>
                         </div>
 
@@ -33,8 +32,8 @@
                             <label for="ingredients"
                                    class=" col-form-label  tm-text-primary">{{ __('Ingredients') }}</label>
                             <div id="input-group-ingredients">
-                        <textarea id="ingredients" class="form-control rounded-0"
-                                  name="ingredients" required autocomplete="ingredients"> {{ old('ingredients') }} </textarea>
+{{--                        <textarea id="ingredients" class="form-control rounded-0"--}}
+{{--                                  name="ingredients" required autocomplete="ingredients"> {{ old('ingredients') }} </textarea>--}}
                             </div>
                         </div>
 
@@ -42,7 +41,7 @@
                             <label for="price"
                                    class=" col-form-label  tm-text-primary">{{ __('Price') }}</label>
                             <div id="input-group-price">
-                                <input type="number" min="0.00" max="10000.00" step="0.01"  name="price" id="price"/>
+{{--                                <input type="number" min="0.00" max="10000.00" step="0.01"  name="price" id="price"/>--}}
                             </div>
                         </div>
 
@@ -50,13 +49,13 @@
 
                             <label for="tags"
                                    class=" col-form-label  tm-text-primary">{{ __('Tags') }}</label>
-                            <div id="input-group-tags">
-{{--                                <select name="tag_ids[]" class="select2" multiple="multiple"--}}
-{{--                                        data-placeholder="Select a Tag" style="width: 100%;">--}}
+                            <div >
+                                <select name="tag_ids[]" class="select2" multiple="multiple"
+                                      data-placeholder="Select a Tag" style="width: 100%;" id="input-group-tags">
 {{--                                        <option--}}
 {{--                                            {{ is_array( old('tag_ids')) && in_array($tag->id, old('tag_ids')) ? ' selected' : ''}} value="{{ $tag->id }}"--}}
 {{--                                        >{{ $tag->title }}</option>--}}
-{{--                                </select>--}}
+                                </select>
                             </div>
                         </div>
 
@@ -81,10 +80,16 @@
                         </div>
 
                         <div class="row mb-3">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary" id="create_dish_button"
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-primary" id="update_dish_button"
                                         style="background-color:#009999; border: none">
-                                    {{ __('Create new recipes') }}
+                                    {{ __('Update your dish') }}
+                                </button>
+                            </div>
+                            <div class="col-md-6 ">
+                                <button type="submit" class="btn btn-primary" id="delete_dish_button"
+                                        style="background-color:#009999; border: none">
+                                    {{ __('Delete your dish') }}
                                 </button>
                             </div>
                         </div>
@@ -102,37 +107,107 @@
                 }
             });
 
+            let user_id = '{{Auth::user()->id}}';
+
+            function yourDish(data = {}) {
+                $.ajax({
+                    url: '/personal/dish/{{$dishId}}/editData',
+                    method: 'get',
+                    dataType: 'json',
+                    data: data,
+                    success: function (data) {
+
+                        let title = `<input id="title" type="text"
+                                       class="form-control rounded-0" name="title"
+                                       value="${data[0]['title']}" required autocomplete="Recipe title" autofocus>`
+                        let ingredients = `<textarea id="ingredients" class="form-control rounded-0"
+                                  name="ingredients" required autocomplete="ingredients">${data[0]['ingredients']}</textarea>`
+                        let description =`<textarea id="description" class="form-control rounded-0"
+                                  name="description" required autocomplete="description">${data[0]['description']}</textarea>`
+                        let price = ` <input type="number" min="0.00" max="10000.00" step="0.01"  name="price"  value="${data[0]['price']}" id="price"/>`
+
+                        let preview_image = `<img src="/storage/${data[0]['get_dish_images'][0]['image']}" width="200" class="img-fluid img-thumbnail">`
+                        let main_image = `<img src="/storage/${data[0]['get_dish_images'][1]['image']}" width="200" class="img-fluid img-thumbnail">`
+
+
+                        $('#input-group-title').append(title);
+                        $('#input-group-ingredients').append(ingredients);
+                        $('#input-group-description').append(description);
+                        $('#input-group-price').append(price);
+                        $('#input-group-preview-image').prepend(preview_image);
+                        $('#input-group-main-image').prepend(main_image);
+
+                        {{--console.log(data[1]);--}}
+                        {{--$.each(data[1], function (key, value) {--}}
+
+                        {{--    let tags = `<option--}}
+                        {{--                    ${data[0]['tags']} && in_array($tag->id, old('tag_ids')) ? ' selected' : ''}} value="{{ $tag->id }}"--}}
+                        {{--                >{{ $tag->title }}</option>`--}}
+
+                        {{--});--}}
+                       // $('.input-group-tags').append(tags);
+
+                        // if (data['tags']) {
+                        //     $.each(data['tags'], function (i, item) {
+                        //         let tag = `<a href="#" class="tm-text-primary mr-4 mb-2 d-inline-block">${data['tags']}</a>`
+                        //         $('.dish-tag').append(tag);
+                        //     })
+                        // } else {
+                        //     $('.dish-tags').remove()
+                        // }
+                        //
+                        //
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('Error: ' + textStatus + ' - ' + errorThrown);
+                    }
+
+                });
+            }
+
             $(document).ready(function () {
-                $('#search-form').remove();
-                console.log('Create new recipes')
+                yourDish();
 
-                $('#create_dish_button').on("click", function () {
+                let dish_id = $('#dish_card').attr('data-id');
 
-                   //  let id_user = $('#dish_card').attr('data-id');
-                   //  let title = $('#title').val();
-                   //  let description = $('#description').val();
-                   //  let ingredients = $('#ingredients').val();
-                   //  let price = $('#price').val();
-                   //  let preview_image = $('#preview_image')[0].files[0];
-                   //  let main_image = $('#main_image')[0].files[0];
-                   // // let tags_ids = $('#tags').val();
+                $('#update_dish_button').on("click", function () {
 
                     var formData = new FormData();
-                    //  let description = $('#description').val();
-                    //  let ingredients = $('#ingredients').val();
 
-                    formData.append("user_id", $('#dish_card').attr('data-id'));
+                    formData.append(' _method', 'PATCH');
+                    formData.append("user_id", user_id);
+                    formData.append("dish_id", $('#dish_card').attr('data-id'));
                     formData.append("title", $('#title').val());
                     formData.append("description", $('#description').val());
                     formData.append("ingredients", $('#ingredients').val());
                     formData.append("price", $('#price').val());
-                    formData.append("preview_image", $('#preview_image')[0].files[0]);
-                    formData.append("main_image", $('#main_image')[0].files[0]);
+
+                    if ($('#preview_image')[0].files[0]) {
+                        let preview_image = $('#preview_image')[0].files[0];
+                        formData.append("preview_image", preview_image);
+                    } else {
+                        let preview_image =  $('#input-group-preview-image img').attr('src').replace("/storage/images/", "");
+                        formData.append("preview_image", preview_image);
+                    }
+
+                    if ($('#main_image')[0].files[0]) {
+                        let main_image = $('#main_image')[0].files[0];
+                        formData.append("main_image", main_image);
+                    } else {
+                        let main_image =  $('#input-group-main-image img').attr('src').replace("/storage/images/", "");
+                        formData.append("main_image", main_image);
+                    }
+
+                    for (var pair of formData.entries()) {
+                        console.log(pair[0]+ ', ' + pair[1]);
+                    }
+
 
 
                     $.ajax({
-                        url: `/personal/dish`,
-                        type: 'POST',
+                        url: `/personal/dish/${dish_id}`,
+                        type: 'post',
                         data: formData,
                         processData: false,
                         contentType: false,
@@ -179,4 +254,5 @@
                 });
             });
         </script>
+
 @endsection
