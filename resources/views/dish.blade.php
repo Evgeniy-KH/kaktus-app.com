@@ -11,7 +11,7 @@
             <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12" style="height: 650px ;">
                 <div class="tm-bg-gray tm-video-details">
                     <div class="mb-4 dish-description"
-                    style="max-height: 150px; overflow-y: auto; /">
+                    style="max-height: 250px; overflow-y: auto; /">
                     </div>
                     <p class="mb-4"><h4 class="tm-text-gray-dark">Ingredient</h4><div class="dish-ingredients tm-text-gray"></div></p>
                     <div class="mb-2 d-flex flex-wrap">
@@ -64,9 +64,9 @@
                     <img src="/storage/${data['get_dish_images'][1]['image']}" alt="Image" class="img-fluid" style="width: 1155px; height: 650px ;">
                     <figcaption class="d-flex align-items-center justify-content-center action">
                        <h2 class="dish-action justify-content-between">
-                       <div class="row mt-3 mb-0 ">
-<div class="col"><a href="dish/${data['id']}/edit" id="edit-btn" style="color:inherit;">Edit</a></div>
-                       <div class="col" id="delete-btn">Delete</div></div></h2>
+                       <div class="row mt-3 mb-0" style="color:inherit; font-size: 5rem">
+                        <div class="col mr-4" id="edit-btn"><a href="/personal/dish/${data['id']}/edit" style="color:inherit;">Edit</a></div>
+                       <div class="col mr-4" id="delete-btn">Delete</div></div></h2>
                     </figcaption>
                   </figure>`
 
@@ -106,7 +106,6 @@
                         });
 
 
-
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert('Error: ' + textStatus + ' - ' + errorThrown);
@@ -116,7 +115,13 @@
         }
 
         $(document).ready(function () {
+            console.log('ready');
             initDish();
+
+            $(document).on("click","#delete-btn",function() {
+
+            });
+
 
         });
     </script>

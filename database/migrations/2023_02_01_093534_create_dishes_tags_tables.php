@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('dishes_tags', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('recipe_id');
+            $table->unsignedBigInteger('dish_id');
             $table->unsignedSmallInteger('tag_id');
             $table->timestamps();
-            $table->index('recipe_id','recipe_tag_recipe_idx');
-            $table->foreign('recipe_id', 'recipe_tag_recipe_fk')->on('dishes')->references('id');
+            $table->index('dish_id','recipe_tag_dish_idx');
+            $table->foreign('dish_id', 'recipe_tag_dish_fk')->on('dishes')->references('id');
             $table->index('tag_id','recipe_tag_tag_idx');
             $table->foreign('tag_id', 'recipe_tag_tag_fk')->on('tags')->references('id');
 
