@@ -81,6 +81,8 @@ class DishService
                 $dish->tags()->sync($tagIds);
             }
 
+            ///вот эта часть с картинка мне не нравитсья, надо бы сделаеить ее в форич но я не могу понять как ее так организоват ///
+
             if (isset($previewImage, $mainImage)) {
                 $allImages = [$previewImage, $mainImage];
 
