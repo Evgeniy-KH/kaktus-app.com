@@ -24,9 +24,12 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ["required", "string"],
-            'email' => ["required", "string", "email"],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'name' => ["sometimes", "required", "string"],
+            'birthday' => ["sometimes", "required", "date"],
+            'email' => ["sometimes", "required", "string", "email"],
+            'password' => ["sometimes", 'required', 'string', 'min:8', 'confirmed'],
+            'current_password' => ["sometimes", 'required', 'string', 'min:8'],
+            'image' => ["sometimes", "required", "file"],
         ];
     }
 }

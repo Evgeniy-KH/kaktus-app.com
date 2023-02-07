@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\User\Dish\DishController;
-use App\Http\Controllers\User\PersonalController;
+use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,7 +34,12 @@ Route::get('auth/facebook', [SocialController::class, 'facebookRedirect']);
 Route::get('auth/facebook/callback', [SocialController::class, 'loginWithFacebook']);
 
 Route::group(['namespace'=>'App\Http\Controllers\User', 'prefix' => 'personal','middleware' => ['auth']], function () {
-    Route::get('{personal}/edit', [PersonalController::class, 'edit']);
+    Route::get('{personal}/edit', [UserController::class, 'editView']);
+    Route::get('/{personal}/edit', [UserController::class, 'edit']);
+    Route::patch('password/{personal}/', [UserController::class, 'updatePassword']);
+    Route::patch('personal/{personal}/', [UserController::class, 'updatePersonal']);
+    Route::post('image/{personal}/', [UserController::class, 'updateImage']);
+//    Route::delete('/{personal}', [PersonalController::class, 'delete'])->name('api.personal.delete');
 
     Route::group(['prefix' => 'dish'], function () {
         Route::get('/', [DishController::class,'index'])->name('personal.dish.index');

@@ -19,12 +19,3 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['namespace'=>'App\Http\Controllers', 'prefix' => 'personal','middleware' => ['auth']], function () {
-//    Route::get('/', [PersonalController::class, 'index'])->name('api.personal.index');
-//    Route::post('/', [PersonalController::class, 'store'])->name('api.personal.store');
-     Route::get('/{personal}/edit', [PersonalController::class, 'edit']);
-     Route::patch('password/{personal}/', [PersonalController::class, 'updatePassword']);
-     Route::patch('personal/{personal}/', [PersonalController::class, 'updatePersonal']);
-     Route::post('image/{personal}/', [PersonalController::class, 'updateImage']);
-//    Route::delete('/{personal}', [PersonalController::class, 'delete'])->name('api.personal.delete');
-});
