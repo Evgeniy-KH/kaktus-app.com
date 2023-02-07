@@ -26,8 +26,6 @@
                         </div>
                     </div>
                     <div class="dish-tags">
-                        <h4 class="tm-text-gray-dark mb-3 dish-tag">Tags</h4>
-                        <a href="#" class="tm-text-primary mr-4 mb-2 d-inline-block">Real Estate</a>
                     </div>
                 </div>
             </div>
@@ -43,7 +41,22 @@
             }
         });
 
-        let user_id = '{{Auth::user()->id}}';
+        let userId = '{{Auth::user()->id}}';
+        let dishId = {{$id}};
+
+        function checkImages (images) {
+            let previewImage ='';
+            let mainImage ='';
+
+            $.each(images, function (i, image) {
+                if (image['type_id'] == '0') {/// delete preview image or not ???
+                    previewImage = image['image']
+                } else if (image['type_id'] == '1') {
+                    mainImage = image['image']
+                }
+            })
+            return {"previewImage":previewImage, "mainImage":mainImage}
+        }
 
         function initDish(data = {}) {
             $.ajax({
@@ -52,33 +65,33 @@
                 dataType: 'json',
                 data: data,
                 success: function (data) {
-
                     data['created_at'] = new Date(data['created_at']).toLocaleDateString("en-US", {
                         day: 'numeric',
                         month: 'short',
                         year: 'numeric'
                     });
 
+                    let images = checkImages(data['get_dish_images']);// return of this function let variables
+                    let mainImage = images["mainImage"];
+
                     let title = `<h1 class="col-12 tm-text-primary">${data['title']}</h1>`;
                     let image =`<figure class="effect-ming tm-video-item main-image">
-                    <img src="/storage/${data['get_dish_images'][1]['image']}" alt="Image" class="img-fluid" style="width: 1155px; height: 650px ;">
+                    <img src="/storage/${mainImage}" alt="Image" class="img-fluid" style="width: 1155px; height: 650px ;">
                     <figcaption class="d-flex align-items-center justify-content-center action">
                        <h2 class="dish-action justify-content-between">
                        <div class="row mt-3 mb-0" style="color:inherit; font-size: 5rem">
                         <div class="col mr-4" id="edit-btn"><a href="/personal/dish/${data['id']}/edit" style="color:inherit;">Edit</a></div>
-                       <div class="col mr-4" id="delete-btn">Delete</div></div></h2>
+                       <div class="col mr-4" id="delete-btn" data-id="${dishId}">Delete</div></div></h2>
                     </figcaption>
                   </figure>`
-
                     let description =`<h4 class="tm-text-gray-dark mb-3">${data['description']}</h4>`;
-                    $(".dish-ingredients").html(data['ingredients']);
                     let price = `<span class="tm-text-gray-dark">Price: </span><span class="tm-text-primary">${data['price']}$</span>`
                     let created = `<span class="tm-text-gray-dark">Published: </span><span class="tm-text-gray">${data['created_at']}$</span>`
-
 
                     $('.dish-title').append(title);
                     $('.dish-image').append(image);
                     $('.dish-description').append(description);
+                    $(".dish-ingredients").html(data['ingredients']);
                     $('.dish-price').append(price);
                     $('.dish-created-data').append(created);
 
@@ -91,8 +104,8 @@
                         $('.dish-tags').remove()
                     }
 
-                    if ( data['user_id'] != user_id) {
-                            $('.main-image').remove();
+                    if ( data['user_id'] != userId) {
+                        $('.main-image').remove();
                         let image =`<img src="/storage/${data['get_dish_images'][1]['image']}" alt="Image" class="img-fluid" style="width: 1155px; height: 650px ;">`
                         $('.dish-image').append(image);
                     }
@@ -104,8 +117,6 @@
                         .on('mouseleave', function() {
                             $(this).css("color", "inherit");
                         });
-
-
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert('Error: ' + textStatus + ' - ' + errorThrown);
@@ -116,9 +127,21 @@
 
         $(document).ready(function () {
             console.log('ready');
+
             initDish();
 
             $(document).on("click","#delete-btn",function() {
+                $.ajax({
+                    url: `/personal/dish/`+dishId,
+                    type: 'delete',
+                    data: {_method: 'delete'},
+                    dataType: 'json',
+                    success: function (data) {
+                        window.location.href = "/home"
+                    },
+                });
+
+
 
             });
 

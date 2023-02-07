@@ -51,12 +51,10 @@
                             <label for="tags"
                                    class=" col-form-label  tm-text-primary">{{ __('Tags') }}</label>
                             <div id="input-group-tags">
-{{--                                <select name="tag_ids[]" class="select2" multiple="multiple"--}}
-{{--                                        data-placeholder="Select a Tag" style="width: 100%;">--}}
-{{--                                        <option--}}
-{{--                                            {{ is_array( old('tag_ids')) && in_array($tag->id, old('tag_ids')) ? ' selected' : ''}} value="{{ $tag->id }}"--}}
-{{--                                        >{{ $tag->title }}</option>--}}
-{{--                                </select>--}}
+                                <select name="tag_ids[]" class="form-control rounded-0 select-tags" multiple="multiple"
+                                        data-placeholder="Select a Tag">
+
+                                </select>
                             </div>
                         </div>
 
@@ -102,8 +100,32 @@
                 }
             });
 
+            function showTags (data ={}) {
+                $.ajax({
+                    url: `/catalog/dish/getTags`,
+                    type: 'get',
+                    dataType: 'json',
+                    data: data,
+                    success: function (data) {
+                        $.each(data, function (i, item) {
+                        let tags = `<option
+                            {{
+    is_array( old('tag_ids')) && in_array(item['id'], old('tag_ids')) ? ' selected' : ''}} value="${item['id']}"
+                                                             >${item['title']}</option>`
+                            $('.select-tags').append(tags);
+                        });
+
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('Error: ' + textStatus + ' - ' + errorThrown);
+                    },
+                });
+
+            }
             $(document).ready(function () {
                 $('#search-form').remove();
+                showTags ();
                 console.log('Create new recipes')
 
                 $('#create_dish_button').on("click", function () {

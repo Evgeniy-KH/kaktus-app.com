@@ -25,8 +25,10 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/catalog', [App\Http\Controllers\HomeController::class, 'catalog'])->name('home.catalog');
+Route::get('/catalog/dish/getTags', [App\Http\Controllers\HomeController::class, 'getTags']);
 Route::get('/catalog/dish/{dish}', [App\Http\Controllers\HomeController::class, 'show'])->name('home.show');
 Route::get('/catalog/dish/show/{dish}', [App\Http\Controllers\HomeController::class, 'showDish']);
+
 
 Route::get('auth/facebook', [SocialController::class, 'facebookRedirect']);
 Route::get('auth/facebook/callback', [SocialController::class, 'loginWithFacebook']);
@@ -41,7 +43,7 @@ Route::group(['namespace'=>'App\Http\Controllers\User', 'prefix' => 'personal','
         Route::get('/{dish}/edit', [DishController::class,'editView'])->name('personal.dish.edit');
         Route::get('/{dish}/editData', [DishController::class,'editData']);
         Route::patch('/{dish}', [DishController::class,'update'])->name('personal.dish.update');
-//    Route::delete('/{recipes}', 'DeleteController')->name('admin.recipes.delete');
+        Route::delete('/{dish}', [DishController::class,'delete'])->name('personal.dish.delete');
     });
 
 

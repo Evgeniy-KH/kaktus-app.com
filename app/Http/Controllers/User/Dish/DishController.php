@@ -45,12 +45,20 @@ class DishController extends BaseController
         return response()->json($returnData);
     }
 
-    public function update(StoreRequest $request)
+    public function update(UpdateRequest $request)
     {
-        dd($request->getContent());
         $data = $request->validated();
-        dd($data);
-        $this->service->store($data);
+        $dish = Dish::findOrFail($data['dish_id']);
+        unset($data['dish_id']);
+
+        $dish = $this->service->update($data, $dish);
+
+        return response()->json();
+    }
+
+    public function delete(int $dishId)
+    {
+        $dish = Dish::findOrFail($dishId)->delete();
 
         return response()->json();
     }

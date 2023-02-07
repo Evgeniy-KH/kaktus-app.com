@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Dish;
 use App\Models\DishImage;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -28,11 +29,16 @@ class HomeController extends Controller
     {
         return view('home');
     }
+    public function getTags()
+    {
+        $tags = Tag::all();
+
+        return response()->json($tags);
+    }
 
     public function catalog()
     {
         $dishes = Dish::with('getDishImages')->get();
-
         $returnData = $dishes;
 
         return response()->json($returnData);
@@ -49,4 +55,5 @@ class HomeController extends Controller
 
         return response()->json($dish);
     }
+
 }
