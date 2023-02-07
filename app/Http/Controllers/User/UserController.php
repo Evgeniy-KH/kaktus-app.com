@@ -15,7 +15,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
-class PersonalController extends Controller
+class UserController extends Controller
 {
     public function editView (int $id): View
     {
