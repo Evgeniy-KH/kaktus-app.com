@@ -146,7 +146,7 @@
                             <a href="#" class="nav-link">
                                 <i class="nav-icon far fa-plus-square"></i>
                                 <p class="tm-text-primary">
-                                    Recipes
+                                    Dishes
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">

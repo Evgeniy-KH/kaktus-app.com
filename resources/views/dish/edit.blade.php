@@ -116,6 +116,7 @@
                     dataType: 'json',
                     data: data,
                     success: function (data) {
+                        console.log(data);
 
                         let title = `<input id="title" type="text"
                                        class="form-control rounded-0" name="title"
@@ -186,24 +187,16 @@
                     if ($('#preview_image')[0].files[0]) {
                         let preview_image = $('#preview_image')[0].files[0];
                         formData.append("preview_image", preview_image);
-                    } else {
-                        let preview_image =  $('#input-group-preview-image img').attr('src').replace("/storage/images/", "");
-                        formData.append("preview_image", preview_image);
                     }
 
                     if ($('#main_image')[0].files[0]) {
                         let main_image = $('#main_image')[0].files[0];
                         formData.append("main_image", main_image);
-                    } else {
-                        let main_image =  $('#input-group-main-image img').attr('src').replace("/storage/images/", "");
-                        formData.append("main_image", main_image);
                     }
 
-                    for (var pair of formData.entries()) {
-                        console.log(pair[0]+ ', ' + pair[1]);
-                    }
-
-
+                    // for (var pair of formData.entries()) {
+                    //     console.log(pair[0]+ ', ' + pair[1]);
+                    // }
 
                     $.ajax({
                         url: `/personal/dish/${dish_id}`,
@@ -213,8 +206,8 @@
                         contentType: false,
                         success: function (data) {
                                 alert('New dish has been create successfully');
-                                location.reload();
-
+                                // location.reload();
+                                window.location.href = "/home";
                         },
                         error: function (data) {
                             if (data.status === 422) {

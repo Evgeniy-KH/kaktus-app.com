@@ -40,6 +40,20 @@
 
         let user_id = '{{Auth::user()->id}}';
 
+        function checkImages (images) {
+            let previewImage ='';
+            let mainImage ='';
+
+            $.each(images, function (i, image) {
+                if (image['type_id'] == '0') {
+                    previewImage = image['image']
+                } else if (image['type_id'] == '1') {
+                    mainImage = image['image']
+                }
+            })
+            return {"previewImage":previewImage, "mainImage":mainImage}
+        }
+
         function initCatalog(data = {}) {
             $.ajax({
                 url: '/catalog',
@@ -47,6 +61,7 @@
                 dataType: 'json',
                 data: data,
                 success: function (data) {
+                    console.log(data);
                     $.each(data, function (i, item) {
 
                         item['created_at'] = new Date(item['created_at']).toLocaleDateString("en-US", {
@@ -55,11 +70,13 @@
                             year: 'numeric'
                         });
 
+                        let images = checkImages(item['get_dish_images']);// return of this function let variables
+                        let previewImage = images["previewImage"];
                         let row = `<div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
 <div class="hidden dish-author-id" data-id="${item['user_id']}"></div>
 <div class="hidden dish-id" data-id=${item['id']}"></div>
                    <figure class="effect-ming tm-video-item" style="height: 209px; width: 372px">
-                    <img src="/storage/${item['get_dish_images'][0]['image']}" alt="preview Image" class="img-fluid">
+                    <img src="/storage/${previewImage}" alt="preview Image" class="img-fluid">
                     <figcaption class="d-flex align-items-center justify-content-center">
                         <h2 class="dish-action"><a href="/catalog/dish/${item['id']}" id="show-dish-btm" style="color:inherit;">${item['title']}</a></h2>
                     </figcaption>
