@@ -40,9 +40,9 @@
 
         let user_id = '{{Auth::user()->id}}';
 
-        function checkImages (images) {
-            let previewImage ='';
-            let mainImage ='';
+        function checkImages(images) {
+            let previewImage = '';
+            let mainImage = '';
 
             $.each(images, function (i, image) {
                 if (image['type_id'] == '0') {
@@ -51,7 +51,7 @@
                     mainImage = image['image']
                 }
             })
-            return {"previewImage":previewImage, "mainImage":mainImage}
+            return {"previewImage": previewImage, "mainImage": mainImage}
         }
 
         function initCatalog(data = {}) {
@@ -70,7 +70,7 @@
                             year: 'numeric'
                         });
 
-                        let images = checkImages(item['get_dish_images']);// return of this function let variables
+                        let images = checkImages(item['get_dish_images']);// return of this function  variables
                         let previewImage = images["previewImage"];
                         let row = `<div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
 <div class="hidden dish-author-id" data-id="${item['user_id']}"></div>
@@ -102,10 +102,10 @@
                     });
 
                     $('#edit-btn, #delete-btn, #show-dish-btm')
-                        .on('mouseenter', function() {
+                        .on('mouseenter', function () {
                             $(this).css("color", "#5c6772");
                         })
-                        .on('mouseleave', function() {
+                        .on('mouseleave', function () {
                             $(this).css("color", "inherit");
                         });
 
