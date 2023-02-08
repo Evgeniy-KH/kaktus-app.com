@@ -34,7 +34,7 @@
                             </div>
                             <div class="row mb-0">
                                 <div class="col-md-6 offset-md-6">
-                                    <button type="submit" class="btn btn-primary" id="personal-info-update"
+                                    <button type="submit" class="btn btn-primary" id="btn-update-info"
                                             style="background-color:#009999; border: none; font-size: 15px ; font-size: 15px">
                                         {{ __('Save changes') }}
                                     </button>
@@ -99,7 +99,6 @@
                                        class=" col-form-label tm-text-primary">{{ __('New Profile Photo') }}</label>
                                 <div id="input-group-image">
                                     <input id="image" type="file"
-                                           class="form-control rounded-0"
                                            name="profile-photo">
                                 </div>
                             </div>
@@ -142,7 +141,7 @@
                 let password_confirmation = $('#password-confirm').val();
 
                 $.ajax({
-                    url: `/api/user/password/${id}`,
+                    url: `/user/${id}`,
                     type: 'PATCH',
                     data: {
                         _method: 'PATCH',
@@ -184,7 +183,7 @@
                 });
             });
 
-            $('#user-info-update').on("click", function () {
+            $('#btn-update-info').on("click", function () {
                 $('.name').removeClass('is-invalid');
                 $('.birthday').removeClass('is-invalid');
                 $(".invalid-feedback").remove();
@@ -193,7 +192,7 @@
                 let birthday = $('#birthday').val();
 
                 $.ajax({
-                    url: `/api/user/user/${id}`,
+                    url: `/user/${id}`,
                     type: 'PATCH',
                     data: {
                         _method: 'PATCH',
@@ -240,7 +239,7 @@
                 formData.append('image', image);
 
                 $.ajax({
-                    url: `/api/personal/image/${id}`,
+                    url: `/user/${id}`,
                     type: 'POST',
                     data: formData,
                     processData: false,
