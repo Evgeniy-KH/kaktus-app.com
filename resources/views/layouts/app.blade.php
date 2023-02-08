@@ -25,11 +25,9 @@
     <link rel="stylesheet" href={{ asset("dist/css/adminlte.min.css") }}>
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href={{ asset("plugins/overlayScrollbars/css/OverlayScrollbars.min.css") }}>
-
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">

@@ -6,38 +6,24 @@ namespace App\Http\Controllers\User;
 
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\UpdatePasswordRequest;
-use App\Http\Requests\User\UpdatePersonalRequest;
-use App\Http\Requests\User\UpdatePhotoRequest;
+use App\Http\Requests\User\UpdateRequest;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    public function editView (int $id): View
-    {
-        return view('user.edit', compact('id'));
-    }
 
-    public function edit(int $id): \Illuminate\Http\JsonResponse
-    {
-        $user = User::find($id);
-
-        return response()->json($user);
-
-    }
-
-    public function updatePersonal(int $id, UpdateRequest $request): \Illuminate\Http\JsonResponse
+    public function updateUser(int $id, UpdateRequest $request): \Illuminate\Http\JsonResponse
     {
         $user = User::find($id);
         $data = $request->validated();
 
-        if ($data['name'] && $data['birthday']) {
+        if(array_key_exists('name',$data) ||  array_key_exists('birthday',$data)){
             $name = $data['name'];
-            $birthday = Carbon::createFromFormat('m/d/Y', $data['birthday'])->format('Y-m-d');
+//            $birthday = Carbon::createFromFormat('m/d/Y', $data['birthday'])->format('Y-m-d');
+            $birthday = $data['birthday'];
             $user->update([
                 'name' => $name,
                 'birthday' => $birthday
@@ -47,7 +33,7 @@ class UserController extends Controller
             $returnData = $user;
         }
 
-        if ($data['current_password'] && $data['password']) {
+        if(array_key_exists('current_password',$data) && array_key_exists('password',$data)){
 
             if (Hash::check($data['current_password'], $user->password)) {
                 $user->update([
@@ -64,17 +50,17 @@ class UserController extends Controller
             }
         }
 
-        if ($data['image']) {
+        if (array_key_exists('avatar_path',$data)) {
 
-            if ($user->image) {
-                Storage::delete('public/images/' . $user->image);
+            if ($user->avatar_path) {
+                Storage::delete('public/images/' . $user->avatar_path);
             }
 
-            $request->hasFile('image');
-            $file = $request->file('image');
+            $request->hasFile('avatar_path');
+            $file = $request->file('avatar_path');
             $fileName = time() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public/images', $fileName);
-            $user->update(['image' => $fileName]);
+            $user->update(['avatar_path' => $fileName]);
 
             $returnData = User::find($id);
             $code = 200;
