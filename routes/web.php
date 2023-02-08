@@ -34,11 +34,9 @@ Route::get('auth/facebook', [SocialController::class, 'facebookRedirect']);
 Route::get('auth/facebook/callback', [SocialController::class, 'loginWithFacebook']);
 
 Route::group(['namespace'=>'App\Http\Controllers\User', 'prefix' => 'user','middleware' => ['auth']], function () {
-//    Route::get('{user}/edit', [UserController::class, 'editView']);
     Route::view('{user}', 'user.edit');
     Route::post('{user}/', [UserController::class, 'updateUser']);
     Route::post('image/{user}/', [UserController::class, 'updateImage']);
-//    Route::delete('/{user}', [PersonalController::class, 'delete'])->name('api.user.delete');
 
     Route::group(['prefix' => 'dish'], function () {
         Route::get('/', [DishController::class,'index'])->name('user.dish.index');
