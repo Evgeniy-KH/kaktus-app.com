@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-lg-4 col-12 mb-5">
-                <div class="card-body" id="edit-card" data-id="{{ $id }}">
+                <div class="card-body" id="edit-card" data-id="{{ $user->id }}">
 
                     <div class="card mb-3">
                         <div class="card-header">
@@ -19,7 +19,7 @@
                                     <input id="name" type="text"
                                            class="form-control rounded-0"
                                            name="name"
-                                           value="">
+                                           value="{{ $user->name }}">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -27,9 +27,8 @@
                                        class=" col-form-label text-md-end tm-text-primary">{{ __('Birthday') }}</label>
                                 <div d="input-group-birthday">
                                     <div class="input-group date" id="datepicker">
-                                        <input type="text" class="form-control" name="birthday" id="birthday">
-                                        <span class="input-group-append">
-                                            </span>
+                                        <input type="text" class="form-control" name="birthday" id="birthday" value="{{ $user->birthday}}">
+                                        <span class="input-group-append"></span>
                                     </div>
                                 </div>
                             </div>
@@ -93,8 +92,7 @@
                         </div>
                         <div class="card-body">
                             <div class="w-75 mb-2" id="preview-photo">
-                                {{--                                <img src="{{ asset('/storage/images/'.Auth::user()->image)}}" alt="preview_image"--}}
-                                {{--                                     class="w-50">--}}
+                                <img src="{{ asset('/storage/images/'.Auth::user()->avatar_path) }}"  width="200" class="img-fluid img-thumbnail">
                             </div>
                             <div class="form-group">
                                 <label for="image"
@@ -128,42 +126,12 @@
             }
         });
 
-        function initFill(id) {
-            $('#current_password').val('');
-            $('#password').val('');
-            $('#birthday').val('');
-            $('#password-confirm').val('');
-            $('#image').val('')
-
-            $.ajax({
-                url: `/api/personal/${id}/edit`,
-                method: 'get',
-                dataType: 'json',
-                success: function (data) {
-
-                    $('#name').val(data.name);
-                    $('#birthday').val(data.birthday);
-                    $('#preview-photo').append('<img src="{{ asset('/storage/images/'.Auth::user()->image) }}"  width="200" class="img-fluid img-thumbnail">');
-                },
-                error: function (data) {
-                    if (data.status === 422) {
-                        var errors = data.responseJSON.errors;
-                        $.each(errors, function (key, value) {
-                            console.log(value);
-                        });
-                    }
-                },
-            });
-        }
-
         $(document).ready(function () {
 
             $('#datepicker').datepicker({format: 'mm/dd/yyyy'
             });
 
             let id = $('#edit-card').attr('data-id');
-
-            initFill(id);
 
             $('#btn-update-password').on("click", function () {
                 $('.is-invalid').removeClass('is-invalid');
@@ -174,7 +142,7 @@
                 let password_confirmation = $('#password-confirm').val();
 
                 $.ajax({
-                    url: `/api/personal/password/${id}`,
+                    url: `/api/user/password/${id}`,
                     type: 'PATCH',
                     data: {
                         _method: 'PATCH',
@@ -216,7 +184,7 @@
                 });
             });
 
-            $('#personal-info-update').on("click", function () {
+            $('#user-info-update').on("click", function () {
                 $('.name').removeClass('is-invalid');
                 $('.birthday').removeClass('is-invalid');
                 $(".invalid-feedback").remove();
@@ -225,7 +193,7 @@
                 let birthday = $('#birthday').val();
 
                 $.ajax({
-                    url: `/api/personal/personal/${id}`,
+                    url: `/api/user/user/${id}`,
                     type: 'PATCH',
                     data: {
                         _method: 'PATCH',

@@ -111,7 +111,7 @@
 
             function yourDish(data = {}) {
                 $.ajax({
-                    url: '/personal/dish/{{$dishId}}/editData',
+                    url: '/user/dish/{{$dishId}}/editData',
                     method: 'get',
                     dataType: 'json',
                     data: data,
@@ -199,7 +199,7 @@
                     // }
 
                     $.ajax({
-                        url: `/personal/dish/${dish_id}`,
+                        url: `/user/dish/${dish_id}`,
                         type: 'post',
                         data: formData,
                         processData: false,

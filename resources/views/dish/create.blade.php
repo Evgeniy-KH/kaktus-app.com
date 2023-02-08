@@ -153,7 +153,7 @@
 
 
                     $.ajax({
-                        url: `/personal/dish`,
+                        url: `/user/dish`,
                         type: 'POST',
                         data: formData,
                         processData: false,
