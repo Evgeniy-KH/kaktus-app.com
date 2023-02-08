@@ -33,22 +33,23 @@ Route::get('/catalog/dish/show/{dish}', [App\Http\Controllers\HomeController::cl
 Route::get('auth/facebook', [SocialController::class, 'facebookRedirect']);
 Route::get('auth/facebook/callback', [SocialController::class, 'loginWithFacebook']);
 
-Route::group(['namespace'=>'App\Http\Controllers\User', 'prefix' => 'personal','middleware' => ['auth']], function () {
-    Route::get('{personal}/edit', [UserController::class, 'editView']);
-    Route::get('/{personal}/edit', [UserController::class, 'edit']);
-    Route::patch('password/{personal}/', [UserController::class, 'updatePassword']);
-    Route::patch('personal/{personal}/', [UserController::class, 'updatePersonal']);
-    Route::post('image/{personal}/', [UserController::class, 'updateImage']);
-//    Route::delete('/{personal}', [PersonalController::class, 'delete'])->name('api.personal.delete');
+Route::group(['namespace'=>'App\Http\Controllers\User', 'prefix' => 'user','middleware' => ['auth']], function () {
+//    Route::get('{user}/edit', [UserController::class, 'editView']);
+    Route::view('{user}', 'user.edit');
+    Route::get('/{user}/edit', [UserController::class, 'edit']);
+    Route::patch('password/{user}/', [UserController::class, 'updatePassword']);
+    Route::patch('user/{user}/', [UserController::class, 'updatePersonal']);
+    Route::post('image/{user}/', [UserController::class, 'updateImage']);
+//    Route::delete('/{user}', [PersonalController::class, 'delete'])->name('api.user.delete');
 
     Route::group(['prefix' => 'dish'], function () {
-        Route::get('/', [DishController::class,'index'])->name('personal.dish.index');
-        Route::get('/create', [DishController::class,'create'])->name('personal.dish.create');
-        Route::post('/', [DishController::class,'store'])->name('personal.dish.store');
-        Route::get('/{dish}/edit', [DishController::class,'editView'])->name('personal.dish.edit');
+        Route::get('/', [DishController::class,'index'])->name('user.dish.index');
+        Route::get('/create', [DishController::class,'create'])->name('user.dish.create');
+        Route::post('/', [DishController::class,'store'])->name('user.dish.store');
+        Route::get('/{dish}/edit', [DishController::class,'editView'])->name('user.dish.edit');
         Route::get('/{dish}/editData', [DishController::class,'editData']);
-        Route::patch('/{dish}', [DishController::class,'update'])->name('personal.dish.update');
-        Route::delete('/{dish}', [DishController::class,'delete'])->name('personal.dish.delete');
+        Route::patch('/{dish}', [DishController::class,'update'])->name('user.dish.update');
+        Route::delete('/{dish}', [DishController::class,'delete'])->name('user.dish.delete');
     });
 
 

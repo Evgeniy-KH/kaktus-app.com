@@ -68,8 +68,8 @@
                                     {{ Auth::user()->name }}
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" id="personal-edit" data-id="{{ Auth::user()->id }}"
-                                       href="personal/{{ Auth::user()->id }}/edit">
+                                    <a class="dropdown-item" id="user-edit" data-id="{{ Auth::user()->id }}"
+                                       href="user/{{ Auth::user()->id }}">
                                         {{ __('Edit') }}
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
@@ -151,7 +151,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="/personal/dish/create" class="nav-link">
+                                    <a href="/user/dish/create" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Create</p>
                                     </a>

@@ -19,7 +19,7 @@ class UserController extends Controller
 {
     public function editView (int $id): View
     {
-        return view('personal.edit', compact('id'));
+        return view('user.edit', compact('id'));
     }
 
     public function edit(int $id): \Illuminate\Http\JsonResponse
@@ -30,63 +30,99 @@ class UserController extends Controller
 
     }
 
-    public function updatePersonal(int $id, UpdatePersonalRequest $request): \Illuminate\Http\JsonResponse
+    public function updatePersonal(int $id, UpdateRequest $request): \Illuminate\Http\JsonResponse
     {
         $user = User::find($id);
         $data = $request->validated();
 
-        $name = $data['name'];
-        $birthday = Carbon::createFromFormat('m/d/Y', $data['birthday'])->format('Y-m-d');
-
-        $user->update([
-            'name' => $name,
-            'birthday' => $birthday
-        ]);
-
-        $returnData = $user;
-
-        return response()->json($returnData);
-    }
-
-    public function updatePassword(int $id, UpdatePasswordRequest $request): \Illuminate\Http\JsonResponse
-    {
-        $data = $request->validated();
-        $user = User::find($id);
-
-        if (Hash::check($data['current_password'], $user->password)) {
+        if ($data['name'] && $data['birthday']) {
+            $name = $data['name'];
+            $birthday = Carbon::createFromFormat('m/d/Y', $data['birthday'])->format('Y-m-d');
             $user->update([
-                'password' => Hash::make($data['password'])
+                'name' => $name,
+                'birthday' => $birthday
             ]);
-            $returnData = $user;
+
             $code = 200;
-        } else {
-            $returnData = array(
-                'status' => 'error',
-                'message' => 'Your old password is incorrect'
-            );
-            $code = 422;
+            $returnData = $user;
         }
+
+        if ($data['current_password'] && $data['password']) {
+
+            if (Hash::check($data['current_password'], $user->password)) {
+                $user->update([
+                    'password' => Hash::make($data['password'])
+                ]);
+                $returnData = $user;
+                $code = 200;
+            } else {
+                $returnData = array(
+                    'status' => 'error',
+                    'message' => 'Your old password is incorrect'
+                );
+                $code = 422;
+            }
+        }
+
+        if ($data['image']) {
+
+            if ($user->image) {
+                Storage::delete('public/images/' . $user->image);
+            }
+
+            $request->hasFile('image');
+            $file = $request->file('image');
+            $fileName = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/images', $fileName);
+            $user->update(['image' => $fileName]);
+
+            $returnData = User::find($id);
+            $code = 200;
+       }
 
         return response()->json($returnData, $code);
     }
 
-    public function updateImage(int $id, UpdatePhotoRequest $request): \Illuminate\Http\JsonResponse
-    {
-        $user = User::find($id);
-
-        if ($user->image) {
-            Storage::delete('public/images/' . $user->image);
-        }
-
-        $request->hasFile('image');
-        $file = $request->file('image');
-        $fileName = time() . '.' . $file->getClientOriginalExtension();
-        $file->storeAs('public/images', $fileName);
-        $user->update(['image' => $fileName]);
-
-        $returnData = User::find($id);;
-
-        return response()->json($returnData);
-    }
+//    public function updatePassword(int $id, UpdateRequest $request): \Illuminate\Http\JsonResponse
+//    {
+//        $data = $request->validated();
+//        $user = User::find($id);
+//
+//        if (Hash::check($data['current_password'], $user->password)) {
+//            $user->update([
+//                'password' => Hash::make($data['password'])
+//            ]);
+//            $returnData = $user;
+//            $code = 200;
+//        } else {
+//            $returnData = array(
+//                'status' => 'error',
+//                'message' => 'Your old password is incorrect'
+//            );
+//            $code = 422;
+//        }
+//
+//        return response()->json($returnData, $code);
+//    }
+//
+//    public function updateImage(int $id, UpdatePhotoRequest $request): \Illuminate\Http\JsonResponse
+//    {
+//
+//        $user = User::find($id);
+//
+//        if ($user->image) {
+//            Storage::delete('public/images/' . $user->image);
+//        }
+//
+//        $request->hasFile('image');
+//        $file = $request->file('image');
+//        $fileName = time() . '.' . $file->getClientOriginalExtension();
+//        $file->storeAs('public/images', $fileName);
+//        $user->update(['image' => $fileName]);
+//
+//        $returnData = User::find($id);;
+//
+//        return response()->json($returnData);
+//    }
 
 }
