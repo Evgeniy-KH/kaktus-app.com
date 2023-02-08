@@ -95,16 +95,16 @@
                                 <img src="{{ asset('/storage/images/'.Auth::user()->avatar_path) }}"  width="200" class="img-fluid img-thumbnail">
                             </div>
                             <div class="form-group">
-                                <label for="image"
+                                <label for="avatar-path"
                                        class=" col-form-label tm-text-primary">{{ __('New Profile Photo') }}</label>
-                                <div id="input-group-image">
-                                    <input id="image" type="file"
+                                <div id="input-group-avatar-path">
+                                    <input id="avatar-path" type="file"
                                            name="profile-photo">
                                 </div>
                             </div>
                             <div class="row mb-0">
                                 <div class="col-md-6 offset-md-6">
-                                    <button type="submit" class="btn btn-primary" id="btn-update-image"
+                                    <button type="submit" class="btn btn-primary" id="btn-update-avatar-path"
                                             style="background-color:#009999; border: none; font-size: 15px ">
                                         {{ __('Update profile-photo') }}
                                     </button>
@@ -142,9 +142,8 @@
 
                 $.ajax({
                     url: `/user/${id}`,
-                    type: 'PATCH',
+                    type: 'POST',
                     data: {
-                        _method: 'PATCH',
                         'current_password': current_password,
                         'password': password,
                         'password_confirmation': password_confirmation
@@ -193,9 +192,8 @@
 
                 $.ajax({
                     url: `/user/${id}`,
-                    type: 'PATCH',
+                    type: 'POST',
                     data: {
-                        _method: 'PATCH',
                         'name': name,
                         'birthday': birthday,
                     },
@@ -229,14 +227,19 @@
                 });
             });
 
-            $('#btn-update-image').on("click", function () {
+            $('#btn-update-avatar-path').on("click", function () {
                 $('.is-invalid').removeClass('is-invalid');
                 $(".invalid-feedback").remove();
-
-                let image = $('#image')[0].files[0];
+                let avatar_path = $('#avatar-path')[0].files[0];
                 let formData = new FormData();
+                console.log(avatar_path);
 
-                formData.append('image', image);
+                // formData.append(' _method', 'PATCH');
+                formData.append('avatar_path', avatar_path);
+
+                // for (var pair of formData.entries()) {
+                //     console.log(pair[0]+ ', ' + pair[1]);
+                // }
 
                 $.ajax({
                     url: `/user/${id}`,
@@ -247,8 +250,8 @@
                     success: function (data) {
                         if (data.id) {
                             let id = data.id
-                            initFill(id);
                             alert('Image uploaded successfully');
+                            window.location.href = "/home"
                         }
                     },
                     error: function (data) {
@@ -256,7 +259,7 @@
                             var errors = data.responseJSON.errors;
 
                             $.each(errors, function (key, value) {
-                                if (key === 'image') {
+                                if (key === 'avatar-path') {
                                     $('#image').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
                                     $('#input-group-image').append(rowError);

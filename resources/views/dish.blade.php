@@ -80,7 +80,7 @@
                     <figcaption class="d-flex align-items-center justify-content-center action">
                        <h2 class="dish-action justify-content-between">
                        <div class="row mt-3 mb-0" style="color:inherit; font-size: 5rem">
-                        <div class="col mr-4" id="edit-btn"><a href="/personal/dish/${data['id']}/edit" style="color:inherit;">Edit</a></div>
+                        <div class="col mr-4" id="edit-btn"><a href="/user/dish/${data['id']}/edit" style="color:inherit;">Edit</a></div>
                        <div class="col mr-4" id="delete-btn" data-id="${dishId}">Delete</div></div></h2>
                     </figcaption>
                   </figure>`
