@@ -187,13 +187,14 @@
                     if ($('#preview_image')[0].files[0]) {
                         let preview_image = $('#preview_image')[0].files[0];
                         formData.append("preview_image", preview_image);
+                        console.log(preview_image);
                     }
 
                     if ($('#main_image')[0].files[0]) {
                         let main_image = $('#main_image')[0].files[0];
                         formData.append("main_image", main_image);
                     }
-
+                    //
                     // for (var pair of formData.entries()) {
                     //     console.log(pair[0]+ ', ' + pair[1]);
                     // }

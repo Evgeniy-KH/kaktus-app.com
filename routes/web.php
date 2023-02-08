@@ -36,7 +36,7 @@ Route::get('auth/facebook/callback', [SocialController::class, 'loginWithFaceboo
 Route::group(['namespace'=>'App\Http\Controllers\User', 'prefix' => 'user','middleware' => ['auth']], function () {
 //    Route::get('{user}/edit', [UserController::class, 'editView']);
     Route::view('{user}', 'user.edit');
-    Route::patch('{user}/', [UserController::class, 'updateUser']);
+    Route::post('{user}/', [UserController::class, 'updateUser']);
     Route::post('image/{user}/', [UserController::class, 'updateImage']);
 //    Route::delete('/{user}', [PersonalController::class, 'delete'])->name('api.user.delete');
 

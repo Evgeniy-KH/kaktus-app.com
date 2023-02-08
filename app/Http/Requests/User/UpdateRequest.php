@@ -29,7 +29,7 @@ class UpdateRequest extends FormRequest
             'email' => ["sometimes", "required", "string", "email"],
             'password' => ["sometimes", 'required', 'string', 'min:8', 'confirmed'],
             'current_password' => ["sometimes", 'required', 'string', 'min:8'],
-            'avatar_path' => ["sometimes", "required", "file"],
+            'avatar_path' => ["sometimes", "required", "image", "mimes:jpg,png,jpeg,gif,svg", "max:20480"],
         ];
     }
 }
