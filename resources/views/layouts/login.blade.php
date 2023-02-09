@@ -22,55 +22,28 @@
 <body>
 <div id="app">
     <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ml-auto ms-auto">
-                    @guest
-
-                        @if (Route::has('login'))
-                            <li class="nav-item">
-                                <a class="nav-link nav-link-3" href="{{ route('login') }}">Login</a>
-                            </li>
-                        @endif
-
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            @if (Route::has('login'))
+                <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+                    @auth
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-1 active" aria-current="page" href="{{ url('/home') }}"> Home page </a>
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-2" href="{{ route('login') }}" >Login</a>
+                        </li>
                         @if (Route::has('register'))
                             <li class="nav-item">
-                                <a class="nav-link nav-link-3" href="{{ route('register') }}">Register</a>
+                                <a class="nav-link nav-link-3" href="{{ route('register') }}" >Register</a>
                             </li>
                         @endif
-
-                    @endguest
-
-                    @if (auth()->user())
-                            @if(Auth::user()->avatar_path)
-                                <img class="image rounded-circle" src="{{asset('/storage/images/'.Auth::user()->avatar_path)}}" alt="profile_image" style="width: 80px;height: 80px; padding: 10px; margin: 0px; ">
-                            @endif
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle nav-link-3" role="button" data-bs-toggle="dropdown"
-                               aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->name }}
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" id="personal-edit" data-id="{{ Auth::user()->id }}"
-                                   href="personal/{{ Auth::user()->id }}/edit ">
-                                    {{ __('Edit') }}
-                                </a>
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                   onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
-                                </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </div>
-
-
-                        </li>
-                    @endif
+                    @endauth
                 </ul>
-            </div>
+            @endif
         </div>
+    </div>
     </nav>
     <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll"
          data-image-src={{ asset("img/hero.jpg") }}>

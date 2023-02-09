@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="container-fluid tm-container-content tm-mt-60">
+    <div class="container-fluid tm-container-content tm-mt-60" >
         <div class="row mb-4 dish-title" >
         </div>
         <div class="row tm-mb-90">
@@ -41,7 +41,7 @@
             }
         });
 
-        let userId = '{{Auth::user()->id}}';
+        let userId = $('#user-edit').attr('data-id');
         let dishId = {{$id}};
 
         function checkImages (images) {
@@ -140,11 +140,7 @@
                         window.location.href = "/home"
                     },
                 });
-
-
-
             });
-
 
         });
     </script>

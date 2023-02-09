@@ -54,20 +54,20 @@
 
                         @endguest
 
-                        @if (auth()->user())
-                            @if(Auth::user()->avatar_path)
+                        @if ($user)
+                            @if( $user->avatar_path )
                                 <img class="image rounded-circle"
-                                     src="{{asset('/storage/images/'.Auth::user()->avatar_path)}}"
+                                     src="{{asset('/storage/images/'.$user->avatar_path)}}"
                                      alt="profile_image" style="width: 80px;height: 80px; padding: 10px; margin: 0px; ">
                             @endif
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle nav-link-3" role="button" data-bs-toggle="dropdown"
                                    aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
+                                    {{ $user->name }}
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" id="user-edit" data-id="{{ Auth::user()->id }}"
-                                       href="/user/{{ Auth::user()->id }}">
+                                    <a class="dropdown-item" id="user-edit" data-id="{{ $user->id }}"
+                                       href="/user/{{ $user->id }}">
                                         {{ __('Edit') }}
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"

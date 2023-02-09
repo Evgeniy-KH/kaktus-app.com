@@ -107,7 +107,7 @@
                 }
             });
 
-            let user_id = '{{Auth::user()->id}}';
+            let user_id = $('#user-edit').attr('data-id');
 
             function yourDish(data = {}) {
                 $.ajax({
