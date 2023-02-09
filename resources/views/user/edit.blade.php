@@ -92,7 +92,7 @@
                         </div>
                         <div class="card-body">
                             <div class="w-75 mb-2" id="preview-photo">
-                                <img src="{{ asset('/storage/images/'.Auth::user()->avatar_path) }}"  width="200" class="img-fluid img-thumbnail">
+                                <img src="{{ asset('/storage/images/'.$user->avatar_path) }}"  alt="avatar" width="200" class="img-fluid img-thumbnail">
                             </div>
                             <div class="form-group">
                                 <label for="avatar-path"
@@ -150,9 +150,7 @@
                     },
                     dataType: 'json',
                     success: function (data) {
-                        if (data.id) {
-                            let id = data.id
-                            initFill(id);
+                        if (data === 'success') {
                             alert('Password has beed updated successfully');
                         }
                         // location.reload();
@@ -199,9 +197,7 @@
                     },
                     dataType: 'json',
                     success: function (data) {
-                        if (data.id) {
-                            let id = data.id
-                            initFill(id);
+                        if (data === 'success') {
                             alert('Personal info has beed updated successfully');
                         }
                         // location.reload();
@@ -248,8 +244,7 @@
                     processData: false,
                     contentType: false,
                     success: function (data) {
-                        if (data.id) {
-                            let id = data.id
+                        if (data === 'success') {
                             alert('Image uploaded successfully');
                             window.location.href = "/home"
                         }
