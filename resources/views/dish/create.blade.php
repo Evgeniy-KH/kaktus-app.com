@@ -7,7 +7,7 @@
                 <div class="row mb-3" >
                     <h2 class="col-12 tm-text-primary">Your new Recipes</h2>
                 </div>
-                <div class="card mb-3 tm-bg-gray elevation-3" id="dish_card" data-id="{{ $user->id }}">
+                <div class="card mb-3 tm-bg-gray elevation-3" id="dish_card">
                     <div class="tm-video-details">
 
                         <div class="row mb-3">
@@ -110,12 +110,10 @@
                         $.each(data, function (i, item) {
                         let tags = `<option
                             {{
-    is_array( old('tag_ids')) && in_array(item['id'], old('tag_ids')) ? ' selected' : ''}} value="${item['id']}"
+                            is_array( old('tag_ids')) && in_array(item['id'], old('tag_ids')) ? ' selected' : ''}} value="${item['id']}"
                                                              >${item['title']}</option>`
                             $('.select-tags').append(tags);
                         });
-
-
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         alert('Error: ' + textStatus + ' - ' + errorThrown);
@@ -126,8 +124,6 @@
             $(document).ready(function () {
                 $('#search-form').remove();
                 showTags ();
-                console.log('Create new recipes')
-
                 $('#create_dish_button').on("click", function () {
 
                    //  let id_user = $('#dish_card').attr('data-id');
@@ -143,7 +139,7 @@
                     //  let description = $('#description').val();
                     //  let ingredients = $('#ingredients').val();
 
-                    formData.append("user_id", $('#dish_card').attr('data-id'));
+                    formData.append("user_id", $('#user-edit').attr('data-id'));
                     formData.append("title", $('#title').val());
                     formData.append("description", $('#description').val());
                     formData.append("ingredients", $('#ingredients').val());

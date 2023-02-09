@@ -28,5 +28,7 @@ class ViewServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer('user.edit', UserComposer::class);
+        View::composer('layouts.app', UserComposer::class);
+        View::composer('layouts.login', UserComposer::class);
     }
 }
