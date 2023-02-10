@@ -3,12 +3,13 @@
 namespace App\Filters;
 
 use App\Filters\Dish\PriceFilter;
+use App\Filters\Dish\TagFilter;
 
 class DishFilter
 {
     protected $filters = [
         'price' => PriceFilter::class,
-        ///'tags' => CategoryFilter::class,
+        'tag' => TagFilter::class,
     ];
 
     public function apply($query)

@@ -40,7 +40,7 @@ class HomeController extends Controller
 
     public function catalog()
     {
-        $dishes = Dish::with('getDishImages')->get();
+        $dishes = Dish::with('getDishImages', 'tags')->get();
         $returnData = $dishes;
 
         return response()->json($returnData);

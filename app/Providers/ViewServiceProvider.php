@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\View\Composer\TagComposer;
 use App\View\Composer\UserComposer;
 use Illuminate\Support\ServiceProvider;
 use App\Models\User;
@@ -29,6 +30,6 @@ class ViewServiceProvider extends ServiceProvider
     {
         View::composer('user.edit', UserComposer::class);
         View::composer('layouts.app', UserComposer::class);
-        View::composer('layouts.login', UserComposer::class);
+//        View::composer('home', TagComposer::class);
     }
 }

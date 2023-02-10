@@ -2,6 +2,7 @@
 
 namespace App\View\Composer;
 
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\View\View;
 
@@ -12,6 +13,6 @@ class TagComposer
      */
     public function compose(View $view)
     {
-        $view->with('user', auth()->user());
+        $view->with('tags' , Tag::all());
     }
 }
