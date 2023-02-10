@@ -159,6 +159,7 @@
                    </div>
                 </div>`;
 
+
                 $('#catalog').prepend(row);
 
                 $('#edit-btn, #delete-btn, #show-dish-btm')
@@ -212,9 +213,13 @@
                 formData.append('price', price);
                 formData.append('tagsId', tagsId);
 
+
                 for (var pair of formData.entries()) {
                     console.log(pair[0] + ', ' + pair[1]);
                 }
+
+                // }
+
 
                 $.ajax({
                     url: '/catalog/filter',

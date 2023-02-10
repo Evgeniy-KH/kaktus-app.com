@@ -13,7 +13,7 @@ class Tag extends Model
     protected $guarded = false;
 
 
-    public function getDishes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function dishes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Dish::class,'dishes_tags', 'tag_id', 'dish_id');
     }
