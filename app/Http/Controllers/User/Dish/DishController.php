@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\User\Dish;
 
 
+use App\Filters\DishFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dish\StoreRequest;
 use App\Http\Requests\Dish\UpdateRequest;
