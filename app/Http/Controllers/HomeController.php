@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\DishFilter;
+use App\Http\Requests\Dish\FilterRequest;
 use App\Models\Dish;
 use App\Models\DishImage;
 use App\Models\Tag;
@@ -54,6 +56,13 @@ class HomeController extends Controller
         $dish = Dish::with('getDishImages')->findOrFail($id);
 
         return response()->json($dish);
+    }
+
+    public function filter( DishFilter $filters )
+    {
+        $returnData = Dish::filter($filters)->get();
+
+        return response()->json($returnData);
     }
 
 }

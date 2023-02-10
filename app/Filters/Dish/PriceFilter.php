@@ -4,25 +4,11 @@ namespace App\Filters\Dish;
 
 class PriceFilter
 {
-    public function apply($query)
+    function __invoke($query, $request)
     {
-        if (request()->filled('price')) {
-            list($min, $max) = explode(",", $request->price);
+        list($min, $max) = explode(",", $request);
 
-            $query->where('price', '>=', $min)
-                ->where('price', '<=', $max);
-        }
-
-
-        if (request()->filled('tags')) {
-            $categorySlug = $request->category;
-
-            $query->whereHas('tags', function ($query) use ($tagSlug) {
-                $query->where('slug', $tagSlug);
-            });
-        }
-
-
-        return $query->get();
+        $query->where('price', '>=', $min)
+            ->where('price', '<=', $max);
     }
 }

@@ -25,4 +25,9 @@ class Dish extends Model
         return $this->belongsToMany(Tag::class,'dishes_tags', 'dish_id', 'tag_id');
     }
 
+    public function scopeFilter($query, $filters)
+    {
+        return $filters->apply($query);
+    }
+
 }
