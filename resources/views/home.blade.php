@@ -214,9 +214,9 @@
                 formData.append('tagsId', tagsId);
 
 
-                for (var pair of formData.entries()) {
-                    console.log(pair[0] + ', ' + pair[1]);
-                }
+                // for (var pair of formData.entries()) {
+                //     console.log(pair[0] + ', ' + pair[1]);
+                // }
 
                 // }
 
