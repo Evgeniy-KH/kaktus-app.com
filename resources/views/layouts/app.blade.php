@@ -28,6 +28,8 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="{{ asset('plugins/sumoselect-master/sumoselect.css') }}" rel="stylesheet" />
+
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -207,10 +209,13 @@
 
 <script src={{ asset("js/plugins.js") }}></script>
 <script type="text/javascript" src="{{ asset('js/jquery-3.6.3.min.js') }}"></script>
+
+<script src="{{ asset('plugins/jquery-mask/jquery.mask.js') }}" type="text/javascript"></script>
 <script type="text/javascript" src="{{ asset('js/moment.js') }}"></script>
 <script type="text/javascript" src="{{ asset('bootstrap-5.2.3-dist/js/bootstrap.bundle.js') }}"></script>
 <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.sumoselect/3.0.2/jquery.sumoselect.min.js"></script>
 <!-- AdminLTE App -->
 <script src={{ asset("dist/js/adminlte.js") }}></script>
 
