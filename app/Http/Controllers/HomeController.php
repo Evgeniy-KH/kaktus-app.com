@@ -60,6 +60,7 @@ class HomeController extends Controller
 
     public function filter( DishFilter $filters )
     {
+
         $returnData = Dish::filter($filters)->get();
 
         return response()->json($returnData);

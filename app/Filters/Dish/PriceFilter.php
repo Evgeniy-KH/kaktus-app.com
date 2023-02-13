@@ -9,6 +9,6 @@ class PriceFilter
         list($min, $max) = explode(",", $request);
         $query->where('price', '>=', $min)
             ->where('price', '<=', $max)
-        ->with('getDishImages');
+        ->with('getDishImages', 'tags');
     }
 }

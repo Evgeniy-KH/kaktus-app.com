@@ -2,17 +2,14 @@
 
 namespace App\Filters\Dish;
 
-class KeywordsFilter
+class KeywordFilter
 {
     function __invoke($query, $request)
     {
-        $tag_id= $request;
+        $keyword = $request;
 
-        $filter = function ($q) use ($tag_id) {
-            $q->where('tag_id', $tag_id);
-        };
-
-       $query->whereHas('tags', $filter)->with('getDishImages', 'tags');
-
+        $query->where('title', 'LIKE', '%' .$keyword. '%')
+            ->orWhere('description', 'LIKE', '%' .$keyword. '%')
+            ->with('getDishImages', 'tags');
     }
 }
