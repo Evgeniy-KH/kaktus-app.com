@@ -10,8 +10,8 @@ class DishFilter
 {
     protected $filters = [
         'price' => PriceFilter::class,
-       'tagsId' => TagFilter::class,
-       'keyword' => KeywordFilter::class,
+        'tagsId' => TagFilter::class,
+        'keyword' => KeywordFilter::class,
     ];
 
     public function apply($query)

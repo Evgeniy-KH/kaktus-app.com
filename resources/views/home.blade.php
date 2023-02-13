@@ -11,7 +11,7 @@
                 <input class="tm-search-input filter-input" type="text" id="keyword" placeholder="Keyword"
                        aria-label="Search">
 
-                <select class="search_tag ml-4"  id="select-tag" multiple="multiple" style="height: 50px;">
+                <select class="search_tag ml-4" id="select-tag" multiple="multiple" style="height: 50px;">
                 </select>
 
                 <input class="btn btn-primary filter-input-btn " id="filter-input-btn"
@@ -62,9 +62,8 @@
             csvDispCount: 3,
             search: true,
         });
+
         $(".search_tag").css("margin-left", "10px");
-
-
 
 
         function mask() {
@@ -83,20 +82,21 @@
                     mainImage = image['image']
                 }
             })
+
             return {"previewImage": previewImage, "mainImage": mainImage}
         }
 
         function checkTags(tags) {
-           let tagList = [];
+            let tagList = [];
             $.each(tags, function (i, tag) {
-
                 let tag_title = tag['title'];
                 tagList.push(tag_title);
             })
+
             return tagList
         }
 
-        function showTags (data ={}) {
+        function showTags(data = {}) {
             $.ajax({
                 url: `/catalog/dish/getTags`,
                 type: 'get',
@@ -115,12 +115,10 @@
                     alert('Error: ' + textStatus + ' - ' + errorThrown);
                 },
             });
-
         }
 
         function catalog(data) {
             $.each(data, function (i, item) {
-                console.log(item);
 
                 item['created_at'] = new Date(item['created_at']).toLocaleDateString("en-US", {
                     day: 'numeric',
@@ -138,12 +136,10 @@
                 })
 
                 let rowTags = arrayTags.join("");
-
                 let previewImage = images["previewImage"];
-
                 let row = `<div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-<div class="hidden dish-author-id" data-id="${item['user_id']}"></div>
-<div class="hidden dish-id" data-id=${item['id']}"></div>
+                   <div class="hidden dish-author-id" data-id="${item['user_id']}"></div>
+                    <div class="hidden dish-id" data-id=${item['id']}"></div>
                    <figure class="effect-ming tm-video-item" style="height: 209px; width: 372px">
                     <img src="/storage/${previewImage}" alt="preview Image" class="img-fluid">
                     <figcaption class="d-flex align-items-center justify-content-center">
@@ -166,7 +162,6 @@
                     .on('mouseleave', function () {
                         $(this).css("color", "inherit");
                     });
-
             });
         }
 
@@ -177,7 +172,7 @@
                 dataType: 'json',
                 data: data,
                 success: function (data) {
-                        catalog(data);
+                    catalog(data);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert('Error: ' + textStatus + ' - ' + errorThrown);
@@ -187,7 +182,6 @@
         }
 
         $(document).ready(function () {
-
             initCatalog();
             showTags();
             mask()
@@ -196,24 +190,22 @@
                 console.log('Filter input');
                 let formData = new FormData();
 
-                if($('#keyword').val()){
+                if ($('#keyword').val()) {
                     let keyword = $('#keyword').val();
 
                     formData.append('keyword', keyword);
                 }
 
-                if ($('#min-price').val()!='' || $('#max-price').val()!='' )
-                {
-                    console.log('333333333')
+                if ($('#min-price').val() != '' || $('#max-price').val() != '') {
                     let price = [$('#min-price').val(), $('#max-price').val()]
 
                     formData.append('price', price);
                 }
 
-                if( $('.search_tag option:selected').length > 0 ){
+                if ($('.search_tag option:selected').length > 0) {
                     let tagsId = [];
 
-                    $('.search_tag option:selected').each(function(i) {
+                    $('.search_tag option:selected').each(function (i) {
                         tagsId.push($(this).val());
                         $('.search_tag')[0].sumo.unSelectItem(i);
                     });
@@ -221,13 +213,11 @@
                     formData.append('tagsId', tagsId);
                 }
 
-                for (var pair of formData.entries()) {
-                    console.log(pair[0] + ', ' + pair[1]);
-                }
+                // for (var pair of formData.entries()) {
+                //     console.log(pair[0] + ', ' + pair[1]);
+                // }
 
-                console.log(formData);
                 if (formData.entries().next().done) {
-                    console.log('formData is null');
                     initCatalog();
                 } else {
                     $.ajax({
@@ -251,6 +241,7 @@
                 }
             });
         });
+
     </script>
 
     <style type="text/css">
@@ -269,6 +260,7 @@
             width: 100px;
             height: 50px;
         }
+
         .select-tags {
             background: none !important;
         }

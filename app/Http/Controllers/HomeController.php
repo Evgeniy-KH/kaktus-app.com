@@ -31,6 +31,7 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
     public function getTags()
     {
         $tags = Tag::all();
@@ -58,9 +59,8 @@ class HomeController extends Controller
         return response()->json($dish);
     }
 
-    public function filter( DishFilter $filters )
+    public function filter(DishFilter $filters)
     {
-
         $returnData = Dish::filter($filters)->get();
 
         return response()->json($returnData);
