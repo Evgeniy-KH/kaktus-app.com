@@ -91,7 +91,6 @@
             $.each(tags, function (i, tag) {
 
                 let tag_title = tag['title'];
-                console.log(tag_title);
                 tagList.push(tag_title);
             })
             return tagList
@@ -121,9 +120,7 @@
 
         function catalog(data) {
             $.each(data, function (i, item) {
-
-
-                console.log(item)
+                console.log(item);
 
                 item['created_at'] = new Date(item['created_at']).toLocaleDateString("en-US", {
                     day: 'numeric',
@@ -134,12 +131,13 @@
                 let images = checkImages(item['get_dish_images']);// return of this function  variables
                 let tagList = checkTags(item['tags']);// return of this function  variables\
                 let arrayTags = [];
+
                 $.each(tagList, function (i, tag) {
                     let tagRow = `<span class="tm-text-gray-light">${tag}</span>`
                     arrayTags.push(tagRow);
                 })
+
                 let rowTags = arrayTags.join("");
-                console.log(rowTags)
 
                 let previewImage = images["previewImage"];
 
@@ -158,7 +156,6 @@
                    <span>${item['price']}$</span>
                    </div>
                 </div>`;
-
 
                 $('#catalog').prepend(row);
 
@@ -190,55 +187,68 @@
         }
 
         $(document).ready(function () {
-            showTags();
 
             initCatalog();
-
+            showTags();
             mask()
 
             $('#filter-input-btn').on("click", function () {
                 console.log('Filter input');
-
-                let keyword = $('#keyword').val();
-                let price = [$('#min-price').val(), $('#max-price').val()]
-                let tagsId = [];
-                $('.search_tag option:selected').each(function(i) {
-                    tagsId.push($(this).val());
-                    $('.search_tag')[0].sumo.unSelectItem(i);
-                });
-
                 let formData = new FormData();
 
-                formData.append('keyword', keyword);
-                formData.append('price', price);
-                formData.append('tagsId', tagsId);
+                if($('#keyword').val()){
+                    let keyword = $('#keyword').val();
 
+                    formData.append('keyword', keyword);
+                }
 
-                // for (var pair of formData.entries()) {
-                //     console.log(pair[0] + ', ' + pair[1]);
-                // }
+                if ($('#min-price').val()!='' || $('#max-price').val()!='' )
+                {
+                    console.log('333333333')
+                    let price = [$('#min-price').val(), $('#max-price').val()]
 
-                // }
+                    formData.append('price', price);
+                }
 
+                if( $('.search_tag option:selected').length > 0 ){
+                    let tagsId = [];
 
-                $.ajax({
-                    url: '/catalog/filter',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
+                    $('.search_tag option:selected').each(function(i) {
+                        tagsId.push($(this).val());
+                        $('.search_tag')[0].sumo.unSelectItem(i);
+                    });
+
+                    formData.append('tagsId', tagsId);
+                }
+
+                for (var pair of formData.entries()) {
+                    console.log(pair[0] + ', ' + pair[1]);
+                }
+
+                console.log(formData);
+                if (formData.entries().next().done) {
+                    console.log('formData is null');
+                    initCatalog();
+                } else {
+                    $.ajax({
+                        url: '/catalog/filter',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
 
                             $('#catalog').remove()
                             let row = `<div class="row tm-mb-90 tm-gallery" id="catalog">`
                             $('#main-catalog').prepend(row);
                             catalog(data)
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert('Error: ' + textStatus + ' - ' + errorThrown);
-                    }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert('Error: ' + textStatus + ' - ' + errorThrown);
+                        }
 
-                });
+                    });
+                }
             });
         });
     </script>
