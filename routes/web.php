@@ -25,6 +25,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/catalog', [App\Http\Controllers\HomeController::class, 'catalog'])->name('home.catalog');
+Route::get('/catalog/pagination', [App\Http\Controllers\HomeController::class, 'paginationAjax'])->name('home.catalog.pagination');
 Route::get('/catalog/dish/getTags', [App\Http\Controllers\HomeController::class, 'getTags']);
 Route::post('/catalog/filter', [App\Http\Controllers\HomeController::class, 'filter']);
 Route::get('/catalog/dish/{dish}', [App\Http\Controllers\HomeController::class, 'show'])->name('home.show');
@@ -36,12 +37,12 @@ Route::get('auth/facebook/callback', [SocialController::class, 'loginWithFaceboo
 
 Route::group(['namespace'=>'App\Http\Controllers\User', 'prefix' => 'user','middleware' => ['auth']], function () {
     Route::view('{userId}', 'user.edit');
-    Route::post('{userId}/', [UserController::class, 'update']);
+    Route::post('{userId}', [UserController::class, 'update']);
 
     Route::group(['prefix' => 'dish'], function () {
         Route::get('/', [DishController::class,'index'])->name('user.dish.index');
         Route::get('/create', [DishController::class,'create'])->name('user.dish.create');
-        Route::post('/', [DishController::class,'store'])->name('user.dish.store');
+        Route::post('/store', [DishController::class,'store'])->name('user.dish.store');
         Route::get('/{dishId}/edit', [DishController::class,'editView'])->name('user.dish.edit');
         Route::get('/{dishId}/editData', [DishController::class,'editData']);
         Route::patch('/{dishId}', [DishController::class,'update'])->name('user.dish.update');

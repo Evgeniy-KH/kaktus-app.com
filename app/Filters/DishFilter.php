@@ -24,7 +24,6 @@ class DishFilter
         return $query;
     }
 
-
     public function receivedFilters()
     {
         return request()->only(array_keys($this->filters));
