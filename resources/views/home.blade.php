@@ -10,10 +10,8 @@
                        aria-label="Search">
                 <input class="tm-search-input filter-input" type="text" id="keyword" placeholder="Keyword"
                        aria-label="Search">
-
                 <select class="search_tag ml-4" id="select-tag" multiple="multiple" style="height: 50px;">
                 </select>
-
                 <input class="btn btn-primary filter-input-btn " id="filter-input-btn"
                        value="{{ __('Filter') }}">
             </form>
@@ -32,15 +30,9 @@
             <div class="row tm-mb-90 tm-gallery" id="catalog">
             </div> <!-- row -->
             <div class="row tm-mb-90">
-                <div class="col-12 d-flex justify-content-between align-items-center tm-paging-col">
-                    <a href="javascript:void(0);" class="btn btn-primary tm-btn-prev mb-2 disabled">Previous</a>
-                    <div class="tm-paging d-flex">
-                        {{--                    <a href="javascript:void(0);" class="active tm-paging-link">1</a>--}}
-                        {{--                    <a href="javascript:void(0);" class="tm-paging-link">2</a>--}}
-                        {{--                    <a href="javascript:void(0);" class="tm-paging-link">3</a>--}}
-                        {{--                    <a href="javascript:void(0);" class="tm-paging-link">4</a>--}}
+                <div class="col-12 d-flex justify-content-between align-items-center tm-paging-col pagination a">
+                    <div class="tm-paging d-flex pagination-center">
                     </div>
-                    <a href="javascript:void(0);" class="btn btn-primary tm-btn-next">Next Page</a>
                 </div>
             </div>
         </div>
@@ -64,7 +56,6 @@
         });
 
         $(".search_tag").css("margin-left", "10px");
-
 
         function mask() {
             $('#min-price').mask("#.##0.00", {reverse: true});
@@ -118,6 +109,10 @@
         }
 
         function catalog(data) {
+            $('#catalog').remove()
+            let row = `<div class="row tm-mb-90 tm-gallery" id="catalog">`
+            $('#main-catalog').prepend(row);
+
             $.each(data, function (i, item) {
 
                 item['created_at'] = new Date(item['created_at']).toLocaleDateString("en-US", {
@@ -137,7 +132,7 @@
 
                 let rowTags = arrayTags.join("");
                 let previewImage = images["previewImage"];
-                let row = `<div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+                let row = `<div class="catalog-item col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                    <div class="hidden dish-author-id" data-id="${item['user_id']}"></div>
                     <div class="hidden dish-id" data-id=${item['id']}"></div>
                    <figure class="effect-ming tm-video-item" style="height: 209px; width: 372px">
@@ -172,12 +167,31 @@
                 dataType: 'json',
                 data: data,
                 success: function (data) {
-                    catalog(data);
+                    catalog(data['data']);
+                    pagination(data['links']);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert('Error: ' + textStatus + ' - ' + errorThrown);
                 }
 
+            });
+        }
+
+        function pagination(data = {}) {
+            $('.tm-paging-link').remove();
+
+            $.each(data, function (i, item) {
+                if (i === 0) {
+                    let row = `<a class="btn btn-primary mb-2 tm-paging-link filter-input-btn"  href="${item['url']}" >Previous</a>`
+                    $('.pagination').prepend(row);
+                } else if (i === data.length - 1) {
+                    let row = `<a class="btn btn-primary tm-paging-link filter-input-btn " href="${item['url']}">Next Page</a>`
+                    $('.pagination').append(row);
+                } else {
+                    let active = item['active'] ? 'active' : '';
+                    let row = `<a  class="tm-paging-link ${active}"  href="${item['url']}" >${item['label']}</a>`;
+                    $('.pagination-center').append(row);
+                }
             });
         }
 
@@ -227,19 +241,32 @@
                         processData: false,
                         contentType: false,
                         success: function (data) {
-
-                            $('#catalog').remove()
-                            let row = `<div class="row tm-mb-90 tm-gallery" id="catalog">`
-                            $('#main-catalog').prepend(row);
-                            catalog(data)
+                            catalog(data['data']);
+                            pagination(data['links']);
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             alert('Error: ' + textStatus + ' - ' + errorThrown);
                         }
-
                     });
                 }
             });
+
+            $(document).on('click', '.tm-paging-link', function (event) {
+                event.preventDefault();
+                let page = $(this).attr('href').split('page=')[1];
+                fetch_user_data(page);
+            });
+
+            function fetch_user_data(page) {
+                $.ajax({
+                    url: "/catalog/pagination?page=" + page,
+                    // data: {'filter': filter},
+                    success: function (data) {
+                        catalog(data['data']);
+                        pagination(data['links']);
+                    }
+                });
+            }
         });
 
     </script>

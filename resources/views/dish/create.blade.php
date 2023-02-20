@@ -149,7 +149,7 @@
 
 
                     $.ajax({
-                        url: `/user/dish`,
+                        url: `/user/dish/store`,
                         type: 'POST',
                         data: formData,
                         processData: false,
