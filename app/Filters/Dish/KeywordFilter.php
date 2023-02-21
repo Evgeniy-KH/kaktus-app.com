@@ -10,6 +10,6 @@ class KeywordFilter
 
         $query->where('title', 'LIKE', '%' .$keyword. '%')
             ->orWhere('description', 'LIKE', '%' .$keyword. '%')
-            ->with('getDishImages', 'tags');
+            ->with('dishImages', 'tags');
     }
 }

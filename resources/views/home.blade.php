@@ -109,6 +109,7 @@
         }
 
         function catalog(data) {
+
             $('#catalog').remove()
             let row = `<div class="row tm-mb-90 tm-gallery" id="catalog">`
             $('#main-catalog').prepend(row);
@@ -121,7 +122,7 @@
                     year: 'numeric'
                 });
 
-                let images = checkImages(item['get_dish_images']);// return of this function  variables
+                let images = checkImages(item['dish_images']);// return of this function  variables
                 let tagList = checkTags(item['tags']);// return of this function  variables\
                 let arrayTags = [];
 
@@ -160,13 +161,17 @@
             });
         }
 
-        function initCatalog(data = {}) {
+        function initCatalog(filters = {}) {
             $.ajax({
                 url: '/catalog',
-                method: 'get',
-                dataType: 'json',
-                data: data,
+                type: 'get',
+                data: {
+                    price: filters['price'],
+                    keyword: filters['keyword'],
+                    tagsId: filters['tagsId'],
+                },
                 success: function (data) {
+                    console.log(data);
                     catalog(data['data']);
                     pagination(data['links']);
                 },
@@ -195,72 +200,62 @@
             });
         }
 
+        function getFilters() {
+            let filters = {};
+
+            if ($('#keyword').val()) {
+                let keyword = $('#keyword').val().replace(/[^a-z0-9\s]/gi, '');
+                console.log(keyword);
+
+                filters['keyword'] = keyword;
+            }
+
+            if ($('#min-price').val() != '' || $('#max-price').val() != '') {
+                let price = [$('#min-price').val(), $('#max-price').val()].toString();
+                filters['price'] = price;
+            }
+
+            if ($('.search_tag option:selected').length > 0) {
+                let tagsId = [];
+
+                $('.search_tag option:selected').each(function (i) {
+                    tagsId.push($(this).val());
+                    $('.search_tag')[0].sumo.unSelectItem(i);
+                });
+
+                filters['tagsId'] = tagsId;
+            }
+            return filters;
+
+        }
+
         $(document).ready(function () {
             initCatalog();
             showTags();
             mask()
 
             $('#filter-input-btn').on("click", function () {
-                console.log('Filter input');
-                let formData = new FormData();
 
-                if ($('#keyword').val()) {
-                    let keyword = $('#keyword').val();
-
-                    formData.append('keyword', keyword);
-                }
-
-                if ($('#min-price').val() != '' || $('#max-price').val() != '') {
-                    let price = [$('#min-price').val(), $('#max-price').val()]
-
-                    formData.append('price', price);
-                }
-
-                if ($('.search_tag option:selected').length > 0) {
-                    let tagsId = [];
-
-                    $('.search_tag option:selected').each(function (i) {
-                        tagsId.push($(this).val());
-                        $('.search_tag')[0].sumo.unSelectItem(i);
-                    });
-
-                    formData.append('tagsId', tagsId);
-                }
-
-                // for (var pair of formData.entries()) {
-                //     console.log(pair[0] + ', ' + pair[1]);
-                // }
-
-                if (formData.entries().next().done) {
-                    initCatalog();
-                } else {
-                    $.ajax({
-                        url: '/catalog/filter',
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function (data) {
-                            catalog(data['data']);
-                            pagination(data['links']);
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            alert('Error: ' + textStatus + ' - ' + errorThrown);
-                        }
-                    });
-                }
+                let filters = getFilters()
+                initCatalog(filters);
             });
 
             $(document).on('click', '.tm-paging-link', function (event) {
                 event.preventDefault();
                 let page = $(this).attr('href').split('page=')[1];
-                fetch_user_data(page);
+                let filters = getFilters()
+                console.log(page);
+                fetch_user_data(filters,page);
             });
 
-            function fetch_user_data(page) {
+            function fetch_user_data(filters,page) {
                 $.ajax({
-                    url: "/catalog/pagination?page=" + page,
-                    // data: {'filter': filter},
+                    url: "/catalog?page=" + page,
+                    data: {
+                        price: filters['price'],
+                        keyword: filters['keyword'],
+                        tagsId: filters['tagsId'],
+                    },
                     success: function (data) {
                         catalog(data['data']);
                         pagination(data['links']);

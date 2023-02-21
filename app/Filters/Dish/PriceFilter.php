@@ -10,6 +10,6 @@ class PriceFilter
 
         $query->where('price', '>=', $min)
             ->where('price', '<=', $max)
-        ->with('getDishImages', 'tags');
+        ->with('dishImages', 'tags');
     }
 }
