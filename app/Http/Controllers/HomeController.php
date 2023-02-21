@@ -39,21 +39,11 @@ class HomeController extends Controller
         return response()->json($tags);
     }
 
-    public function catalog()
+    public function catalog(DishFilter $filters)
     {
-        $dishes = Dish::with('getDishImages', 'tags')->paginate(4);
-        $returnData = $dishes;
+        $returnData = Dish::filter($filters)->with('dishImages', 'tags')->paginate(3);
 
         return response()->json($returnData);
-    }
-
-    function paginationAjax(Request $request)
-    {
-        if($request->ajax())
-        {
-            $data =  Dish::with('getDishImages', 'tags')->paginate(4);
-            return response()->json($data);
-        }
     }
 
     public function show(int $id)
@@ -63,16 +53,9 @@ class HomeController extends Controller
 
     public function showDish(int $id)
     {
-        $dish = Dish::with('getDishImages')->findOrFail($id);
+        $dish = Dish::with('dishImages')->findOrFail($id);
 
         return response()->json($dish);
-    }
-
-    public function filter(DishFilter $filters)
-    {
-        $returnData = Dish::filter($filters)->paginate(4);
-
-        return response()->json($returnData);
     }
 
 }

@@ -15,7 +15,7 @@ class Dish extends Model
     protected $guarded = false;
 
 
-    public function getDishImages(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function dishImages(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(DishImage::class, 'dish_id','id');
     }
@@ -29,5 +29,6 @@ class Dish extends Model
     {
         return $filters->apply($query);
     }
+
 
 }
