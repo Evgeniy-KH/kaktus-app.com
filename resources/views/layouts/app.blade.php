@@ -171,11 +171,9 @@
             <!-- /.sidebar -->
         </aside>
         <!-- Main content -->
-        <div class="content-wrapper" style="background-color: white">
+        <div class="content-wrapper" style="background-color: white;">
             <section class="content">
-                <div class="container-fluid tm-container-content tm-mt-60">
                     @yield('content')
-                </div>
             </section>
         </div>
         <footer class="main-footer" style="margin-left: 200px;">
@@ -203,6 +201,10 @@
     ::-webkit-scrollbar {
         width: 0px;
         background: transparent; /* make scrollbar transparent */
+    }
+
+    .content-wrapper{
+        min-height: 600px !important;
     }
 </style>
 </body>

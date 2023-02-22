@@ -7,9 +7,10 @@ class KeywordFilter
     function __invoke($query, $request)
     {
         $keyword = $request;
-
-        $query->where('title', 'LIKE', '%' .$keyword. '%')
-            ->orWhere('description', 'LIKE', '%' .$keyword. '%')
+        $query->where('title', 'LIKE', '%' . $keyword . '%')
+            ->orWhere('description', 'LIKE', '%' . $keyword . '%')
             ->with('dishImages', 'tags');
+
+        return $query;
     }
 }
