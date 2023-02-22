@@ -7,9 +7,10 @@ class PriceFilter
     function __invoke($query, $request)
     {
         list($min, $max) = explode(",", $request);
-
         $query->where('price', '>=', $min)
             ->where('price', '<=', $max)
-        ->with('dishImages', 'tags');
+            ->with('dishImages', 'tags');
+
+        return $query;
     }
 }

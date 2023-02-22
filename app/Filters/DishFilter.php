@@ -16,18 +16,12 @@ class DishFilter
 
     public function apply($query)
     {
-        $filterQuery = $query;
         foreach ($this->receivedFilters() as $name => $value) {
-           // dump($name, $value);
             $filterInstance = new $this->filters[$name];
-           // dump($filterQuery);
-            $filterQuery = $filterInstance($query, $value);
-         //   dump($filterQuery, $value);
+            $query = $filterInstance($query, $value);
         }
-       dump $filterQuery);
-        dd("stopped");
-        return $filterQuery;
 
+        return $query;
     }
 
     public function receivedFilters()

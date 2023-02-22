@@ -9,6 +9,7 @@ use App\Models\DishImage;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use function PHPUnit\Framework\isEmpty;
 
 class HomeController extends Controller
 {
@@ -41,9 +42,18 @@ class HomeController extends Controller
 
     public function catalog(DishFilter $filters)
     {
-        $returnData = Dish::filter($filters)->with('dishImages', 'tags')->paginate(3);
+        $returnData = Dish::filter($filters)->with('dishImages', 'tags')->paginate(4);
+        $code = 200;
 
-        return response()->json($returnData);
+        if ($returnData->isEmpty()) {
+            $returnData = array(
+                'status' => 'error',
+                'message' => 'Your your filter doesn\'t\ match any dishes'
+            );
+            $code = 422;
+        }
+
+        return response()->json($returnData,$code);
     }
 
     public function show(int $id)
@@ -57,5 +67,4 @@ class HomeController extends Controller
 
         return response()->json($dish);
     }
-
 }

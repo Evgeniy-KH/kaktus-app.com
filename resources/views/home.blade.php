@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container-fluid tm-container-content tm-mt-60">
+    <div class="container-fluid tm-container-content tm-mt-60 ">
         <div class="row mb-4">
             <form class="d-flex justify-content-center" id="filter-form">
                 <input class="tm-search-input filter-input" type="text" id="min-price" placeholder="Min price"
@@ -20,19 +20,14 @@
             <h2 class="col-6 tm-text-primary">
                 Dishes
             </h2>
-            <div class="col-6 d-flex justify-content-end align-items-center">
-                <form action="" class="tm-text-primary">
-                    Page <input type="text" value="1" size="1" class="tm-input-paging tm-text-primary"> of 200
-                </form>
-            </div>
         </div>
         <div id="main-catalog">
             <div class="row tm-mb-90 tm-gallery" id="catalog">
             </div> <!-- row -->
-            <div class="row tm-mb-90">
-                <div class="col-12 d-flex justify-content-between align-items-center tm-paging-col pagination a">
-                    <div class="tm-paging d-flex pagination-center">
-                    </div>
+        </div>
+        <div class="row align-items-end">
+            <div class="col-12 d-flex justify-content-between align-items-center tm-paging-col pagination a">
+                <div class="tm-paging d-flex pagination-center">
                 </div>
             </div>
         </div>
@@ -79,6 +74,7 @@
 
         function checkTags(tags) {
             let tagList = [];
+
             $.each(tags, function (i, tag) {
                 let tag_title = tag['title'];
                 tagList.push(tag_title);
@@ -109,7 +105,6 @@
         }
 
         function catalog(data) {
-
             $('#catalog').remove()
             let row = `<div class="row tm-mb-90 tm-gallery" id="catalog">`
             $('#main-catalog').prepend(row);
@@ -171,14 +166,18 @@
                     tagsId: filters['tagsId'],
                 },
                 success: function (data) {
-                    console.log(data);
                     catalog(data['data']);
                     pagination(data['links']);
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert('Error: ' + textStatus + ' - ' + errorThrown);
+                error: function (data) {
+                    var errors = data.responseJSON.message;
+                    alert('Error: ' + errors);
+                    $(':input', '#filter-form')
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .prop('checked', false)
+                        .prop('selected', false);
                 }
-
             });
         }
 
@@ -205,8 +204,6 @@
 
             if ($('#keyword').val()) {
                 let keyword = $('#keyword').val().replace(/[^a-z0-9\s]/gi, '');
-                console.log(keyword);
-
                 filters['keyword'] = keyword;
             }
 
@@ -225,8 +222,8 @@
 
                 filters['tagsId'] = tagsId;
             }
-            return filters;
 
+            return filters;
         }
 
         $(document).ready(function () {
@@ -235,20 +232,21 @@
             mask()
 
             $('#filter-input-btn').on("click", function () {
-
                 let filters = getFilters()
+
                 initCatalog(filters);
             });
 
             $(document).on('click', '.tm-paging-link', function (event) {
                 event.preventDefault();
+
                 let page = $(this).attr('href').split('page=')[1];
                 let filters = getFilters()
-                console.log(page);
-                fetch_user_data(filters,page);
+
+                fetch_user_data(filters, page);
             });
 
-            function fetch_user_data(filters,page) {
+            function fetch_user_data(filters, page) {
                 $.ajax({
                     url: "/catalog?page=" + page,
                     data: {
@@ -285,6 +283,21 @@
 
         .select-tags {
             background: none !important;
+        }
+
+        .SumoSelect > .CaptionCont > span.placeholder {
+            color: #009999;
+            font-family: inherit;
+            font-size: inherit;
+            line-height: inherit;
+            text-align: start;
+            cursor: text;
+            padding: 5px 15px;
+
+        }
+
+        .SumoSelect > .CaptionCont {
+            border: 1px solid #009999;
         }
     </style>
 @endsection
