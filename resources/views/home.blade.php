@@ -94,6 +94,7 @@
                         $('.search_tag')
                             .append($("<option></option>")
                                 .attr("value", item['id'])
+                                .attr("id", item['id'])
                                 .text(item['title']));
                     });
                     $('.search_tag').SumoSelect().sumo.reload();
@@ -157,6 +158,7 @@
         }
 
         function initCatalog(filters = {}) {
+            console.log(filters);
             $.ajax({
                 url: '/catalog',
                 type: 'get',
@@ -172,11 +174,11 @@
                 error: function (data) {
                     var errors = data.responseJSON.message;
                     alert('Error: ' + errors);
-                    $(':input', '#filter-form')
-                        .not(':button, :submit, :reset, :hidden')
-                        .val('')
-                        .prop('checked', false)
-                        .prop('selected', false);
+                    // $(':input', '#filter-form')
+                    //     .not(':button, :submit, :reset, :hidden')
+                    //     .val('')
+                    //     .prop('checked', false)
+                    //     .prop('selected', false);
                 }
             });
         }
@@ -203,7 +205,7 @@
             let filters = {};
 
             if ($('#keyword').val()) {
-                let keyword = $('#keyword').val().replace(/[^a-z0-9\s]/gi, '');
+                let keyword = $('#keyword').val().match(/[\wа-я]+/ig);
                 filters['keyword'] = keyword;
             }
 
@@ -226,22 +228,71 @@
             return filters;
         }
 
+        function getUrlParams() {
+            let urlParams = new URLSearchParams(window.location.search);
+            let filtersUrl = {};
+
+            for (var [key, value] of urlParams) {
+                filtersUrl[key] = value;
+            }
+
+            $.each(filtersUrl, function (key, value) {
+                if (key === 'tagsId') {
+                    value = parseInt(value);
+                    // $('.search_tag')[0].sumo.selectItem(value);/// not working
+                } else if (key === 'keyword') {
+                    $('#keyword').val(value)
+                    // $('.search_tag')[0].sumo.selectItem(value);/// not working
+                } else if (key === 'price') {
+                    let price = value.split(",");
+                    $('#min-price').val(price[0])
+                    $('#max-price').val(price[1])
+                }
+            })
+
+            return filtersUrl;
+        }
+
+        function updateUrl(filters) {
+            let urlFilter = "";
+            let index = 1;
+            let filterLength = Object.keys(filters).length
+
+            $.each(filters, function (key, value) {
+                if (filterLength != index) {
+                    value += '&';
+                }
+                urlFilter += key + "=" + value;
+                index++;
+            });
+
+            let url = 'http://kaktus-app.com/home'
+            window.history.replaceState(null, null, url + "?" + urlFilter);
+        }
+
         $(document).ready(function () {
-            initCatalog();
+            let filterUrl = getUrlParams();
+            initCatalog(filterUrl);
             showTags();
             mask()
 
             $('#filter-input-btn').on("click", function () {
                 let filters = getFilters()
 
+                updateUrl(filters);
+
                 initCatalog(filters);
             });
 
             $(document).on('click', '.tm-paging-link', function (event) {
                 event.preventDefault();
-
+                
                 let page = $(this).attr('href').split('page=')[1];
                 let filters = getFilters()
+
+                updateUrl(filters);
+                let url = $(location).attr('href')
+                window.history.replaceState(null, null, url + "page=" + page);
 
                 fetch_user_data(filters, page);
             });
@@ -257,10 +308,11 @@
                     success: function (data) {
                         catalog(data['data']);
                         pagination(data['links']);
+
                     }
                 });
             }
-        });
+        })
 
     </script>
 
