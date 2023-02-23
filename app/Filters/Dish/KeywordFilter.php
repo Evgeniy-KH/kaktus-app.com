@@ -6,7 +6,7 @@ class KeywordFilter
 {
     function __invoke($query, $request)
     {
-        $keyword = $request;
+        $keyword = $request[0];
         $query->where('title', 'LIKE', '%' . $keyword . '%')
             ->orWhere('description', 'LIKE', '%' . $keyword . '%')
             ->with('dishImages', 'tags');
