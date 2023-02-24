@@ -52,7 +52,7 @@
                             <div class="form-group">
                                 <div>
                                     <label for="current_password"
-                                           class=" col-form-label  tm-text-primary">{{ __('Old Password') }}</label>
+                                           class=" col-form-label  tm-text-primary">{{ __('Current Password') }}</label>
                                     <div id="input-group-current_password">
                                         <input id="current_password" type="password"
                                                class="form-control rounded-0"
@@ -91,9 +91,11 @@
                                 profile photo</h3>
                         </div>
                         <div class="card-body">
+                            @if ($user->avatar_path)
                             <div class="w-75 mb-2" id="preview-photo">
                                 <img src="{{ asset('/storage/images/'.$user->avatar_path) }}"  alt="avatar" width="200" class="img-fluid img-thumbnail">
                             </div>
+                            @endif
                             <div class="form-group">
                                 <label for="avatar-path"
                                        class=" col-form-label tm-text-primary">{{ __('New Profile Photo') }}</label>
@@ -153,7 +155,7 @@
                         if (data === 'success') {
                             alert('Password has beed updated successfully');
                         }
-                        // location.reload();
+                      console.log(data);
                     },
                     error: function (data) {
                         if (data.status === 422) {

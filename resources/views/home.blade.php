@@ -233,8 +233,26 @@
             let filtersUrl = {};
 
             for (var [key, value] of urlParams) {
+                if (key === 'keyword') {
+                    value = value.match(/^[a-zA-Z]*$/);
+
+                } else if (key === 'price') {
+                    value = value.replace(/[^0-9.,]/g, '');
+                    value = value.split(",");
+                    value[0] = value[0].replace(/^0+/, '');
+                    value[1] = value[1].replace(/^0+/, '');
+                    value = value.join(',');
+                }
+
                 filtersUrl[key] = value;
             }
+
+
+            $.each(filtersUrl, function (key, value) {
+                if (value == "" || value == "," | value == null) {
+                    delete filtersUrl[key];
+                }
+            });
 
             $.each(filtersUrl, function (key, value) {
                 if (key === 'tagsId') {
@@ -286,7 +304,7 @@
 
             $(document).on('click', '.tm-paging-link', function (event) {
                 event.preventDefault();
-                
+
                 let page = $(this).attr('href').split('page=')[1];
                 let filters = getFilters()
 
