@@ -92,25 +92,7 @@
 
         <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll"
              data-image-src={{ asset("img/hero.jpg") }}>
-            <form class="d-flex tm-search-form" id="search-form">
-                <input class="form-control tm-search-input form-control-sidebar" type="search" placeholder="Search" aria-label="Search"
-                       style="
-    width: 360px;
-    border-radius: 0;
-    padding: 12px 15px;
-    color: #009999;
-     height: 50px;
-    border: none;"
-                >
-                <button class="btn btn-outline-success tm-search-btn" type="submit" style="color: white;
-    background-color: #009999;
-    border: none;
-    width: 100px;
-    height: 50px;
-    margin-left: -1px;">
-                    <i class="fas fa-search"></i>
-                </button>
-            </form>
+
         </div>
         < <!-- Main Sidebar Container -->
         <aside class="main-sidebar tm-bg-gray elevation-2" style=" width: 200px">

@@ -40,9 +40,10 @@ class UserController extends Controller
                 $returnData = $status;
             } else {
                 $returnData = array(
-                    'status' => 'error',
-                    'message' => 'Your old password is incorrect'
+                    'status' => '422',
+                    'message' => 'Your current password is incorrect'
                 );
+
             }
         }
 
