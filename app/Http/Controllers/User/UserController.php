@@ -64,4 +64,10 @@ class UserController extends Controller
         return response()->json($returnData);
     }
 
+    public function getFavoriteDishes(): \Illuminate\Http\JsonResponse
+    {
+        $favoriteDishes = auth()->user()->favoriteDishes()->get();
+
+        return response()->json($favoriteDishes);
+    }
 }

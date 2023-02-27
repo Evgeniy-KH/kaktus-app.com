@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\User\Dish\DishController;
+use App\Http\Controllers\User\Dish\FavoriteDishController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,11 +39,14 @@ Route::get('auth/facebook/callback', [SocialController::class, 'loginWithFaceboo
 Route::group(['namespace'=>'App\Http\Controllers\User', 'prefix' => 'user','middleware' => ['auth']], function () {
     Route::view('{userId}', 'user.edit');
     Route::post('{userId}', [UserController::class, 'update']);
+    Route::get('/favorite/dish', [UserController::class, 'getFavoriteDishes']);
 
     Route::group(['prefix' => 'dish'], function () {
         Route::get('/', [DishController::class,'index'])->name('user.dish.index');
         Route::get('/create', [DishController::class,'create'])->name('user.dish.create');
         Route::post('/store', [DishController::class,'store'])->name('user.dish.store');
+        Route::post('/favorite', [FavoriteDishController::class, 'addToFavoriteDish']);
+        Route::post('/disfavouring', [FavoriteDishController::class, 'removeFromFavoriteDish']);
         Route::get('/{dishId}/edit', [DishController::class,'editView'])->name('user.dish.edit');
         Route::get('/{dishId}/editData', [DishController::class,'editData']);
         Route::patch('/{dishId}', [DishController::class,'update'])->name('user.dish.update');

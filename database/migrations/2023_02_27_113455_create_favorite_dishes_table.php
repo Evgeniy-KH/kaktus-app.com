@@ -13,15 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('dishes_tags', function (Blueprint $table) {
+        Schema::create('favorite_dishes', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('dish_id');
-            $table->unsignedSmallInteger('tag_id');
+
+            $table->index('dish_id','favorite_dishes_dish_idx');
+            $table->foreign('dish_id', 'favorite_dishes_dish_fk')->on('dishes')->references('id');
+            $table->index('user_id','favorite_dishes_user_idx');
+            $table->foreign('user_id', 'favorite_dishes_user_fk')->on('users')->references('id');
+
             $table->timestamps();
-            $table->index('dish_id','recipe_tag_dish_idx');
-            $table->foreign('dish_id', 'recipe_tag_dish_fk')->on('dishes')->references('id');
-            $table->index('tag_id','recipe_tag_tag_idx');
-            $table->foreign('tag_id', 'recipe_tag_tag_fk')->on('tags')->references('id');
         });
     }
 
@@ -32,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dishes_tags_tables');
+        Schema::dropIfExists('favorite_dishes');
     }
 };

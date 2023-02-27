@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Dish::class, 'dish_id','id');
     }
+
+    public function favoriteDishes():\Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(FavoriteDish::class);
+    }
 }

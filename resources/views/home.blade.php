@@ -141,9 +141,11 @@
                    <div class="d-flex justify-content-between tm-text-gray">
                     <span class="tm-text-gray-light" id="time">${item['created_at']}</span>
                      ${rowTags}
-                   <span>${item['price']}$</span>
+                   <span id="favorite_${item['id']}" class="favourite"><i class="nav-icon far fa-heart"></i></span>
+                   <span id="price" >${item['price']}$</span>
                    </div>
                 </div>`;
+
 
                 $('#catalog').prepend(row);
 
@@ -288,11 +290,70 @@
             window.history.replaceState(null, null, url + "?" + urlFilter);
         }
 
+        function addToFavourites(dishId) {
+
+            $.ajax({
+                type: 'post',
+                url: '/user/dish/favorite',
+                data: {
+                    'dish_id': dishId,
+                },
+                success: function () {
+                    // alert('New dish has been create successfully');
+                },
+                error: function (data) {
+                    let errors = data.responseJSON.message;
+                    alert('Error: ' + errors);
+                }
+            });
+        }
+
+        function removeFromFavourites(dishId) {
+
+            $.ajax({
+                type: 'post',
+                url: '/user/dish/disfavouring',
+                data: {
+                    'dish_id': dishId,
+                },
+                success: function () {
+                },
+                error: function (data) {
+                    let errors = data.responseJSON.message;
+                    alert('Error: ' + errors);
+                }
+            });
+        }
+
+        function favoriteDish(data = {}) {
+            $.ajax({
+                url: `/user/favorite/dish`,
+                type: 'get',
+                dataType: 'json',
+                data: data,
+                success: function (data) {
+                    $.each(data, function (index, item) {
+                        let dishId = item['dish_id'];
+                        $(document).ready(function () {
+                            console.log($("#favorite_" + dishId));
+                            $("#favorite_" + dishId).removeClass('favourite').addClass('disfavouring')
+                            $("#favorite_" + dishId).find('i').removeClass('far').addClass('fas IM here');
+                        });
+                    })
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('Error: ' + textStatus + ' - ' + errorThrown);
+                },
+            });
+        }
+
+
         $(document).ready(function () {
             let filterUrl = getUrlParams();
             initCatalog(filterUrl);
+            favoriteDish()
             showTags();
-            mask()
+            mask();
 
             $('#filter-input-btn').on("click", function () {
                 let filters = getFilters()
@@ -313,6 +374,22 @@
                 window.history.replaceState(null, null, url + "page=" + page);
 
                 fetch_user_data(filters, page);
+            });
+
+            $(document).on('click', '.favourite', function (event) {
+                let dishId = $(this).attr('id').split('_')[1];
+                addToFavourites(dishId)
+
+                $(this).removeClass('favourite').addClass('disfavouring')
+                $(this).find('i').removeClass('far').addClass('fas');
+            });
+
+            $(document).on('click', '.disfavouring', function (event) {
+                let dishId = $(this).attr('id').split('_')[1];
+                removeFromFavourites(dishId)
+
+                $(this).removeClass('disfavouring').addClass('favourite')
+                $(this).find('i').removeClass('fas').addClass('far');
             });
 
             function fetch_user_data(filters, page) {

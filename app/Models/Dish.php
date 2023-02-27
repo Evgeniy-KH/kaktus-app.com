@@ -30,5 +30,10 @@ class Dish extends Model
         return $filters->apply($query);
     }
 
+    public function favorites()
+    {
+        return $this->belongsToMany(FavoriteDish::class);
+    }
+
 
 }
