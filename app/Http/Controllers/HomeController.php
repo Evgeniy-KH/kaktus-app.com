@@ -42,7 +42,7 @@ class HomeController extends Controller
 
     public function catalog(DishFilter $filters)
     {
-        $returnData = Dish::filter($filters)->with('dishImages', 'tags')->paginate(4);
+        $returnData = Dish::filter($filters)->with('dishImages', 'tags')->paginate(8);
         $code = 200;
 
         if ($returnData->isEmpty()) {

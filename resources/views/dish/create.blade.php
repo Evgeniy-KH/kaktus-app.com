@@ -157,7 +157,6 @@
                         success: function (data) {
                                 alert('New dish has been create successfully');
                                 location.reload();
-
                         },
                         error: function (data) {
                             if (data.status === 422) {
