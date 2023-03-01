@@ -139,9 +139,9 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="pages/mailbox/read-mail.html" class="nav-link">
+                                    <a href="/user/favorites_dishes" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p></p>
+                                        <p>My favorites</p>
                                     </a>
                                 </li>
                             </ul>

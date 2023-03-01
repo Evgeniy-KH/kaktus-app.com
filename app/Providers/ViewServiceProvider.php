@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\View\Composer\FavoritesDishesComposer;
 use App\View\Composer\TagComposer;
 use App\View\Composer\UserComposer;
 use Illuminate\Support\ServiceProvider;
@@ -30,6 +31,7 @@ class ViewServiceProvider extends ServiceProvider
     {
         View::composer('user.edit', UserComposer::class);
         View::composer('layouts.app', UserComposer::class);
+        View::composer('dish.favorites', FavoritesDishesComposer::class);
 //        View::composer('home', TagComposer::class);
     }
 }
