@@ -146,7 +146,6 @@
                    </div>
                 </div>`;
 
-
                 $('#catalog').prepend(row);
 
                 $('#edit-btn, #delete-btn, #show-dish-btm')
@@ -333,12 +332,9 @@
                 data: data,
                 success: function (data) {
                     $.each(data, function (index, item) {
-                        let dishId = item['dish_id'];
-                        $(document).ready(function () {
-                            console.log($("#favorite_" + dishId));
-                            $("#favorite_" + dishId).removeClass('favourite').addClass('disfavouring')
-                            $("#favorite_" + dishId).find('i').removeClass('far').addClass('fas IM here');
-                        });
+                        let element = $(document).find('#favorite_' +item['dish_id']);
+                        element.removeClass('favourite').addClass('disfavouring')
+                        element.find('i').removeClass('far').addClass('fas IM here');
                     })
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -347,13 +343,15 @@
             });
         }
 
-
         $(document).ready(function () {
             let filterUrl = getUrlParams();
             initCatalog(filterUrl);
-            favoriteDish()
             showTags();
             mask();
+
+            $(window).on('load', function () {
+                favoriteDish()
+            })
 
             $('#filter-input-btn').on("click", function () {
                 let filters = getFilters()
