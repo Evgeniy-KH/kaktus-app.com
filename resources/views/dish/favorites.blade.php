@@ -3,22 +3,8 @@
 @section('content')
     <div class="container-fluid tm-container-content tm-mt-60 ">
         <div class="row mb-4">
-            <form class="d-flex justify-content-center" id="filter-form">
-                <input class="tm-search-input filter-input" type="text" id="min-price" placeholder="Min price"
-                       aria-label="Search">
-                <input class="tm-search-input filter-input" type="text" id="max-price" placeholder="Max price"
-                       aria-label="Search">
-                <input class="tm-search-input filter-input" type="text" id="keyword" placeholder="Keyword"
-                       aria-label="Search">
-                <select class="search_tag ml-4" id="select-tag" multiple="multiple" style="height: 50px;">
-                </select>
-                <input class="btn btn-primary filter-input-btn " id="filter-input-btn"
-                       value="{{ __('Filter') }}">
-            </form>
-        </div>
-        <div class="row mb-4">
             <h2 class="col-6 tm-text-primary">
-                Dishes
+               My Favorites Dishes
             </h2>
         </div>
         <div id="main-catalog">
@@ -43,6 +29,7 @@
         });
 
         let user_id = $('#user-edit').attr('data-id');
+
 
         $('.search_tag').SumoSelect({
             placeholder: 'Tags',
@@ -141,7 +128,7 @@
                    <div class="d-flex justify-content-between tm-text-gray">
                     <span class="tm-text-gray-light" id="time">${item['created_at']}</span>
                      ${rowTags}
-                   <span id="favorite_${item['id']}" class="favourite"><i class="nav-icon far fa-heart"></i></span>
+                   <span id="favorite_${item['id']}" class="disfavouring"><i class="nav-icon fas fa-heart"></i></span>
                    <span id="price" >${item['price']}$</span>
                    </div>
                 </div>`;
@@ -161,7 +148,7 @@
         function initCatalog(filters = {}) {
             console.log(filters);
             $.ajax({
-                url: '/catalog',
+                url: '/user/favorite/dishes',
                 type: 'get',
                 data: {
                     price: filters['price'],
@@ -169,6 +156,7 @@
                     tagsId: filters['tagsId'],
                 },
                 success: function (data) {
+                    console.log(data);
                     catalog(data['data']);
                     pagination(data['links']);
                 },
@@ -202,111 +190,6 @@
             });
         }
 
-        function getFilters() {
-            let filters = {};
-
-            if ($('#keyword').val()) {
-                let keyword = $('#keyword').val().match(/[\wа-я]+/ig);
-                filters['keyword'] = keyword;
-            }
-
-            if ($('#min-price').val() != '' || $('#max-price').val() != '') {
-                let price = [$('#min-price').val(), $('#max-price').val()].toString();
-                filters['price'] = price;
-            }
-
-            if ($('.search_tag option:selected').length > 0) {
-                let tagsId = [];
-
-                $('.search_tag option:selected').each(function (i) {
-                    tagsId.push($(this).val());
-                    $('.search_tag')[0].sumo.unSelectItem(i);
-                });
-
-                filters['tagsId'] = tagsId;
-            }
-
-            return filters;
-        }
-
-        function getUrlParams() {
-            let urlParams = new URLSearchParams(window.location.search);
-            let filtersUrl = {};
-
-            for (var [key, value] of urlParams) {
-                if (key === 'keyword') {
-                    value = value.match(/^[a-zA-Z]*$/);
-
-                } else if (key === 'price') {
-                    value = value.replace(/[^0-9.,]/g, '');
-                    value = value.split(",");
-                    value[0] = value[0].replace(/^0+/, '');
-                    value[1] = value[1].replace(/^0+/, '');
-                    value = value.join(',');
-                }
-
-                filtersUrl[key] = value;
-            }
-
-
-            $.each(filtersUrl, function (key, value) {
-                if (value == "" || value == "," | value == null) {
-                    delete filtersUrl[key];
-                }
-            });
-
-            $.each(filtersUrl, function (key, value) {
-                if (key === 'tagsId') {
-                    value = parseInt(value);
-                    // $('.search_tag')[0].sumo.selectItem(value);/// not working
-                } else if (key === 'keyword') {
-                    $('#keyword').val(value)
-                    // $('.search_tag')[0].sumo.selectItem(value);/// not working
-                } else if (key === 'price') {
-                    let price = value.split(",");
-                    $('#min-price').val(price[0])
-                    $('#max-price').val(price[1])
-                }
-            })
-
-            return filtersUrl;
-        }
-
-        function updateUrl(filters) {
-            let urlFilter = "";
-            let index = 1;
-            let filterLength = Object.keys(filters).length
-
-            $.each(filters, function (key, value) {
-                if (filterLength != index) {
-                    value += '&';
-                }
-                urlFilter += key + "=" + value;
-                index++;
-            });
-
-            let url = 'http://kaktus-app.com/home'
-            window.history.replaceState(null, null, url + "?" + urlFilter);
-        }
-
-        function addToFavourites(dishId) {
-
-            $.ajax({
-                type: 'post',
-                url: '/user/dish/favorite',
-                data: {
-                    'dish_id': dishId,
-                },
-                success: function () {
-                    // alert('New dish has been create successfully');
-                },
-                error: function (data) {
-                    let errors = data.responseJSON.message;
-                    alert('Error: ' + errors);
-                }
-            });
-        }
-
         function removeFromFavourites(dishId) {
 
             $.ajax({
@@ -316,6 +199,7 @@
                     'dish_id': dishId,
                 },
                 success: function () {
+                    initCatalog();
                 },
                 error: function (data) {
                     let errors = data.responseJSON.message;
@@ -324,42 +208,14 @@
             });
         }
 
-        function favoriteDish(data = {}) {
-            $.ajax({
-                url: `/user/favorite/dish`,
-                type: 'get',
-                dataType: 'json',
-                data: data,
-                success: function (data) {
-                    $.each(data, function (index, item) {
-                        let element = $(document).find('#favorite_' +item['dish_id']);
-                        element.removeClass('favourite').addClass('disfavouring')
-                        element.find('i').removeClass('far').addClass('fas IM here');
-                    })
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert('Error: ' + textStatus + ' - ' + errorThrown);
-                },
-            });
-        }
-
         $(document).ready(function () {
-            let filterUrl = getUrlParams();
-            initCatalog(filterUrl);
+            initCatalog();
             showTags();
             mask();
 
             $(window).on('load', function () {
                 favoriteDish()
             })
-
-            $('#filter-input-btn').on("click", function () {
-                let filters = getFilters()
-
-                updateUrl(filters);
-
-                initCatalog(filters);
-            });
 
             $(document).on('click', '.tm-paging-link', function (event) {
                 event.preventDefault();
@@ -401,7 +257,6 @@
                     success: function (data) {
                         catalog(data['data']);
                         pagination(data['links']);
-
                     }
                 });
             }
