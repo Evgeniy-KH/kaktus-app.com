@@ -13,6 +13,7 @@ use App\Models\Dish;
 use App\Models\Tag;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DishController extends BaseController
 {
@@ -39,7 +40,7 @@ class DishController extends BaseController
 
     public function editData(int $dishId)
     {
-        $dish = Dish::with('getDishImages')->findOrFail($dishId);
+        $dish = Dish::with('dishImages')->findOrFail($dishId);
         $tags = Tag::all();
         $returnData = [$dish, $tags];
 
@@ -59,7 +60,10 @@ class DishController extends BaseController
 
     public function delete(int $dishId)
     {
-        $dish = Dish::findOrFail($dishId)->delete();
+        DB::transaction(function () use ($dishId) {
+            auth()->user()->favoriteDishes()->where('dish_id', $dishId)->delete();
+            Dish::findOrFail($dishId)->delete();
+        });
 
         return response()->json();
     }

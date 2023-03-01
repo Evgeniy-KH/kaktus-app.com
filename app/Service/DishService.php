@@ -13,8 +13,7 @@ class DishService
 {
     public function store($data)
     {
-        try {
-            Db::beginTransaction();
+        DB::transaction(function () use ($data) {
 
             if (isset($data['tag_ids'])) {
                 $tagIds = $data['tag_ids'];
@@ -43,20 +42,12 @@ class DishService
                 $image = DishImage::firstOrCreate($image);
                 $dish->getDishImages()->save($image);
             }
-
-            Db::commit();
-
-        } catch (Exception $exception) {
-            dd($exception->getMessage());
-            Db::rollBack();
-            abort(500);
-        }
+        });
     }
 
     public function update($data, $dish)
     {
-        try {
-            Db::beginTransaction();
+        DB::transaction(function () use ($data, $dish) {
 
             if (isset($data['tag_ids'])) {
                 $tagIds = $data['tag_ids'];
@@ -111,13 +102,7 @@ class DishService
                     $dish->getDishImages()->save($image);
                 }
             }
-
-            Db::commit();
-        } catch (Exception $exception) {
-            dd($exception->getMessage());
-            Db::rollBack();
-            abort(500);
-        }
+        });
 
         return $dish;
     }

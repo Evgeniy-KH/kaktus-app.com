@@ -127,8 +127,8 @@
                                   name="description" required autocomplete="description">${data[0]['description']}</textarea>`
                         let price = ` <input type="number" min="0.00" max="10000.00" step="0.01"  name="price"  value="${data[0]['price']}" id="price"/>`
 
-                        let preview_image = `<img src="/storage/${data[0]['get_dish_images'][0]['image']}" width="200" class="img-fluid img-thumbnail">`
-                        let main_image = `<img src="/storage/${data[0]['get_dish_images'][1]['image']}" width="200" class="img-fluid img-thumbnail">`
+                        let preview_image = `<img src="/storage/${data[0]['dish_images'][0]['image']}" width="200" class="img-fluid img-thumbnail">`
+                        let main_image = `<img src="/storage/${data[0]['dish_images'][1]['image']}" width="200" class="img-fluid img-thumbnail">`
 
 
                         $('#input-group-title').append(title);

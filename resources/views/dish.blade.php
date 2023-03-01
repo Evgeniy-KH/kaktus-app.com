@@ -65,13 +65,14 @@
                 dataType: 'json',
                 data: data,
                 success: function (data) {
+                    console.log(data);
                     data['created_at'] = new Date(data['created_at']).toLocaleDateString("en-US", {
                         day: 'numeric',
                         month: 'short',
                         year: 'numeric'
                     });
 
-                    let images = checkImages(data['get_dish_images']);// return of this function let variables
+                    let images = checkImages(data['dish_images']);// return of this function let variables
                     let mainImage = images["mainImage"];
 
                     let title = `<h1 class="col-12 tm-text-primary">${data['title']}</h1>`;
@@ -105,8 +106,10 @@
                     }
 
                     if ( data['user_id'] != userId) {
+                        console.log(data['dish_images']);
+
                         $('.main-image').remove();
-                        let image =`<img src="/storage/${data['get_dish_images'][1]['image']}" alt="Image" class="img-fluid" style="width: 1155px; height: 650px ;">`
+                        let image =`<img src="/storage/${data['dish_images'][1]['image']}" alt="Image" class="img-fluid" style="width: 1155px; height: 650px ;">`
                         $('.dish-image').append(image);
                     }
 
@@ -132,7 +135,7 @@
 
             $(document).on("click","#delete-btn",function() {
                 $.ajax({
-                    url: `/personal/dish/`+dishId,
+                    url: `/user/dish/`+dishId,
                     type: 'delete',
                     data: {_method: 'delete'},
                     dataType: 'json',

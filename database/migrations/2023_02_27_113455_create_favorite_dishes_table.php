@@ -19,9 +19,9 @@ return new class extends Migration
             $table->unsignedBigInteger('dish_id');
 
             $table->index('dish_id','favorite_dishes_dish_idx');
-            $table->foreign('dish_id', 'favorite_dishes_dish_fk')->on('dishes')->references('id');
+            $table->foreign('dish_id', 'favorite_dishes_dish_fk')->on('dishes')->references('id')->onDelete('cascade');
             $table->index('user_id','favorite_dishes_user_idx');
-            $table->foreign('user_id', 'favorite_dishes_user_fk')->on('users')->references('id');
+            $table->foreign('user_id', 'favorite_dishes_user_fk')->on('users')->references('id')->onDelete('cascade');
 
             $table->timestamps();
         });
