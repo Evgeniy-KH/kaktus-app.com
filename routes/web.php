@@ -37,11 +37,14 @@ Route::get('auth/facebook', [SocialController::class, 'facebookRedirect']);
 Route::get('auth/facebook/callback', [SocialController::class, 'loginWithFacebook']);
 
 Route::group(['namespace'=>'App\Http\Controllers\User', 'prefix' => 'user','middleware' => ['auth']], function () {
+    Route::get('/dishes', [UserController::class, 'usersDishes']);
     Route::view('/favorites_dishes', 'dish.favorites');
+    Route::view('/my_dishes', 'dish.my_dishes');
     Route::view('{userId}', 'user.edit');
     Route::post('{userId}', [UserController::class, 'update']);
     Route::get('/favorite/dish', [UserController::class, 'getFavoriteDishes']);
     Route::get('/favorite/dishes', [UserController::class, 'myFavoritesDishes']);
+
 
     Route::group(['prefix' => 'dish'], function () {
         Route::get('/', [DishController::class,'index'])->name('user.dish.index');

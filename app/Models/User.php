@@ -50,7 +50,7 @@ class User extends Authenticatable
 
     public function dishes(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Dish::class, 'dish_id','id');
+        return $this->hasMany(Dish::class, 'user_id','id');
     }
 
     public function favoriteDishes():\Illuminate\Database\Eloquent\Relations\HasMany

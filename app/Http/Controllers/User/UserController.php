@@ -8,6 +8,7 @@ use App\Filters\DishFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UpdateRequest;
 use App\Models\Dish;
+use App\Models\FavoriteDish;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -87,7 +88,7 @@ class UserController extends Controller
             array_push($favoriteDishesId, $favoriteDish['dish_id']);
         }
 
-        $returnData =  Dish::with('dishImages', 'tags')->whereIn('id',$favoriteDishesId)->paginate(8);
+        $returnData = Dish::with('dishImages', 'tags')->whereIn('id', $favoriteDishesId)->paginate(8);
         $code = 200;
 
         if ($returnData->isEmpty()) {
@@ -98,6 +99,38 @@ class UserController extends Controller
             $code = 422;
         }
 
-       return response()->json($returnData,$code);
+        return response()->json($returnData, $code);
+    }
+
+    public function usersDishes()
+    {
+
+        $usersDishes = auth()->user()->dishes()->with('dishImages', 'tags')->paginate(8);
+        $returnData = [];
+        $returnData['usersDishes'] = $usersDishes;
+
+        $usersDishesId = [];
+
+        foreach ($usersDishes as $usersDishe) {
+            array_push(  $usersDishesId, $usersDishe['id']);
+        }
+
+        $countFavorited = FavoriteDish::whereIn('dish_id', $usersDishesId)
+            ->orderBy('total', 'asc')
+            ->selectRaw('dish_id, count(*) as total')
+            ->groupBy('dish_id')
+            ->pluck('total','dish_id')->all();
+
+//        $counts = Model::whereIn('agent_id', $agents)
+//            ->orderBy('total', 'asc')
+//            ->selectRaw('agent_id, count(*) as total')
+//            ->groupBy('agent_id')
+//            ->pluck('total','agent_id')->all();
+
+        $returnData['countFavorited'] = $countFavorited;
+
+
+        return response()->json($returnData);
+
     }
 }

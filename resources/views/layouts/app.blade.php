@@ -139,6 +139,12 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
+                                    <a href="/user/my_dishes" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>My dishes</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="/user/favorites_dishes" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>My favorites</p>

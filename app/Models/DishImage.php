@@ -13,6 +13,7 @@ class DishImage extends Model
     const TYPE_MAIN = 1;
 
     protected $guarded = false;
+    protected $table = 'dish_images';
 
 
     public static function getTypes(): array
@@ -23,8 +24,8 @@ class DishImage extends Model
         ];
     }
 
-    public function recipe(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function dishes(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Dish::class,'recipe_id', 'id');
+        return $this->belongsTo(Dish::class,'dish_id', 'id');
     }
 }

@@ -14,7 +14,6 @@ class Dish extends Model
     protected $table = 'dishes';
     protected $guarded = false;
 
-
     public function dishImages(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(DishImage::class, 'dish_id','id');

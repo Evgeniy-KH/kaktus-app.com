@@ -4,11 +4,12 @@
     <div class="container-fluid tm-container-content tm-mt-60 ">
         <div class="row mb-4">
             <h2 class="col-6 tm-text-primary">
-               My Favorites Dishes
+               My Dishes
             </h2>
         </div>
         <div id="main-catalog">
             <div class="row tm-mb-90 tm-gallery" id="catalog">
+
             </div> <!-- row -->
         </div>
         <div class="row align-items-end">
@@ -70,34 +71,21 @@
             return tagList
         }
 
-        function showTags(data = {}) {
-            $.ajax({
-                url: `/catalog/dish/getTags`,
-                type: 'get',
-                dataType: 'json',
-                data: data,
-                success: function (data) {
-                    $.each(data, function (index, item) {
-                        $('.search_tag')
-                            .append($("<option></option>")
-                                .attr("value", item['id'])
-                                .attr("id", item['id'])
-                                .text(item['title']));
-                    });
-                    $('.search_tag').SumoSelect().sumo.reload();
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert('Error: ' + textStatus + ' - ' + errorThrown);
-                },
-            });
-        }
-
         function catalog(data) {
+            let dish =data.usersDishes['data']
+            let count  = data.countFavorited
+            let usersCount ='';
+            let heartClass = 'far'
+
             $('#catalog').remove()
             let row = `<div class="row tm-mb-90 tm-gallery" id="catalog">`
             $('#main-catalog').prepend(row);
 
-            $.each(data, function (i, item) {
+            $.each(dish, function (i, item)  {
+                if(item['id'] in count){
+                    usersCount = count[item['id']]
+                    heartClass = 'fas'
+                }
 
                 item['created_at'] = new Date(item['created_at']).toLocaleDateString("en-US", {
                     day: 'numeric',
@@ -128,7 +116,7 @@
                    <div class="d-flex justify-content-between tm-text-gray">
                     <span class="tm-text-gray-light" id="time">${item['created_at']}</span>
                      ${rowTags}
-                   <span id="favorite_${item['id']}" class="disfavouring"><i class="nav-icon fas fa-heart"></i></span>
+                   <span><i class="nav-icon ${heartClass} fa-heart"></i> ${usersCount}</span>
                    <span id="price" >${item['price']}$</span>
                    </div>
                 </div>`;
@@ -146,9 +134,8 @@
         }
 
         function initCatalog(filters = {}) {
-            console.log(filters);
             $.ajax({
-                url: '/user/favorite/dishes',
+                url: '/user/dishes',
                 type: 'get',
                 data: {
                     price: filters['price'],
@@ -156,18 +143,12 @@
                     tagsId: filters['tagsId'],
                 },
                 success: function (data) {
-                    console.log(data);
-                    catalog(data['data']);
-                    pagination(data['links']);
+                    catalog(data);
+                    pagination(data.usersDishes['links']);
                 },
                 error: function (data) {
                     var errors = data.responseJSON.message;
                     alert('Error: ' + errors);
-                    // $(':input', '#filter-form')
-                    //     .not(':button, :submit, :reset, :hidden')
-                    //     .val('')
-                    //     .prop('checked', false)
-                    //     .prop('selected', false);
                 }
             });
         }
@@ -190,32 +171,10 @@
             });
         }
 
-        function removeFromFavourites(dishId) {
-
-            $.ajax({
-                type: 'post',
-                url: '/user/dish/disfavouring',
-                data: {
-                    'dish_id': dishId,
-                },
-                success: function () {
-                    initCatalog();
-                },
-                error: function (data) {
-                    let errors = data.responseJSON.message;
-                    alert('Error: ' + errors);
-                }
-            });
-        }
 
         $(document).ready(function () {
             initCatalog();
-            showTags();
             mask();
-
-            $(window).on('load', function () {
-                favoriteDish()
-            })
 
             $(document).on('click', '.tm-paging-link', function (event) {
                 event.preventDefault();
@@ -228,22 +187,6 @@
                 window.history.replaceState(null, null, url + "page=" + page);
 
                 fetch_user_data(filters, page);
-            });
-
-            $(document).on('click', '.favourite', function (event) {
-                let dishId = $(this).attr('id').split('_')[1];
-                addToFavourites(dishId)
-
-                $(this).removeClass('favourite').addClass('disfavouring')
-                $(this).find('i').removeClass('far').addClass('fas');
-            });
-
-            $(document).on('click', '.disfavouring', function (event) {
-                let dishId = $(this).attr('id').split('_')[1];
-                removeFromFavourites(dishId)
-
-                $(this).removeClass('disfavouring').addClass('favourite')
-                $(this).find('i').removeClass('fas').addClass('far');
             });
 
             function fetch_user_data(filters, page) {
