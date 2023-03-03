@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use App\Contracts\Likeable;
+use App\Models\Concerns\Likes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Dish extends Model
+class Dish extends Model  implements Likeable
 {
     use HasFactory;
     use SoftDeletes;
+    use Likes;
 
     protected $table = 'dishes';
     protected $guarded = false;

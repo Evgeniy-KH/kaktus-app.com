@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\User\Dish\DishController;
 use App\Http\Controllers\User\Dish\FavoriteDishController;
@@ -47,6 +48,8 @@ Route::group(['namespace'=>'App\Http\Controllers\User', 'prefix' => 'user','midd
 
 
     Route::group(['prefix' => 'dish'], function () {
+        Route::post('/like',  [LikeController::class, 'like'])->name('like');
+        Route::delete('/unlike', [LikeController::class, 'unlike'])->name('unlike');
         Route::get('/', [DishController::class,'index'])->name('user.dish.index');
         Route::get('/create', [DishController::class,'create'])->name('user.dish.create');
         Route::post('/store', [DishController::class,'store'])->name('user.dish.store');
