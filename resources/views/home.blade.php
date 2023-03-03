@@ -227,7 +227,6 @@
                     usersIds.push(like['user_id']);
                 })
             }
-
             return usersIds;
         }
 
@@ -345,6 +344,7 @@
 
                 filtersUrl[key] = value;
             }
+
 
             $.each(filtersUrl, function (key, value) {
                 if (value == "" || value == "," | value == null) {
