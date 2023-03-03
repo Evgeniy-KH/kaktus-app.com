@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LikeRequest;
 use App\Http\Requests\UnlikeRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class LikeController extends Controller
@@ -20,5 +21,13 @@ class LikeController extends Controller
         $request->user()->unlike($request->likeable());
 
         return response()->json();
+    }
+
+    public function users(Request $request)
+    {
+        $usersId = $request->usersId;
+        $users = User::find($usersId)->take(4);;
+
+        return response()->json($users);
     }
 }
