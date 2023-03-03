@@ -111,6 +111,12 @@
             $('#main-catalog').prepend(row);
 
             $.each(data, function (i, item) {
+                let countLikes = likes(item['likes_count'])
+                let classLikes = classLike(item['likes'])
+
+                // if (countLikes == '') {
+                //    likesClass = 'likeable far'
+                // }
 
                 item['created_at'] = new Date(item['created_at']).toLocaleDateString("en-US", {
                     day: 'numeric',
@@ -142,6 +148,9 @@
                     <span class="tm-text-gray-light" id="time">${item['created_at']}</span>
                      ${rowTags}
                    <span id="favorite_${item['id']}" class="favourite"><i class="nav-icon far fa-heart"></i></span>
+                       <span class="like-btn">
+                        <i id="like_${item['id']}" class="${classLikes} fa-thumbs-up"> ${countLikes}</i>
+                       </span>
                    <span id="price" >${item['price']}$</span>
                    </div>
                 </div>`;
@@ -158,8 +167,33 @@
             });
         }
 
+        function likes(likes_count) {
+            let countLikes = '';
+
+            if (likes_count != 0) {
+                countLikes =likes_count
+            }
+
+            return countLikes;
+        }
+
+        function classLike(likes){
+            let classLikes = 'likeable far';
+            let usersIds = [];
+            if (likes.length != 0) {
+                $.each(likes, function (i,like) {
+                    usersIds.push(like['user_id']);
+                })
+            }
+
+            if($.inArray(parseInt(user_id), usersIds) > -1){
+                classLikes = 'unlikeable fas';
+            }
+
+            return classLikes;
+        }
+
         function initCatalog(filters = {}) {
-            console.log(filters);
             $.ajax({
                 url: '/catalog',
                 type: 'get',
@@ -169,6 +203,7 @@
                     tagsId: filters['tagsId'],
                 },
                 success: function (data) {
+                    console.log(data)
                     catalog(data['data']);
                     pagination(data['links']);
                 },
@@ -290,7 +325,6 @@
         }
 
         function addToFavourites(dishId) {
-
             $.ajax({
                 type: 'post',
                 url: '/user/dish/favorite',
@@ -332,7 +366,7 @@
                 data: data,
                 success: function (data) {
                     $.each(data, function (index, item) {
-                        let element = $(document).find('#favorite_' +item['dish_id']);
+                        let element = $(document).find('#favorite_' + item['dish_id']);
                         element.removeClass('favourite').addClass('disfavouring')
                         element.find('i').removeClass('far').addClass('fas IM here');
                     })
@@ -351,6 +385,57 @@
 
             $(window).on('load', function () {
                 favoriteDish()
+
+            })
+
+            $(document).on('click', '.likeable', function (event) {
+                console.log('Like');
+                let dishId = $(this).attr('id').split('_')[1];
+                console.log(dishId);
+
+                $.ajax({
+                    type: 'post',
+                    url: '/user/dish/like',
+                    data: {
+                        'dish_id': dishId,
+                        'likeable_type': 'Dish'
+                    },
+                    success: function (data) {
+                        initCatalog();
+                    },
+                    error: function (data) {
+                        let errors = data.responseJSON.message;
+                        alert('Error: ' + errors);
+                    }
+                });
+
+
+            })
+
+            $(document).on('click', '.unlikeable', function (event) {
+                console.log('Like');
+                let dishId = $(this).attr('id').split('_')[1];
+                console.log(dishId);
+
+                $.ajax({
+                    url: '/user/dish/unlike',
+                    type: 'delete',
+                    dataType: 'json',
+                    data: {
+                        _method: 'delete',
+                        'dish_id': dishId,
+                        'likeable_type': 'Dish'
+                    },
+                    success: function (data) {
+                        initCatalog();
+                    },
+                    error: function (data) {
+                        let errors = data.responseJSON.message;
+                        alert('Error: ' + errors);
+                    }
+                });
+
+
             })
 
             $('#filter-input-btn').on("click", function () {
