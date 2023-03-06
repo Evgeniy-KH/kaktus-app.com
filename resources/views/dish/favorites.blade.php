@@ -114,7 +114,7 @@
                     arrayTags.push(tagRow);
                 })
 
-                let rowTags = arrayTags.join("");
+                let rowTags = arrayTags.join(",");
                 let previewImage = images["previewImage"];
                 let row = `<div class="catalog-item col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                    <div class="hidden dish-author-id" data-id="${item['user_id']}"></div>
@@ -127,7 +127,7 @@
                   </figure>
                    <div class="d-flex justify-content-between tm-text-gray">
                     <span class="tm-text-gray-light" id="time">${item['created_at']}</span>
-                     ${rowTags}
+                    <span class="tm-text-gray-light"> ${rowTags}</span>
                    <span id="favorite_${item['id']}" class="disfavouring"><i class="nav-icon fas fa-heart"></i></span>
                    <span id="price" >${item['price']}$</span>
                    </div>
