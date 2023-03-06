@@ -104,28 +104,9 @@ class UserController extends Controller
 
     public function usersDishes()
     {
-
         $usersDishes = auth()->user()->dishes()->with('dishImages', 'tags', 'likes')->withCount('likes')->paginate(8);
-        $returnData = [];
         $returnData = $usersDishes;
-       // $returnData['usersDishes'] = $usersDishes;
-//
-//        $usersDishesId = [];
-//
-//        foreach ($usersDishes as $usersDishe) {
-//            array_push(  $usersDishesId, $usersDishe['id']);
-//        }
-//
-//        $countFavorited = FavoriteDish::whereIn('dish_id', $usersDishesId)
-//            ->orderBy('total', 'asc')
-//            ->selectRaw('dish_id, count(*) as total')
-//            ->groupBy('dish_id')
-//            ->pluck('total','dish_id')->all();
-//
-//        $returnData['countFavorited'] = $countFavorited;
-
 
         return response()->json($returnData);
-
     }
 }
