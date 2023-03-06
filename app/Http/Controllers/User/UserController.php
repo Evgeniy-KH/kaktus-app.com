@@ -105,29 +105,24 @@ class UserController extends Controller
     public function usersDishes()
     {
 
-        $usersDishes = auth()->user()->dishes()->with('dishImages', 'tags')->paginate(8);
+        $usersDishes = auth()->user()->dishes()->with('dishImages', 'tags', 'likes')->withCount('likes')->paginate(8);
         $returnData = [];
-        $returnData['usersDishes'] = $usersDishes;
-
-        $usersDishesId = [];
-
-        foreach ($usersDishes as $usersDishe) {
-            array_push(  $usersDishesId, $usersDishe['id']);
-        }
-
-        $countFavorited = FavoriteDish::whereIn('dish_id', $usersDishesId)
-            ->orderBy('total', 'asc')
-            ->selectRaw('dish_id, count(*) as total')
-            ->groupBy('dish_id')
-            ->pluck('total','dish_id')->all();
-
-//        $counts = Model::whereIn('agent_id', $agents)
+        $returnData = $usersDishes;
+       // $returnData['usersDishes'] = $usersDishes;
+//
+//        $usersDishesId = [];
+//
+//        foreach ($usersDishes as $usersDishe) {
+//            array_push(  $usersDishesId, $usersDishe['id']);
+//        }
+//
+//        $countFavorited = FavoriteDish::whereIn('dish_id', $usersDishesId)
 //            ->orderBy('total', 'asc')
-//            ->selectRaw('agent_id, count(*) as total')
-//            ->groupBy('agent_id')
-//            ->pluck('total','agent_id')->all();
-
-        $returnData['countFavorited'] = $countFavorited;
+//            ->selectRaw('dish_id, count(*) as total')
+//            ->groupBy('dish_id')
+//            ->pluck('total','dish_id')->all();
+//
+//        $returnData['countFavorited'] = $countFavorited;
 
 
         return response()->json($returnData);

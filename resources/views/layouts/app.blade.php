@@ -150,6 +150,12 @@
                                         <p>My favorites</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="/user/liked_dishes" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>My liked dishes</p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     </ul>

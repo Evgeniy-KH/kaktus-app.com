@@ -41,6 +41,7 @@ Route::get('auth/facebook/callback', [SocialController::class, 'loginWithFaceboo
 Route::group(['namespace'=>'App\Http\Controllers\User', 'prefix' => 'user','middleware' => ['auth']], function () {
     Route::get('/dishes', [UserController::class, 'usersDishes']);
     Route::view('/favorites_dishes', 'dish.favorites');
+    Route::view('/liked_dishes', 'dish.my_liked');
     Route::view('/my_dishes', 'dish.my_dishes');
     Route::view('{userId}', 'user.edit');
     Route::post('{userId}', [UserController::class, 'update']);
@@ -51,6 +52,7 @@ Route::group(['namespace'=>'App\Http\Controllers\User', 'prefix' => 'user','midd
     Route::group(['prefix' => 'dish'], function () {
         Route::get('/users', [LikeController::class,'users'])->name('user.dish.users');
         Route::post('/like',  [LikeController::class, 'like'])->name('like');
+        Route::get('/liked',  [LikeController::class, 'likedDishes'])->name('liked.dishes');
         Route::delete('/unlike', [LikeController::class, 'unlike'])->name('unlike');
         Route::get('/', [DishController::class,'index'])->name('user.dish.index');
         Route::get('/create', [DishController::class,'create'])->name('user.dish.create');

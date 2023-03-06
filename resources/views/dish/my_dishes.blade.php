@@ -72,19 +72,24 @@
         }
 
         function catalog(data) {
-            let dish =data.usersDishes['data']
-            let count  = data.countFavorited
-            let usersCount ='';
-            let heartClass = 'far'
-
+            console.log(data);
             $('#catalog').remove()
             let row = `<div class="row tm-mb-90 tm-gallery" id="catalog">`
             $('#main-catalog').prepend(row);
 
-            $.each(dish, function (i, item)  {
-                if(item['id'] in count){
-                    usersCount = count[item['id']]
-                    heartClass = 'fas'
+            $.each(data, function (i, item)  {
+                console.log(item)
+                let countLikes = likes(item['likes_count'])
+                let countLikesShow = 'hidden'
+                if (countLikes !='') {
+                    console.log('countLikes')
+                    countLikesShow = ' hidden-avatars'
+                }
+                let classLikes = classLike(item['likes'])
+                let likedUsersIds = getLikedUsersIds(item['likes'])
+                let rows = ''
+                if (likedUsersIds.length != 0) {
+                    rows = likeUserData(likedUsersIds, item['id'])
                 }
 
                 item['created_at'] = new Date(item['created_at']).toLocaleDateString("en-US", {
@@ -102,7 +107,7 @@
                     arrayTags.push(tagRow);
                 })
 
-                let rowTags = arrayTags.join("");
+                let rowTags = arrayTags.join(",");
                 let previewImage = images["previewImage"];
                 let row = `<div class="catalog-item col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                    <div class="hidden dish-author-id" data-id="${item['user_id']}"></div>
@@ -114,9 +119,17 @@
                     </figcaption>
                   </figure>
                    <div class="d-flex justify-content-between tm-text-gray">
-                    <span class="tm-text-gray-light" id="time">${item['created_at']}</span>
-                     ${rowTags}
-                   <span><i class="nav-icon ${heartClass} fa-heart"></i> ${usersCount}</span>
+                    <span class="tm-text-gray-light" id="time">${item['created_at']}
+                     ${rowTags}</span>
+                   <span id="favorite_${item['id']}" class="favourite"><i class="nav-icon far fa-heart"></i></span>
+
+                       <span class="like-btn">
+                        <i id="like_${item['id']}" class="${classLikes} fa-thumbs-up"></i></span>
+<div id="avatar-group-${item['id']}" class="avatar-group" >
+   <div class=${countLikesShow}>
+    ${countLikes}
+  </div> </div>
+
                    <span id="price" >${item['price']}$</span>
                    </div>
                 </div>`;
@@ -143,14 +156,84 @@
                     tagsId: filters['tagsId'],
                 },
                 success: function (data) {
-                    catalog(data);
-                    pagination(data.usersDishes['links']);
+
+                    catalog(data['data']);
+                    pagination(data['links']);
                 },
                 error: function (data) {
                     var errors = data.responseJSON.message;
                     alert('Error: ' + errors);
                 }
             });
+        }
+        function likeUserData(data, dishID) {
+
+            $.ajax({
+                url: `/user/dish/users`,
+                type: 'get',
+                dataType: 'json',
+                data: {
+                    usersId: data
+                },
+                success: function (data) {
+                    let AvatarRow = displayAvatars(data)
+                    addAvatarsRow(AvatarRow, dishID)
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                },
+            });
+
+        }
+
+        function addAvatarsRow(AvatarRow, dishID) {
+            let element = $(document).find('#avatar-group-' + dishID);
+            element.prepend(AvatarRow);
+        }
+
+        function displayAvatars(users) {
+            let avatarsRows = "";
+
+            $.each(users, function (i, user) {
+                let avatarImage = 'https://cdn-icons-png.flaticon.com/512/37/37943.png?w=826&t=st=1677848744~exp=1677849344~hmac=e1d108013214838460e03f365e6a782c753b5d6f343be6c557c3ed78c0359eb1'
+                if (user['avatar_path']) {
+                    avatarImage = '/storage/images/' + user['avatar_path']
+                }
+                let avatarRow = `<div class="avatar"><img src="${avatarImage}"></div>`
+                avatarsRows = avatarsRows + avatarRow;
+            })
+
+            return avatarsRows;
+        }
+
+        function getLikedUsersIds(data) {
+            let usersIds = [];
+            if (data.length != 0) {
+                $.each(data, function (i, like) {
+                    usersIds.push(like['user_id']);
+                })
+            }
+            return usersIds;
+        }
+
+        function likes(likes_count) {
+            let countLikes = '';
+
+            if (likes_count != 0) {
+                countLikes = likes_count
+            }
+
+            return countLikes;
+        }
+
+        function classLike(likes) {
+            let classLikes = 'likeable far';
+            let usersIds = getLikedUsersIds(likes)
+
+            if ($.inArray(parseInt(user_id), usersIds) > -1) {
+                classLikes = 'unlikeable fas';
+            }
+
+            return classLikes;
         }
 
         function pagination(data = {}) {
@@ -242,5 +325,58 @@
         .SumoSelect > .CaptionCont {
             border: 1px solid #009999;
         }
+
+        .avatar {
+            width: 25px;
+            height: 25px;
+            overflow: hidden;
+            border-radius: 50%;
+            position: relative;
+            background-color:  #CCC;
+            border: 1px solid #2c303a;
+        }
+
+        .avatar img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+
+        .hidden-avatars {
+            width: 25px;;
+            height: 25px;;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 3px;
+            margin-right: 23px;
+            background-color: #CCC;
+            color:#fff;
+        }
+
+        .avatar-group {
+            display: flex;
+            margin-left:-15px;
+        }
+
+        .avatar-group.rtl {
+            direction: rtl;
+        }
+        .avatar:hover:not(:last-of-type) {
+            transform: translate(10px);
+        }
+
+        .avatar {
+            margin-left: -20px;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .avatar :hover:not(:last-of-type) {
+            transform: translate(-10px);
+        }
+
+
     </style>
 @endsection

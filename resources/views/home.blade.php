@@ -112,12 +112,18 @@
 
             $.each(data, function (i, item) {
                 let countLikes = likes(item['likes_count'])
+                let countLikesShow = 'hidden'
+                if (countLikes !='') {
+                    console.log('countLikes')
+                    countLikesShow = ' hidden-avatars'
+                }
                 let classLikes = classLike(item['likes'])
                 let likedUsersIds = getLikedUsersIds(item['likes'])
                 let rows = ''
                 if (likedUsersIds.length != 0) {
                     rows = likeUserData(likedUsersIds, item['id'])
                 }
+
 
                 // if (countLikes == '') {
                 //    likesClass = 'likeable far'
@@ -138,7 +144,7 @@
                     arrayTags.push(tagRow);
                 })
 
-                let rowTags = arrayTags.join("");
+                let rowTags = arrayTags.join(",");
                 let previewImage = images["previewImage"];
                 let row = `<div class="catalog-item col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                    <div class="hidden dish-author-id" data-id="${item['user_id']}"></div>
@@ -150,15 +156,15 @@
                     </figcaption>
                   </figure>
                    <div class="d-flex justify-content-between tm-text-gray">
-                    <span class="tm-text-gray-light" id="time">${item['created_at']}</span>
-                     ${rowTags}
+                   <span class="tm-text-gray-light" id="time">${item['created_at']}</span>
+                    <span class="tm-text-gray-light"> ${rowTags}</span>
                    <span id="favorite_${item['id']}" class="favourite"><i class="nav-icon far fa-heart"></i></span>
-                       <span class="like-btn">
-                        <i id="like_${item['id']}" class="${classLikes} fa-thumbs-up"> <div id="avatar-group-${item['id']}" class="avatar-group">
-   <div class="hidden-avatars">
-    ${countLikes}
-  </div> </div></i>
-                       </span>
+                    <div id="avatar-group-${item['id']}" class="avatar-group" >
+                    <div class=${countLikesShow}>
+                     ${countLikes}
+                    </div> </div>
+ <span class="like-btn">
+                        <i id="like_${item['id']}" class="${classLikes} fa-thumbs-up"></i></span>
                    <span id="price" >${item['price']}$</span>
                    </div>
                 </div>`;
@@ -237,11 +243,6 @@
         function classLike(likes) {
             let classLikes = 'likeable far';
             let usersIds = getLikedUsersIds(likes)
-            // if (likes.length != 0) {
-            //     $.each(likes, function (i,like) {
-            //         usersIds.push(like['user_id']);
-            //     })
-            // }
 
             if ($.inArray(parseInt(user_id), usersIds) > -1) {
                 classLikes = 'unlikeable fas';
@@ -586,8 +587,8 @@
             overflow: hidden;
             border-radius: 50%;
             position: relative;
-            background-color: #2c303a;
-            border: 2px solid #2c303a;
+            background-color:  #CCC;
+            border: 1px solid #2c303a;
         }
 
         .avatar img {
@@ -605,46 +606,30 @@
             align-items: center;
             margin-left: 3px;
             margin-right: 23px;
-            background-color: #2c303a;
-            color: #fff;
+            background-color: #CCC;
+            color:#fff;
         }
 
         .avatar-group {
             display: flex;
-
-        &
-        .rtl {
-            direction: rtl;
-
-        .avatar:hover:not(:last-of-type) {
-            transform: translate(10px);
+            margin-right:-60px;
         }
 
+        .avatar-group.rtl {
+            direction: rtl;
+        }
+        .avatar:hover:not(:last-of-type) {
+            transform: translate(10px);
         }
 
         .avatar {
             margin-left: -20px;
             transition: transform 0.3s ease;
             cursor: pointer;
+        }
 
-        &
-        :hover:not(:last-of-type) {
+        .avatar :hover:not(:last-of-type) {
             transform: translate(-10px);
-        }
-
-        }
-
-        .hidden-avatars {
-            width: 25px;;
-            height: 25px;;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-left: 3px;
-            margin-right: 23px;
-            background-color: #2c303a;
-            color: #fff;
         }
     </style>
 @endsection
