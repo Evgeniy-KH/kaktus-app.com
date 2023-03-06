@@ -11,6 +11,7 @@ class UnlikeRequest extends FormRequest
     protected array $likeableClass = [
         'Dish' => Dish::class,
     ];
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -45,9 +46,9 @@ class UnlikeRequest extends FormRequest
 
     public function likeable(): Likeable
     {
-        $className =  $this->input('likeable_type');
-
+        $className = $this->input('likeable_type');
         $class = new $this->likeableClass[$className];
+
         return $class::findOrFail($this->input('dish_id'));
     }
 }

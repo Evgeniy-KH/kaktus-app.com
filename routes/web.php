@@ -28,7 +28,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/catalog', [App\Http\Controllers\HomeController::class, 'catalog'])->name('home.catalog');
 Route::get('/catalog/pagination', [App\Http\Controllers\HomeController::class, 'paginationAjax'])->name('home.catalog.pagination');
-Route::get('/catalog/dish/getTags', [App\Http\Controllers\HomeController::class, 'getTags']);
+Route::get('/catalog/dish/getTags', [App\Http\Controllers\HomeController::class, 'tags']);
 Route::post('/catalog/filter', [App\Http\Controllers\HomeController::class, 'filter']);
 Route::get('/catalog/dish/{dish}', [App\Http\Controllers\HomeController::class, 'show'])->name('home.show');
 Route::get('/catalog/dish/show/{dish}', [App\Http\Controllers\HomeController::class, 'showDish']);
