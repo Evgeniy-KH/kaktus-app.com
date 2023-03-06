@@ -33,7 +33,7 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function getTags()
+    public function tags()
     {
         $tags = Tag::all();
 

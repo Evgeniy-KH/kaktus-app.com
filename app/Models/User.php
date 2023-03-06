@@ -52,10 +52,10 @@ class User extends Authenticatable
 
     public function dishes(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Dish::class, 'user_id','id');
+        return $this->hasMany(Dish::class, 'user_id', 'id');
     }
 
-    public function favoriteDishes():\Illuminate\Database\Eloquent\Relations\HasMany
+    public function favoriteDishes(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(FavoriteDish::class);
     }
@@ -81,7 +81,7 @@ class User extends Authenticatable
 
     public function unlike(Likeable $likeable): self
     {
-        if (! $this->hasLiked($likeable)) {
+        if (!$this->hasLiked($likeable)) {
             return $this;
         }
 
@@ -94,12 +94,12 @@ class User extends Authenticatable
 
     public function hasLiked(Likeable $likeable): bool
     {
-        if (! $likeable->exists) {
+        if (!$likeable->exists) {
             return false;
         }
 
         return $likeable->likes()
-            ->whereHas('user', fn($q) =>  $q->whereId($this->id))
+            ->whereHas('user', fn($q) => $q->whereId($this->id))
             ->exists();
     }
 }

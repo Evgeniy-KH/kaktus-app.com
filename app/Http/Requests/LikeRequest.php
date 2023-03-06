@@ -46,8 +46,8 @@ class LikeRequest extends FormRequest
     public function likeable(): Likeable
     {
         $className =  $this->input('likeable_type');
-
         $class = new $this->likeableClass[$className];
+
         return $class::findOrFail($this->input('dish_id'));
     }
 

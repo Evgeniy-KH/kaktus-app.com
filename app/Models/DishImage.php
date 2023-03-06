@@ -26,6 +26,6 @@ class DishImage extends Model
 
     public function dishes(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Dish::class,'dish_id', 'id');
+        return $this->belongsTo(Dish::class, 'dish_id', 'id');
     }
 }

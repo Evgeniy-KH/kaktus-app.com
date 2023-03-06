@@ -46,7 +46,6 @@ class UserController extends Controller
                     'status' => '422',
                     'message' => 'Your current password is incorrect'
                 );
-
             }
         }
 
