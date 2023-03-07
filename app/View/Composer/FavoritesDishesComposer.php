@@ -12,6 +12,6 @@ class FavoritesDishesComposer
      */
     public function compose(View $view)
     {
-        $view->with('favoritesDishes' , auth()->user()->favoriteDishes()->get());
+        $view->with('favoritesDishes', auth()->user()->favoriteDishes()->get());
     }
 }

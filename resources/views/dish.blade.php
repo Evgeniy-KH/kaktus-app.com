@@ -2,8 +2,8 @@
 
 @section('content')
 
-    <div class="container-fluid tm-container-content tm-mt-60" >
-        <div class="row mb-4 dish-title" >
+    <div class="container-fluid tm-container-content tm-mt-60">
+        <div class="row mb-4 dish-title">
         </div>
         <div class="row tm-mb-90">
             <div class="col-xl-8 col-lg-7 col-md-6 col-sm-12 dish-image">
@@ -11,9 +11,11 @@
             <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12" style="height: 650px ;">
                 <div class="tm-bg-gray tm-video-details">
                     <div class="mb-4 dish-description"
-                    style="max-height: 250px; overflow-y: auto; /">
+                         style="max-height: 250px; overflow-y: auto; /">
                     </div>
-                    <p class="mb-4"><h4 class="tm-text-gray-dark">Ingredient</h4><div class="dish-ingredients tm-text-gray"></div></p>
+                    <p class="mb-4"><h4 class="tm-text-gray-dark">Ingredient</h4>
+                    <div class="dish-ingredients tm-text-gray"></div>
+                    </p>
                     <div class="mb-2 d-flex flex-wrap">
                         <div class="mr-4 mb-2">
                             <h4 class="dish-price"></h4>
@@ -44,9 +46,9 @@
         let userId = $('#user-edit').attr('data-id');
         let dishId = {{$id}};
 
-        function checkImages (images) {
-            let previewImage ='';
-            let mainImage ='';
+        function checkImages(images) {
+            let previewImage = '';
+            let mainImage = '';
 
             $.each(images, function (i, image) {
                 if (image['type_id'] == '0') {/// delete preview image or not ???
@@ -55,7 +57,8 @@
                     mainImage = image['image']
                 }
             })
-            return {"previewImage":previewImage, "mainImage":mainImage}
+
+            return {"previewImage": previewImage, "mainImage": mainImage}
         }
 
         function initDish(data = {}) {
@@ -65,7 +68,6 @@
                 dataType: 'json',
                 data: data,
                 success: function (data) {
-                    console.log(data);
                     data['created_at'] = new Date(data['created_at']).toLocaleDateString("en-US", {
                         day: 'numeric',
                         month: 'short',
@@ -76,7 +78,7 @@
                     let mainImage = images["mainImage"];
 
                     let title = `<h1 class="col-12 tm-text-primary">${data['title']}</h1>`;
-                    let image =`<figure class="effect-ming tm-video-item main-image">
+                    let image = `<figure class="effect-ming tm-video-item main-image">
                     <img src="/storage/${mainImage}" alt="Image" class="img-fluid" style="width: 1155px; height: 650px ;">
                     <figcaption class="d-flex align-items-center justify-content-center action">
                        <h2 class="dish-action justify-content-between">
@@ -85,7 +87,7 @@
                        <div class="col mr-4" id="delete-btn" data-id="${dishId}">Delete</div></div></h2>
                     </figcaption>
                   </figure>`
-                    let description =`<h4 class="tm-text-gray-dark mb-3">${data['description']}</h4>`;
+                    let description = `<h4 class="tm-text-gray-dark mb-3">${data['description']}</h4>`;
                     let price = `<span class="tm-text-gray-dark">Price: </span><span class="tm-text-primary">${data['price']}$</span>`
                     let created = `<span class="tm-text-gray-dark">Published: </span><span class="tm-text-gray">${data['created_at']}$</span>`
 
@@ -105,37 +107,34 @@
                         $('.dish-tags').remove()
                     }
 
-                    if ( data['user_id'] != userId) {
+                    if (data['user_id'] != userId) {
                         console.log(data['dish_images']);
 
                         $('.main-image').remove();
-                        let image =`<img src="/storage/${data['dish_images'][1]['image']}" alt="Image" class="img-fluid" style="width: 1155px; height: 650px ;">`
+                        let image = `<img src="/storage/${data['dish_images'][1]['image']}" alt="Image" class="img-fluid" style="width: 1155px; height: 650px ;">`
                         $('.dish-image').append(image);
                     }
 
                     $('#edit-btn, #delete-btn, #show-dish-btm')
-                        .on('mouseenter', function() {
+                        .on('mouseenter', function () {
                             $(this).css("color", "#5c6772");
                         })
-                        .on('mouseleave', function() {
+                        .on('mouseleave', function () {
                             $(this).css("color", "inherit");
                         });
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert('Error: ' + textStatus + ' - ' + errorThrown);
                 }
-
             });
         }
 
         $(document).ready(function () {
-            console.log('ready');
-
             initDish();
 
-            $(document).on("click","#delete-btn",function() {
+            $(document).on("click", "#delete-btn", function () {
                 $.ajax({
-                    url: `/user/dish/`+dishId,
+                    url: `/user/dish/` + dishId,
                     type: 'delete',
                     data: {_method: 'delete'},
                     dataType: 'json',
@@ -144,16 +143,9 @@
                     },
                 });
             });
-
         });
     </script>
 
     <style type="text/css">
-
-        /*.dish-image {*/
-        /*    height: 1155px !important;*/
-        /*    width: 650px !important;*/
-        /*}*/
-
     </style>
 @endsection

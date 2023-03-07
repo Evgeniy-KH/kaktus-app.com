@@ -33,8 +33,6 @@ Route::post('/catalog/filter', [App\Http\Controllers\HomeController::class, 'fil
 Route::get('/catalog/dish/{dish}', [App\Http\Controllers\HomeController::class, 'show'])->name('home.show');
 Route::get('/catalog/dish/show/{dish}', [App\Http\Controllers\HomeController::class, 'showDish']);
 
-
-
 Route::get('auth/facebook', [SocialController::class, 'facebookRedirect']);
 Route::get('auth/facebook/callback', [SocialController::class, 'loginWithFacebook']);
 
@@ -48,7 +46,6 @@ Route::group(['namespace'=>'App\Http\Controllers\User', 'prefix' => 'user','midd
     Route::get('/favorite/dish', [UserController::class, 'getFavoriteDishes']);
     Route::get('/favorite/dishes', [UserController::class, 'myFavoritesDishes']);
 
-
     Route::group(['prefix' => 'dish'], function () {
         Route::get('/users', [LikeController::class,'users'])->name('user.dish.users');
         Route::post('/like',  [LikeController::class, 'like'])->name('like');
@@ -56,7 +53,6 @@ Route::group(['namespace'=>'App\Http\Controllers\User', 'prefix' => 'user','midd
         Route::delete('/unlike', [LikeController::class, 'unlike'])->name('unlike');
         Route::get('/', [DishController::class,'index'])->name('user.dish.index');
         Route::get('/create', [DishController::class,'create'])->name('user.dish.create');
-
         Route::post('/store', [DishController::class,'store'])->name('user.dish.store');
         Route::post('/favorite', [FavoriteDishController::class, 'addToFavoriteDish']);
         Route::post('/disfavouring', [FavoriteDishController::class, 'removeFromFavoriteDish']);
@@ -65,7 +61,6 @@ Route::group(['namespace'=>'App\Http\Controllers\User', 'prefix' => 'user','midd
         Route::patch('/{dishId}', [DishController::class,'update'])->name('user.dish.update');
         Route::delete('/{dishId}', [DishController::class,'delete'])->name('user.dish.delete');
     });
-
 
 });
 

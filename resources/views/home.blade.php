@@ -97,6 +97,7 @@
                                 .attr("id", item['id'])
                                 .text(item['title']));
                     });
+
                     $('.search_tag').SumoSelect().sumo.reload();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -113,21 +114,19 @@
             $.each(data, function (i, item) {
                 let countLikes = likes(item['likes_count'])
                 let countLikesShow = 'hidden'
-                if (countLikes !='') {
+
+                if (countLikes != '') {
                     console.log('countLikes')
                     countLikesShow = ' hidden-avatars'
                 }
+
                 let classLikes = classLike(item['likes'])
                 let likedUsersIds = getLikedUsersIds(item['likes'])
                 let rows = ''
+
                 if (likedUsersIds.length != 0) {
                     rows = likeUserData(likedUsersIds, item['id'])
                 }
-
-
-                // if (countLikes == '') {
-                //    likesClass = 'likeable far'
-                // }
 
                 item['created_at'] = new Date(item['created_at']).toLocaleDateString("en-US", {
                     day: 'numeric',
@@ -163,7 +162,7 @@
                     <div class=${countLikesShow}>
                      ${countLikes}
                     </div> </div>
- <span class="like-btn">
+                    <span class="like-btn">
                         <i id="like_${item['id']}" class="${classLikes} fa-thumbs-up"></i></span>
                    <span id="price" >${item['price']}$</span>
                    </div>
@@ -182,7 +181,6 @@
         }
 
         function likeUserData(data, dishID) {
-
             $.ajax({
                 url: `/user/dish/users`,
                 type: 'get',
@@ -195,9 +193,9 @@
                     addAvatarsRow(AvatarRow, dishID)
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
+                    alert('Error: ' + textStatus + ' - ' + errorThrown);
                 },
             });
-
         }
 
         function addAvatarsRow(AvatarRow, dishID) {
@@ -222,11 +220,13 @@
 
         function getLikedUsersIds(data) {
             let usersIds = [];
+
             if (data.length != 0) {
                 $.each(data, function (i, like) {
                     usersIds.push(like['user_id']);
                 })
             }
+
             return usersIds;
         }
 
@@ -261,7 +261,6 @@
                     tagsId: filters['tagsId'],
                 },
                 success: function (data) {
-                    console.log(data);
                     catalog(data['data']);
                     pagination(data['links']);
                 },
@@ -341,7 +340,6 @@
                 filtersUrl[key] = value;
             }
 
-
             $.each(filtersUrl, function (key, value) {
                 if (value == "" || value == "," | value == null) {
                     delete filtersUrl[key];
@@ -390,7 +388,6 @@
                     'dish_id': dishId,
                 },
                 success: function () {
-                    // alert('New dish has been create successfully');
                 },
                 error: function (data) {
                     let errors = data.responseJSON.message;
@@ -400,7 +397,6 @@
         }
 
         function removeFromFavourites(dishId) {
-
             $.ajax({
                 type: 'post',
                 url: '/user/dish/disfavouring',
@@ -447,6 +443,7 @@
 
             $(document).on('click', '.likeable', function (event) {
                 let dishId = $(this).attr('id').split('_')[1];
+
                 $.ajax({
                     type: 'post',
                     url: '/user/dish/like',
@@ -462,12 +459,11 @@
                         alert('Error: ' + errors);
                     }
                 });
-
-
             })
 
             $(document).on('click', '.unlikeable', function (event) {
                 let dishId = $(this).attr('id').split('_')[1];
+
                 $.ajax({
                     url: '/user/dish/unlike',
                     type: 'delete',
@@ -485,15 +481,12 @@
                         alert('Error: ' + errors);
                     }
                 });
-
-
             })
 
             $('#filter-input-btn').on("click", function () {
                 let filters = getFilters()
 
                 updateUrl(filters);
-
                 initCatalog(filters);
             });
 
@@ -504,6 +497,7 @@
                 let filters = getFilters()
 
                 updateUrl(filters);
+
                 let url = $(location).attr('href')
                 window.history.replaceState(null, null, url + "page=" + page);
 
@@ -512,6 +506,7 @@
 
             $(document).on('click', '.favourite', function (event) {
                 let dishId = $(this).attr('id').split('_')[1];
+
                 addToFavourites(dishId)
 
                 $(this).removeClass('favourite').addClass('disfavouring')
@@ -520,6 +515,7 @@
 
             $(document).on('click', '.disfavouring', function (event) {
                 let dishId = $(this).attr('id').split('_')[1];
+
                 removeFromFavourites(dishId)
 
                 $(this).removeClass('disfavouring').addClass('favourite')
@@ -537,7 +533,6 @@
                     success: function (data) {
                         catalog(data['data']);
                         pagination(data['links']);
-
                     }
                 });
             }
@@ -587,7 +582,7 @@
             overflow: hidden;
             border-radius: 50%;
             position: relative;
-            background-color:  #CCC;
+            background-color: #CCC;
             border: 1px solid #2c303a;
         }
 
@@ -607,17 +602,18 @@
             margin-left: 3px;
             margin-right: 23px;
             background-color: #CCC;
-            color:#fff;
+            color: #fff;
         }
 
         .avatar-group {
             display: flex;
-            margin-right:-60px;
+            margin-right: -60px;
         }
 
         .avatar-group.rtl {
             direction: rtl;
         }
+
         .avatar:hover:not(:last-of-type) {
             transform: translate(10px);
         }

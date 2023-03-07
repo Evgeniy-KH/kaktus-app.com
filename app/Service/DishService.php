@@ -14,7 +14,6 @@ class DishService
     public function store($data)
     {
         DB::transaction(function () use ($data) {
-
             if (isset($data['tag_ids'])) {
                 $tagIds = $data['tag_ids'];
                 unset($data['tag_ids']);
@@ -22,12 +21,10 @@ class DishService
 
             $previewImage['image'] = $data['preview_image'] = Storage::disk('public')->put('/images', $data['preview_image']);
             $previewImage['type_id'] = DishImage::TYPE_PREVIEW;
-
             unset($data['preview_image']);
 
             $mainImage['image'] = $data['main_image'] = Storage::disk('public')->put('/images', $data['main_image']);
             $mainImage['type_id'] = DishImage::TYPE_MAIN;
-
             unset($data['main_image']);
 
             $allImages = [$previewImage, $mainImage];
@@ -48,7 +45,6 @@ class DishService
     public function update($data, $dish)
     {
         DB::transaction(function () use ($data, $dish) {
-
             if (isset($data['tag_ids'])) {
                 $tagIds = $data['tag_ids'];
                 unset($data['tag_ids']);

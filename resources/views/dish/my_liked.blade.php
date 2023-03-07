@@ -4,25 +4,25 @@
     <div class="container-fluid tm-container-content tm-mt-60 ">
         <div class="row mb-4">
             <h2 class="col-6 tm-text-primary">
-               My liked dishes
+                My liked dishes
             </h2>
         </div>
         <div id="main-catalog">
             <div class="row tm-mb-90 tm-gallery">
                 <div class="table-responsive">
-                <table class="table dishes table-striped table align-middle ">
-                    <thead>
-                    <tr>
-                        <th scope="col">Number</th>
-                        <th scope="col">Image</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Tags</th>
-                    </tr>
-                    </thead>
-                    <tbody id="tbody" >
-                    </tbody>
-                </table>
+                    <table class="table dishes table-striped table align-middle ">
+                        <thead>
+                        <tr>
+                            <th scope="col">Number</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Tags</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        </tbody>
+                    </table>
                 </div>
             </div> <!-- row -->
         </div>
@@ -44,7 +44,6 @@
         });
 
         let user_id = $('#user-edit').attr('data-id');
-
 
         function checkImages(images) {
             let previewImage = '';
@@ -72,15 +71,13 @@
             return tagList
         }
 
-        function initCatalog(filters = {}) {
+        function initCatalog() {
             $.ajax({
                 url: '/user/dish/liked',
                 type: 'get',
-                data: {
-                },
+                data: {},
                 success: function (data) {
                     list(data)
-                   console.log(data);
                 },
                 error: function (data) {
                     var errors = data.responseJSON.message;
@@ -90,8 +87,8 @@
         }
 
         function list(data) {
-            let numberDish =1
-            $.each(data, function (i, item)  {
+            let numberDish = 1
+            $.each(data, function (i, item) {
                 item['created_at'] = new Date(item['created_at']).toLocaleDateString("en-US", {
                     day: 'numeric',
                     month: 'short',
@@ -122,10 +119,8 @@
 
                 $('#tbody').append(row);
 
-                numberDish+=1
-
+                numberDish += 1
             })
-
         }
 
         $(document).ready(function () {
