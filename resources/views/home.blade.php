@@ -345,7 +345,6 @@
                 filtersUrl[key] = value;
             }
 
-
             $.each(filtersUrl, function (key, value) {
                 if (value == "" || value == "," | value == null) {
                     delete filtersUrl[key];
