@@ -23,22 +23,18 @@ class PersonalController extends Controller
         $user = User::find($id);
 
         return response()->json($user);
-
     }
 
     public function updatePersonal(int $id, UpdatePersonalRequest $request): \Illuminate\Http\JsonResponse
     {
         $user = User::find($id);
         $data = $request->validated();
-
         $name = $data['name'];
         $birthday = Carbon::createFromFormat('m/d/Y', $data['birthday'])->format('Y-m-d');
-
         $user->update([
             'name' => $name,
             'birthday' => $birthday
         ]);
-
         $returnData = $user;
 
         return response()->json($returnData);
@@ -79,10 +75,8 @@ class PersonalController extends Controller
         $fileName = time() . '.' . $file->getClientOriginalExtension();
         $file->storeAs('public/images', $fileName);
         $user->update(['image' => $fileName]);
-
         $returnData = User::find($id);;
 
         return response()->json($returnData);
     }
-
 }
