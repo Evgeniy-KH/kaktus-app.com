@@ -63,13 +63,13 @@
 
             $.each(images, function (i, image) {
                 if (image['type_id'] == '0') {
-                    previewImage = image['image']
+                    previewImage = image['image'];
                 } else if (image['type_id'] == '1') {
-                    mainImage = image['image']
+                    mainImage = image['image'];
                 }
             })
 
-            return {"previewImage": previewImage, "mainImage": mainImage}
+            return {"previewImage": previewImage, "mainImage": mainImage};
         }
 
         function checkTags(tags) {
@@ -80,7 +80,7 @@
                 tagList.push(tag_title);
             })
 
-            return tagList
+            return tagList;
         }
 
         function showTags(data = {}) {
@@ -107,25 +107,24 @@
         }
 
         function catalog(data) {
-            $('#catalog').remove()
-            let row = `<div class="row tm-mb-90 tm-gallery" id="catalog">`
+            $('#catalog').remove();
+            let row = `<div class="row tm-mb-90 tm-gallery" id="catalog">`;
             $('#main-catalog').prepend(row);
 
             $.each(data, function (i, item) {
-                let countLikes = likes(item['likes_count'])
-                let countLikesShow = 'hidden'
+                let countLikes = likes(item['likes_count']);
+                let countLikesShow = 'hidden';
 
                 if (countLikes != '') {
-                    console.log('countLikes')
-                    countLikesShow = ' hidden-avatars'
+                    countLikesShow = ' hidden-avatars';
                 }
 
-                let classLikes = classLike(item['likes'])
-                let likedUsersIds = getLikedUsersIds(item['likes'])
-                let rows = ''
+                let classLikes = classLike(item['likes']);
+                let likedUsersIds = getLikedUsersIds(item['likes']);
+                let rows = '';
 
                 if (likedUsersIds.length != 0) {
-                    rows = likeUserData(likedUsersIds, item['id'])
+                    rows = likeUserData(likedUsersIds, item['id']);
                 }
 
                 item['created_at'] = new Date(item['created_at']).toLocaleDateString("en-US", {
@@ -139,7 +138,7 @@
                 let arrayTags = [];
 
                 $.each(tagList, function (i, tag) {
-                    let tagRow = `<span class="tm-text-gray-light">${tag}</span>`
+                    let tagRow = `<span class="tm-text-gray-light">${tag}</span>`;
                     arrayTags.push(tagRow);
                 })
 
@@ -190,7 +189,7 @@
                 },
                 success: function (data) {
                     let AvatarRow = displayAvatars(data)
-                    addAvatarsRow(AvatarRow, dishID)
+                    addAvatarsRow(AvatarRow, dishID);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert('Error: ' + textStatus + ' - ' + errorThrown);
@@ -209,9 +208,9 @@
             $.each(users, function (i, user) {
                 let avatarImage = 'https://cdn-icons-png.flaticon.com/512/37/37943.png?w=826&t=st=1677848744~exp=1677849344~hmac=e1d108013214838460e03f365e6a782c753b5d6f343be6c557c3ed78c0359eb1'
                 if (user['avatar_path']) {
-                    avatarImage = '/storage/images/' + user['avatar_path']
+                    avatarImage = '/storage/images/' + user['avatar_path'];
                 }
-                let avatarRow = `<div class="avatar"><img src="${avatarImage}"></div>`
+                let avatarRow = `<div class="avatar"><img src="${avatarImage}"></div>`;
                 avatarsRows = avatarsRows + avatarRow;
             })
 
@@ -234,7 +233,7 @@
             let countLikes = '';
 
             if (likes_count != 0) {
-                countLikes = likes_count
+                countLikes = likes_count;
             }
 
             return countLikes;
@@ -242,7 +241,7 @@
 
         function classLike(likes) {
             let classLikes = 'likeable far';
-            let usersIds = getLikedUsersIds(likes)
+            let usersIds = getLikedUsersIds(likes);
 
             if ($.inArray(parseInt(user_id), usersIds) > -1) {
                 classLikes = 'unlikeable fas';
@@ -351,12 +350,12 @@
                     value = parseInt(value);
                     // $('.search_tag')[0].sumo.selectItem(value);/// not working
                 } else if (key === 'keyword') {
-                    $('#keyword').val(value)
+                    $('#keyword').val(value);
                     // $('.search_tag')[0].sumo.selectItem(value);/// not working
                 } else if (key === 'price') {
                     let price = value.split(",");
-                    $('#min-price').val(price[0])
-                    $('#max-price').val(price[1])
+                    $('#min-price').val(price[0]);
+                    $('#max-price').val(price[1]);
                 }
             })
 
@@ -366,7 +365,7 @@
         function updateUrl(filters) {
             let urlFilter = "";
             let index = 1;
-            let filterLength = Object.keys(filters).length
+            let filterLength = Object.keys(filters).length;
 
             $.each(filters, function (key, value) {
                 if (filterLength != index) {
@@ -376,7 +375,7 @@
                 index++;
             });
 
-            let url = 'http://kaktus-app.com/home'
+            let url = 'http://kaktus-app.com/home';
             window.history.replaceState(null, null, url + "?" + urlFilter);
         }
 
@@ -438,7 +437,7 @@
             mask();
 
             $(window).on('load', function () {
-                favoriteDish()
+                favoriteDish();
             })
 
             $(document).on('click', '.likeable', function (event) {
@@ -484,7 +483,7 @@
             })
 
             $('#filter-input-btn').on("click", function () {
-                let filters = getFilters()
+                let filters = getFilters();
 
                 updateUrl(filters);
                 initCatalog(filters);
@@ -494,11 +493,11 @@
                 event.preventDefault();
 
                 let page = $(this).attr('href').split('page=')[1];
-                let filters = getFilters()
+                let filters = getFilters();
 
                 updateUrl(filters);
 
-                let url = $(location).attr('href')
+                let url = $(location).attr('href');
                 window.history.replaceState(null, null, url + "page=" + page);
 
                 fetch_user_data(filters, page);
@@ -507,18 +506,18 @@
             $(document).on('click', '.favourite', function (event) {
                 let dishId = $(this).attr('id').split('_')[1];
 
-                addToFavourites(dishId)
+                addToFavourites(dishId);
 
-                $(this).removeClass('favourite').addClass('disfavouring')
+                $(this).removeClass('favourite').addClass('disfavouring');
                 $(this).find('i').removeClass('far').addClass('fas');
             });
 
             $(document).on('click', '.disfavouring', function (event) {
                 let dishId = $(this).attr('id').split('_')[1];
 
-                removeFromFavourites(dishId)
+                removeFromFavourites(dishId);
 
-                $(this).removeClass('disfavouring').addClass('favourite')
+                $(this).removeClass('disfavouring').addClass('favourite');
                 $(this).find('i').removeClass('fas').addClass('far');
             });
 
