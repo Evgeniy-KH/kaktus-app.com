@@ -13,6 +13,6 @@ class TagComposer
      */
     public function compose(View $view)
     {
-        $view->with('tags' , Tag::all());
+        $view->with('tags', Tag::all());
     }
 }

@@ -30,20 +30,6 @@
 
         let user_id = $('#user-edit').attr('data-id');
 
-
-        $('.search_tag').SumoSelect({
-            placeholder: 'Tags',
-            csvDispCount: 3,
-            search: true,
-        });
-
-        $(".search_tag").css("margin-left", "10px");
-
-        function mask() {
-            $('#min-price').mask("#.##0.00", {reverse: true});
-            $('#max-price').mask("#.##0.00", {reverse: true});
-        }
-
         function checkImages(images) {
             let previewImage = '';
             let mainImage = '';
@@ -98,7 +84,6 @@
             $('#main-catalog').prepend(row);
 
             $.each(data, function (i, item) {
-
                 item['created_at'] = new Date(item['created_at']).toLocaleDateString("en-US", {
                     day: 'numeric',
                     month: 'short',
@@ -146,7 +131,6 @@
         }
 
         function initCatalog(filters = {}) {
-            console.log(filters);
             $.ajax({
                 url: '/user/favorite/dishes',
                 type: 'get',
@@ -191,7 +175,6 @@
         }
 
         function removeFromFavourites(dishId) {
-
             $.ajax({
                 type: 'post',
                 url: '/user/dish/disfavouring',
@@ -211,7 +194,6 @@
         $(document).ready(function () {
             initCatalog();
             showTags();
-            mask();
 
             $(window).on('load', function () {
                 favoriteDish()
@@ -219,19 +201,19 @@
 
             $(document).on('click', '.tm-paging-link', function (event) {
                 event.preventDefault();
-
                 let page = $(this).attr('href').split('page=')[1];
                 let filters = getFilters()
 
                 updateUrl(filters);
+
                 let url = $(location).attr('href')
                 window.history.replaceState(null, null, url + "page=" + page);
-
                 fetch_user_data(filters, page);
             });
 
             $(document).on('click', '.favourite', function (event) {
                 let dishId = $(this).attr('id').split('_')[1];
+
                 addToFavourites(dishId)
 
                 $(this).removeClass('favourite').addClass('disfavouring')
@@ -240,6 +222,7 @@
 
             $(document).on('click', '.disfavouring', function (event) {
                 let dishId = $(this).attr('id').split('_')[1];
+
                 removeFromFavourites(dishId)
 
                 $(this).removeClass('disfavouring').addClass('favourite')
@@ -261,43 +244,5 @@
                 });
             }
         })
-
     </script>
-
-    <style type="text/css">
-
-        .filter-input {
-            border: 1px solid;
-            margin-left: 10px;
-            width: 200px;
-        }
-
-        .filter-input-btn {
-            color: white;
-            background-color: #009999;
-            margin-left: 10px;
-            border: none;
-            width: 100px;
-            height: 50px;
-        }
-
-        .select-tags {
-            background: none !important;
-        }
-
-        .SumoSelect > .CaptionCont > span.placeholder {
-            color: #009999;
-            font-family: inherit;
-            font-size: inherit;
-            line-height: inherit;
-            text-align: start;
-            cursor: text;
-            padding: 5px 15px;
-
-        }
-
-        .SumoSelect > .CaptionCont {
-            border: 1px solid #009999;
-        }
-    </style>
 @endsection

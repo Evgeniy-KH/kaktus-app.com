@@ -27,7 +27,8 @@
                                        class=" col-form-label text-md-end tm-text-primary">{{ __('Birthday') }}</label>
                                 <div d="input-group-birthday">
                                     <div class="input-group date" id="datepicker">
-                                        <input type="text" class="form-control" name="birthday" id="birthday" value="{{ $user->birthday}}">
+                                        <input type="text" class="form-control" name="birthday" id="birthday"
+                                               value="{{ $user->birthday}}">
                                         <span class="input-group-append"></span>
                                     </div>
                                 </div>
@@ -92,9 +93,10 @@
                         </div>
                         <div class="card-body">
                             @if ($user->avatar_path)
-                            <div class="w-75 mb-2" id="preview-photo">
-                                <img src="{{ asset('/storage/images/'.$user->avatar_path) }}"  alt="avatar" width="200" class="img-fluid img-thumbnail">
-                            </div>
+                                <div class="w-75 mb-2" id="preview-photo">
+                                    <img src="{{ asset('/storage/images/'.$user->avatar_path) }}" alt="avatar"
+                                         width="200" class="img-fluid img-thumbnail">
+                                </div>
                             @endif
                             <div class="form-group">
                                 <label for="avatar-path"
@@ -128,11 +130,11 @@
         });
 
         $(document).ready(function () {
-
-            $('#datepicker').datepicker({format: 'mm/dd/yyyy'
-            });
-
             let id = $('#edit-card').attr('data-id');
+
+            $('#datepicker').datepicker({
+                format: 'mm/dd/yyyy'
+            });
 
             $('#btn-update-password').on("click", function () {
                 $('.is-invalid').removeClass('is-invalid');
@@ -155,7 +157,6 @@
                         if (data === 'success') {
                             alert('Password has beed updated successfully');
                         }
-                      console.log(data);
                     },
                     error: function (data) {
                         if (data.status === 422) {
@@ -202,7 +203,6 @@
                         if (data === 'success') {
                             alert('Personal info has beed updated successfully');
                         }
-                        // location.reload();
                     },
                     error: function (data) {
                         if (data.status === 422) {
@@ -228,16 +228,11 @@
             $('#btn-update-avatar-path').on("click", function () {
                 $('.is-invalid').removeClass('is-invalid');
                 $(".invalid-feedback").remove();
+
                 let avatar_path = $('#avatar-path')[0].files[0];
                 let formData = new FormData();
-                console.log(avatar_path);
 
-                // formData.append(' _method', 'PATCH');
                 formData.append('avatar_path', avatar_path);
-
-                // for (var pair of formData.entries()) {
-                //     console.log(pair[0]+ ', ' + pair[1]);
-                // }
 
                 $.ajax({
                     url: `/user/${id}`,
@@ -253,7 +248,7 @@
                     },
                     error: function (data) {
                         if (data.status === 422) {
-                            var errors = data.responseJSON.errors;
+                            let errors = data.responseJSON.errors;
 
                             $.each(errors, function (key, value) {
                                 if (key === 'avatar-path') {

@@ -29,6 +29,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        //Почему тут прописаны эти правила ???..
+
         // $user->can('like', $post)
         Gate::define('like', function (User $user, Likeable $likeable) {
             if (!$likeable->exists) {

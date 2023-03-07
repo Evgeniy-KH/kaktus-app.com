@@ -4,12 +4,11 @@
     <div class="container-fluid tm-container-content tm-mt-60 ">
         <div class="row mb-4">
             <h2 class="col-6 tm-text-primary">
-               My Dishes
+                My Dishes
             </h2>
         </div>
         <div id="main-catalog">
             <div class="row tm-mb-90 tm-gallery" id="catalog">
-
             </div> <!-- row -->
         </div>
         <div class="row align-items-end">
@@ -30,20 +29,6 @@
         });
 
         let user_id = $('#user-edit').attr('data-id');
-
-
-        $('.search_tag').SumoSelect({
-            placeholder: 'Tags',
-            csvDispCount: 3,
-            search: true,
-        });
-
-        $(".search_tag").css("margin-left", "10px");
-
-        function mask() {
-            $('#min-price').mask("#.##0.00", {reverse: true});
-            $('#max-price').mask("#.##0.00", {reverse: true});
-        }
 
         function checkImages(images) {
             let previewImage = '';
@@ -72,22 +57,23 @@
         }
 
         function catalog(data) {
-            console.log(data);
             $('#catalog').remove()
             let row = `<div class="row tm-mb-90 tm-gallery" id="catalog">`
             $('#main-catalog').prepend(row);
 
-            $.each(data, function (i, item)  {
-                console.log(item)
+            $.each(data, function (i, item) {
                 let countLikes = likes(item['likes_count'])
                 let countLikesShow = 'hidden'
-                if (countLikes !='') {
+
+                if (countLikes != '') {
                     console.log('countLikes')
                     countLikesShow = ' hidden-avatars'
                 }
+
                 let classLikes = classLike(item['likes'])
                 let likedUsersIds = getLikedUsersIds(item['likes'])
                 let rows = ''
+
                 if (likedUsersIds.length != 0) {
                     rows = likeUserData(likedUsersIds, item['id'])
                 }
@@ -125,11 +111,11 @@
 
                        <span class="like-btn">
                         <i id="like_${item['id']}" class="${classLikes} fa-thumbs-up"></i></span>
-<div id="avatar-group-${item['id']}" class="avatar-group" >
-   <div class=${countLikesShow}>
-    ${countLikes}
-  </div> </div>
-
+                  <div id="avatar-group-${item['id']}" class="avatar-group" >
+                    <div class=${countLikesShow}>
+                    ${countLikes}
+                   </div>
+                   </div>
                    <span id="price" >${item['price']}$</span>
                    </div>
                 </div>`;
@@ -156,18 +142,17 @@
                     tagsId: filters['tagsId'],
                 },
                 success: function (data) {
-
                     catalog(data['data']);
                     pagination(data['links']);
                 },
                 error: function (data) {
-                    var errors = data.responseJSON.message;
+                    let errors = data.responseJSON.message;
                     alert('Error: ' + errors);
                 }
             });
         }
-        function likeUserData(data, dishID) {
 
+        function likeUserData(data, dishID) {
             $.ajax({
                 url: `/user/dish/users`,
                 type: 'get',
@@ -292,47 +277,13 @@
 
     <style type="text/css">
 
-        .filter-input {
-            border: 1px solid;
-            margin-left: 10px;
-            width: 200px;
-        }
-
-        .filter-input-btn {
-            color: white;
-            background-color: #009999;
-            margin-left: 10px;
-            border: none;
-            width: 100px;
-            height: 50px;
-        }
-
-        .select-tags {
-            background: none !important;
-        }
-
-        .SumoSelect > .CaptionCont > span.placeholder {
-            color: #009999;
-            font-family: inherit;
-            font-size: inherit;
-            line-height: inherit;
-            text-align: start;
-            cursor: text;
-            padding: 5px 15px;
-
-        }
-
-        .SumoSelect > .CaptionCont {
-            border: 1px solid #009999;
-        }
-
         .avatar {
             width: 25px;
             height: 25px;
             overflow: hidden;
             border-radius: 50%;
             position: relative;
-            background-color:  #CCC;
+            background-color: #CCC;
             border: 1px solid #2c303a;
         }
 
@@ -352,17 +303,18 @@
             margin-left: 3px;
             margin-right: 23px;
             background-color: #CCC;
-            color:#fff;
+            color: #fff;
         }
 
         .avatar-group {
             display: flex;
-            margin-left:-15px;
+            margin-left: -15px;
         }
 
         .avatar-group.rtl {
             direction: rtl;
         }
+
         .avatar:hover:not(:last-of-type) {
             transform: translate(10px);
         }
@@ -376,7 +328,5 @@
         .avatar :hover:not(:last-of-type) {
             transform: translate(-10px);
         }
-
-
     </style>
 @endsection
