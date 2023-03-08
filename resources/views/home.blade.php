@@ -76,8 +76,8 @@
             let tagList = [];
 
             $.each(tags, function (i, tag) {
-                let tag_title = tag['title'];
-                tagList.push(tag_title);
+                let tagTitle = tag['title'];
+                tagList.push(tagTitle);
             })
 
             return tagList;
@@ -206,10 +206,12 @@
             let avatarsRows = "";
 
             $.each(users, function (i, user) {
-                let avatarImage = 'https://cdn-icons-png.flaticon.com/512/37/37943.png?w=826&t=st=1677848744~exp=1677849344~hmac=e1d108013214838460e03f365e6a782c753b5d6f343be6c557c3ed78c0359eb1'
+                let avatarImage = 'https://cdn-icons-png.flaticon.com/512/37/37943.png?w=826&t=st=1677848744~exp=1677849344~hmac=e1d108013214838460e03f365e6a782c753b5d6f343be6c557c3ed78c0359eb1'//if there is no user avatar, so it will show an avatar of unknown user
+
                 if (user['avatar_path']) {
                     avatarImage = '/storage/images/' + user['avatar_path'];
                 }
+
                 let avatarRow = `<div class="avatar"><img src="${avatarImage}"></div>`;
                 avatarsRows = avatarsRows + avatarRow;
             })
@@ -324,7 +326,7 @@
             let urlParams = new URLSearchParams(window.location.search);
             let filtersUrl = {};
 
-            for (var [key, value] of urlParams) {
+            for (let [key, value] of urlParams) {
                 if (key === 'keyword') {
                     value = value.match(/^[a-zA-Z]*$/);
 
@@ -371,6 +373,7 @@
                 if (filterLength != index) {
                     value += '&';
                 }
+
                 urlFilter += key + "=" + value;
                 index++;
             });
