@@ -15,7 +15,6 @@ class DishImage extends Model
     protected $guarded = false;
     protected $table = 'dish_images';
 
-
     public static function getTypes(): array
     {
         return [

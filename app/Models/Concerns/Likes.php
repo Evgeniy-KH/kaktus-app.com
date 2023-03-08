@@ -1,10 +1,9 @@
 <?php
-
+///почему название директории Concerns and not a trait
 namespace App\Models\Concerns;
 
 use App\Models\Like;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Builder;
 
 trait Likes
 {

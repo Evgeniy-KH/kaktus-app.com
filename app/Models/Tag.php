@@ -12,11 +12,8 @@ class Tag extends Model
     protected $table = 'tags';
     protected $guarded = false;
 
-
     public function dishes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Dish::class,'dishes_tags', 'tag_id', 'dish_id');
     }
-
-
 }
