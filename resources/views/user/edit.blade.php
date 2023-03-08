@@ -160,10 +160,9 @@
                     },
                     error: function (data) {
                         if (data.status === 422) {
-                            var errors = data.responseJSON.errors;
-                            console.log(errors);
+                            let errors = data.responseJSON.errors;
+
                             $.each(errors, function (key, value) {
-                                console.log(key);
                                 if (key === 'current_password') {
                                     $('#current_password').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
@@ -206,10 +205,9 @@
                     },
                     error: function (data) {
                         if (data.status === 422) {
-                            var errors = data.responseJSON.errors;
-                            console.log(errors);
+                            let errors = data.responseJSON.errors;
+
                             $.each(errors, function (key, value) {
-                                console.log(key);
                                 if (key === 'name') {
                                     $('#name').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`

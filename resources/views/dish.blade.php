@@ -108,8 +108,6 @@
                     }
 
                     if (data['user_id'] != userId) {
-                        console.log(data['dish_images']);
-
                         $('.main-image').remove();
                         let image = `<img src="/storage/${data['dish_images'][1]['image']}" alt="Image" class="img-fluid" style="width: 1155px; height: 650px ;">`
                         $('.dish-image').append(image);
