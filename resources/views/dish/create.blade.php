@@ -128,9 +128,12 @@
 
         $(document).ready(function () {
             $('#search-form').remove();
+
             showTags();
+
             $('#create_dish_button').on("click", function () {
                 let formData = new FormData();
+
                 formData.append("user_id", $('#user-edit').attr('data-id'));
                 formData.append("title", $('#title').val());
                 formData.append("description", $('#description').val());
@@ -151,10 +154,9 @@
                     },
                     error: function (data) {
                         if (data.status === 422) {
-                            var errors = data.responseJSON.errors;
-                            console.log(errors);
+                            let errors = data.responseJSON.errors;
+
                             $.each(errors, function (key, value) {
-                                console.log(key);
                                 if (key === 'title') {
                                     $('#title').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`

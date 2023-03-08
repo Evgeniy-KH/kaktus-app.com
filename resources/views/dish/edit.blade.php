@@ -149,6 +149,7 @@
 
             $('#update_dish_button').on("click", function () {
                 let formData = new FormData();
+
                 formData.append(' _method', 'PATCH');
                 formData.append("user_id", user_id);
                 formData.append("dish_id", $('#dish_card').attr('data-id'));
@@ -160,7 +161,6 @@
                 if ($('#preview_image')[0].files[0]) {
                     let preview_image = $('#preview_image')[0].files[0];
                     formData.append("preview_image", preview_image);
-                    console.log(preview_image);
                 }
 
                 if ($('#main_image')[0].files[0]) {
@@ -180,10 +180,9 @@
                     },
                     error: function (data) {
                         if (data.status === 422) {
-                            var errors = data.responseJSON.errors;
-                            console.log(errors);
+                            let errors = data.responseJSON.errors;
+
                             $.each(errors, function (key, value) {
-                                console.log(key);
                                 if (key === 'title') {
                                     $('#title').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`

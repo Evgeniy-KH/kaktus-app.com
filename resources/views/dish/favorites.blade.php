@@ -19,7 +19,6 @@
         </div>
     </div>
 
-
     <script type="module">
 
         $.ajaxSetup({
@@ -49,8 +48,8 @@
             let tagList = [];
 
             $.each(tags, function (i, tag) {
-                let tag_title = tag['title'];
-                tagList.push(tag_title);
+                let tagTitle = tag['title'];
+                tagList.push(tagTitle);
             })
 
             return tagList
@@ -70,6 +69,7 @@
                                 .attr("id", item['id'])
                                 .text(item['title']));
                     });
+
                     $('.search_tag').SumoSelect().sumo.reload();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -145,7 +145,7 @@
                     pagination(data['links']);
                 },
                 error: function (data) {
-                    var errors = data.responseJSON.message;
+                    let errors = data.responseJSON.message;
                     alert('Error: ' + errors);
                     // $(':input', '#filter-form')
                     //     .not(':button, :submit, :reset, :hidden')
@@ -208,6 +208,7 @@
 
                 let url = $(location).attr('href')
                 window.history.replaceState(null, null, url + "page=" + page);
+
                 fetch_user_data(filters, page);
             });
 
