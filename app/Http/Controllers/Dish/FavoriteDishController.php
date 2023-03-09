@@ -2,13 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\User\Dish;
+namespace App\Http\Controllers\Dish;
 
 
 use App\Http\Requests\Dish\AddToFavoriteDishRequest;
-use App\Models\FavoriteDish;
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Auth;
 
 class FavoriteDishController extends BaseController
 {

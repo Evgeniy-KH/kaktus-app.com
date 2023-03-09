@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 
 class DishService
 {
-    public function store($data)
+    public function store(array $data)
     {
         DB::transaction(function () use ($data) {
             if (isset($data['tag_ids'])) {
@@ -37,9 +37,10 @@ class DishService
             foreach ($allImages as $image) {
                 $image['dish_id'] = $dish->id;
                 $image = DishImage::firstOrCreate($image);
-                $dish->getDishImages()->save($image);
+                $dish->dishImages()->save($image);
             }
         });
+
     }
 
     public function update($data, $dish)
