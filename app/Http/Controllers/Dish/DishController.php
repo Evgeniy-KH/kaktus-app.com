@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\User\Dish;
+namespace App\Http\Controllers\Dish;
 
 use App\Http\Requests\Dish\StoreRequest;
 use App\Http\Requests\Dish\UpdateRequest;
 use App\Models\Dish;
 use App\Models\Tag;
+use App\Service\DishService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,9 +16,13 @@ use Illuminate\Support\Facades\DB;
 class DishController extends BaseController
 {
     public function __construct(
-        protected Dish $dish,
-        protected Tag $tag,
-    ) {}
+        protected Dish        $dish,
+        protected Tag         $tag,
+        protected DishService $dishService
+    )
+    {
+        parent::__construct($dishService);
+    }
 
     public function create(): View
     {
@@ -39,19 +44,20 @@ class DishController extends BaseController
         return view('dish.edit', compact('dishId'));
     }
 
-    public function editData(int $dishId):\Illuminate\Http\JsonResponse
+    public function editData(int $dishId): \Illuminate\Http\JsonResponse
     {
         $dish = $this->dish->with('dishImages')->findOrFail($dishId);
-        $tags =$this->tag->all();
+        $dish = Dish::with('dishImages')->findOrFail($dishId);
+        $tags = $this->tag->all();
         $returnData = [$dish, $tags];
 
         return response()->json($returnData);
     }
 
-    public function update(UpdateRequest $request):\Illuminate\Http\JsonResponse
+    public function update(UpdateRequest $request): \Illuminate\Http\JsonResponse
     {
         $data = $request->validated();
-        $dish =$this->dish->findOrFail($data['dish_id']);
+        $dish = $this->dish->findOrFail($data['dish_id']);
         unset($data['dish_id']);
 
         $dish = $this->service->update($data, $dish);
@@ -59,7 +65,7 @@ class DishController extends BaseController
         return response()->json();
     }
 
-    public function delete(int $dishId):\Illuminate\Http\JsonResponse
+    public function delete(int $dishId): \Illuminate\Http\JsonResponse
     {
         DB::transaction(function () use ($dishId) {
             auth()->user()->favoriteDishes()->where('dish_id', $dishId)->delete();

@@ -134,13 +134,27 @@
             $('#create_dish_button').on("click", function () {
                 let formData = new FormData();
 
+                let title = $('#title').val();
+                title = title.replace(/[^\w\s]/gi, '')
+
+                let description = $('#description').val();
+                description = description.replace(/[^\w\s]/gi, '')
+
+                let ingredients = $('#ingredients').val();
+                ingredients = ingredients.replace(/[^\w\s]/gi, '')
+
+
                 formData.append("user_id", $('#user-edit').attr('data-id'));
-                formData.append("title", $('#title').val());
-                formData.append("description", $('#description').val());
-                formData.append("ingredients", $('#ingredients').val());
+                formData.append("title", title);
+                formData.append("description",  description);
+                formData.append("ingredients", ingredients);
                 formData.append("price", $('#price').val());
                 formData.append("preview_image", $('#preview_image')[0].files[0]);
                 formData.append("main_image", $('#main_image')[0].files[0]);
+
+                for (let [key, value] of  formData) {
+                    console.log(`${key}: ${value}`)
+                }
 
                 $.ajax({
                     url: `/user/dish/store`,
@@ -149,6 +163,7 @@
                     processData: false,
                     contentType: false,
                     success: function (data) {
+                        console.log(data)
                         alert('New dish has been create successfully');
                         location.reload();
                     },

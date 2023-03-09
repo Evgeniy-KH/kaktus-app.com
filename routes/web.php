@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
+use App\Http\Controllers\Dish\DishController;
+use App\Http\Controllers\Dish\FavoriteDishController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\SocialController;
-use App\Http\Controllers\User\Dish\DishController;
-use App\Http\Controllers\User\Dish\FavoriteDishController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 
