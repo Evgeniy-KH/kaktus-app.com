@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\User\Dish;
 
-
-use App\Filters\DishFilter;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Dish\StoreRequest;
 use App\Http\Requests\Dish\UpdateRequest;
 use App\Models\Dish;
@@ -17,6 +14,10 @@ use Illuminate\Support\Facades\DB;
 
 class DishController extends BaseController
 {
+    public function __construct(
+        protected Dish $dish,
+        protected Tag $tag,
+    ) {}
 
     public function create(): View
     {
@@ -25,7 +26,7 @@ class DishController extends BaseController
         return view('dish.create', compact('user'));
     }
 
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): \Illuminate\Http\JsonResponse
     {
         $data = $request->validated();
         $this->service->store($data);
@@ -38,19 +39,19 @@ class DishController extends BaseController
         return view('dish.edit', compact('dishId'));
     }
 
-    public function editData(int $dishId)
+    public function editData(int $dishId):\Illuminate\Http\JsonResponse
     {
-        $dish = Dish::with('dishImages')->findOrFail($dishId);
-        $tags = Tag::all();
+        $dish = $this->dish->with('dishImages')->findOrFail($dishId);
+        $tags =$this->tag->all();
         $returnData = [$dish, $tags];
 
         return response()->json($returnData);
     }
 
-    public function update(UpdateRequest $request)
+    public function update(UpdateRequest $request):\Illuminate\Http\JsonResponse
     {
         $data = $request->validated();
-        $dish = Dish::findOrFail($data['dish_id']);
+        $dish =$this->dish->findOrFail($data['dish_id']);
         unset($data['dish_id']);
 
         $dish = $this->service->update($data, $dish);
@@ -58,7 +59,7 @@ class DishController extends BaseController
         return response()->json();
     }
 
-    public function delete(int $dishId)
+    public function delete(int $dishId):\Illuminate\Http\JsonResponse
     {
         DB::transaction(function () use ($dishId) {
             auth()->user()->favoriteDishes()->where('dish_id', $dishId)->delete();
