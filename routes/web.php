@@ -60,6 +60,11 @@ Route::group(['namespace'=>'App\Http\Controllers\User', 'prefix' => 'user','midd
         Route::get('/{dishId}/editData', [DishController::class,'editData']);
         Route::patch('/{dishId}', [DishController::class,'update'])->name('user.dish.update');
         Route::delete('/{dishId}', [DishController::class,'delete'])->name('user.dish.delete');
+
+        Route::group(['middleware' => ['dish.verified']], function () {
+            Route::get('/{dishId}/edit', [DishController::class,'editView'])->name('user.dish.edit');
+            Route::get('/{dishId}/editData', [DishController::class,'editData']);
+        });
     });
 
 });
