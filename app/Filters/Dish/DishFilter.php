@@ -1,10 +1,6 @@
 <?php
 
-namespace App\Filters;
-
-use App\Filters\Dish\KeywordFilter;
-use App\Filters\Dish\PriceFilter;
-use App\Filters\Dish\TagFilter;
+namespace App\Filters\Dish;
 
 class DishFilter
 {

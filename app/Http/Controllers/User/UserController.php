@@ -4,16 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\User;
 
-use App\Filters\DishFilter;
-use App\Http\Controllers\Controller;
+use App\Filters\Dish\DishFilter;
 use App\Http\Requests\User\UpdateRequest;
-use App\Models\Dish;
-use App\Models\FavoriteDish;
 use App\Models\User;
 use App\Service\UserService;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
-use mysql_xdevapi\Collection;
 
 class UserController extends BaseController
 {
