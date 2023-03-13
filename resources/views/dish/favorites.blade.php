@@ -55,29 +55,6 @@
             return tagList
         }
 
-        function showTags(data = {}) {
-            $.ajax({
-                url: `/catalog/dish/getTags`,
-                type: 'get',
-                dataType: 'json',
-                data: data,
-                success: function (data) {
-                    $.each(data, function (index, item) {
-                        $('.search_tag')
-                            .append($("<option></option>")
-                                .attr("value", item['id'])
-                                .attr("id", item['id'])
-                                .text(item['title']));
-                    });
-
-                    $('.search_tag').SumoSelect().sumo.reload();
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert('Error: ' + textStatus + ' - ' + errorThrown);
-                },
-            });
-        }
-
         function catalog(data) {
             $('#catalog').remove()
             let row = `<div class="row tm-mb-90 tm-gallery" id="catalog">`
@@ -140,9 +117,8 @@
                     tagsId: filters['tagsId'],
                 },
                 success: function (data) {
-                    console.log(data);
-                    catalog(data['data']);
-                    pagination(data['links']);
+                    catalog(data['data']['data']);
+                    pagination(data['data']['links']);
                 },
                 error: function (data) {
                     let errors = data.responseJSON.message;
@@ -193,11 +169,6 @@
 
         $(document).ready(function () {
             initCatalog();
-            showTags();
-
-            $(window).on('load', function () {
-                favoriteDish()
-            })
 
             $(document).on('click', '.tm-paging-link', function (event) {
                 event.preventDefault();
