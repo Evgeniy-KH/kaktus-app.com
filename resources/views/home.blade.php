@@ -253,6 +253,10 @@
         }
 
         function initCatalog(filters = {}) {
+             if (filters['tagsId']){
+                 filters['tagsId']= filters['tagsId'].toString()
+             }
+
             $.ajax({
                 url: '/catalog',
                 type: 'get',
@@ -317,6 +321,7 @@
                 });
 
                 filters['tagsId'] = tagsId;
+                console.log(filters);
             }
 
             return filters;

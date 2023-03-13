@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Filters\DishFilter;
-use App\Http\Requests\Dish\FilterRequest;
+use App\Filters\Dish\DishFilter;
 use App\Models\Dish;
-use App\Models\DishImage;
 use App\Models\Tag;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use function PHPUnit\Framework\isEmpty;
 
 class HomeController extends Controller
 {
@@ -18,7 +14,10 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct
+    (
+        protected Dish $dish,
+        protected Tag  $tag)
     {
         $this->middleware('auth');
     }
@@ -35,14 +34,15 @@ class HomeController extends Controller
 
     public function tags(): \Illuminate\Http\JsonResponse
     {
-        $tags = Tag::all();
+        $tags = $this->tag->all();
 
         return response()->json($tags);
     }
 
-    public function catalog(DishFilter $filters): \Illuminate\Http\JsonResponse
+    public function catalog(Request $request): \Illuminate\Http\JsonResponse
     {
-        $returnData = Dish::filter($filters)->with('dishImages', 'tags', 'likes')->withCount('likes')->paginate(4);;
+        $returnData = $this->dish->filter($request->all())->with('dishImages', 'tags', 'likes')->withCount('likes')->paginate(4);
+        // $returnData = Dish::filter($filters)->with('dishImages', 'tags', 'likes')->withCount('likes')->paginate(4);;
         $code = 200;
 
         if ($returnData->isEmpty()) {
@@ -58,14 +58,13 @@ class HomeController extends Controller
 
     public function show(int $id): \Illuminate\Http\JsonResponse
     {
-        $dish = Dish::with('dishImages')->findOrFail($id);
+        $dish = $this->dish->with('dishImages')->findOrFail($id);
 
         return response()->json($dish);
     }
 
-    //    public function show(int $id)
+//    public function show(int $id)
 //    {
 //        return view('dish', compact('id'));
 //    }
-
 }

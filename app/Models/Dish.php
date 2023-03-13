@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Contracts\Likeable;
 use App\Models\Concerns\Likes;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,6 +14,7 @@ class Dish extends Model  implements Likeable
     use HasFactory;
     use SoftDeletes;
     use Likes;
+    use Filterable;
 
     protected $table = 'dishes';
     protected $guarded = false;
@@ -27,9 +29,14 @@ class Dish extends Model  implements Likeable
         return $this->belongsToMany(Tag::class,'dishes_tags', 'dish_id', 'tag_id');
     }
 
-    public function scopeFilter($query, $filters)
+//    public function scopeFilter($query, $filters)
+//    {
+//        return $filters->apply($query);
+//    }
+
+    public function scopeHasRevenue($query)
     {
-        return $filters->apply($query);
+        return $query->where('total_revenue', '>', 0);
     }
 
     public function favorites()
