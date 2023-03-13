@@ -242,7 +242,6 @@
 
         $(document).ready(function () {
             initCatalog();
-            mask();
 
             $(document).on('click', '.tm-paging-link', function (event) {
                 event.preventDefault();

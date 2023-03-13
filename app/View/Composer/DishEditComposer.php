@@ -7,7 +7,7 @@ use App\Models\FavoriteDish;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-class EditDishComposer
+class DishEditComposer
 {
     /**
      * @param View $view

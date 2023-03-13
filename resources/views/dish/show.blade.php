@@ -44,7 +44,7 @@
         });
 
         let userId = $('#user-edit').attr('data-id');
-        let dishId = {{$id}};
+        let dishId = {{$dishId}};
 
         function checkImages(images) {
             let previewImage = '';
@@ -63,7 +63,7 @@
 
         function initDish(data = {}) {
             $.ajax({
-                url: '/catalog/dish/show/{{$id}}',
+                url: '/catalog/dish/show/{{$dishId}}',
                 method: 'get',
                 dataType: 'json',
                 data: data,

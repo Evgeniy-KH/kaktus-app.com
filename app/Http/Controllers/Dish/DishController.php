@@ -24,13 +24,6 @@ class DishController extends BaseController
         parent::__construct($dishService);
     }
 
-    public function create(): View
-    {
-        $user = Auth::user();
-
-        return view('dish.create', compact('user'));
-    }
-
     public function store(StoreRequest $request): \Illuminate\Http\JsonResponse
     {
         $data = $request->validated();
@@ -39,15 +32,9 @@ class DishController extends BaseController
         return response()->json();
     }
 
-    public function editView(int $dishId)
-    {
-        return view('dish.edit', compact('dishId'));
-    }
-
-    public function editData(int $dishId): \Illuminate\Http\JsonResponse
+    public function edit(int $dishId): \Illuminate\Http\JsonResponse
     {
         $dish = $this->dish->with('dishImages')->findOrFail($dishId);
-        $dish = Dish::with('dishImages')->findOrFail($dishId);
         $tags = $this->tag->all();
         $returnData = [$dish, $tags];
 
@@ -74,5 +61,18 @@ class DishController extends BaseController
 
         return response()->json();
     }
+
+    //    public function create(): View
+//    {
+//        $user = Auth::user();
+//
+//        return view('dish.create', compact('user'));
+//    }
+
+//    public function editView(int $dishId)
+//    {
+//        return view('dish.edit', compact('dishId'));
+//    }
+
 
 }

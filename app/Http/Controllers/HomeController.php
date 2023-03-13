@@ -33,14 +33,14 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function tags()
+    public function tags(): \Illuminate\Http\JsonResponse
     {
         $tags = Tag::all();
 
         return response()->json($tags);
     }
 
-    public function catalog(DishFilter $filters)
+    public function catalog(DishFilter $filters): \Illuminate\Http\JsonResponse
     {
         $returnData = Dish::filter($filters)->with('dishImages', 'tags', 'likes')->withCount('likes')->paginate(4);;
         $code = 200;
@@ -53,18 +53,19 @@ class HomeController extends Controller
             $code = 422;
         }
 
-        return response()->json($returnData,$code);
+        return response()->json($returnData, $code);
     }
 
-    public function show(int $id)
-    {
-        return view('dish', compact('id'));
-    }
-
-    public function showDish(int $id)
+    public function show(int $id): \Illuminate\Http\JsonResponse
     {
         $dish = Dish::with('dishImages')->findOrFail($id);
 
         return response()->json($dish);
     }
+
+    //    public function show(int $id)
+//    {
+//        return view('dish', compact('id'));
+//    }
+
 }

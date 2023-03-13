@@ -4,103 +4,88 @@ namespace App\Service;
 
 use App\Models\Dish;
 use App\Models\DishImage;
+use App\Models\FavoriteDish;
+use App\Models\User;
 use Dflydev\DotAccessData\Data;
 use Exception;
+use http\Encoding\Stream\Inflate;
+use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use mysql_xdevapi\Collection;
 
-class DishService
+class UserService
 {
-    public function store(array $data)
+    public function update(array $data, User $user):string
     {
-        DB::transaction(function () use ($data) {
-            if (isset($data['tag_ids'])) {
-                $tagIds = $data['tag_ids'];
-                unset($data['tag_ids']);
+        if (array_key_exists('name', $data) || array_key_exists('birthday', $data)) {
+            $name = $data['name'];
+//          $birthday = Carbon::createFromFormat('m/d/Y', $data['birthday'])->format('Y-m-d');
+            $birthday = $data['birthday'];
+            $user->update([
+                'name' => $name,
+                'birthday' => $birthday
+            ]);
+            $status = "success";
+            $returnData = $status;
+        }
+
+        if (array_key_exists('current_password', $data) && array_key_exists('password', $data)) {
+
+            if (Hash::check($data['current_password'], $user->password)) {
+                $user->update([
+                    'password' => Hash::make($data['password'])
+                ]);
+                $status = "success";
+                $returnData = $status;
+            } else {
+                $returnData = array(
+                    'status' => '422',
+                    'message' => 'Your current password is incorrect'
+                );
+            }
+        }
+
+        if (array_key_exists('avatar_path', $data)) {
+
+            if ($user->avatar_path) {
+                Storage::delete('public/images/' . $user->avatar_path);
             }
 
-            $previewImage['image'] = $data['preview_image'] = Storage::disk('public')->put('/images', $data['preview_image']);
-            $previewImage['type_id'] = DishImage::TYPE_PREVIEW;
-            unset($data['preview_image']);
+            $file = $request->file('avatar_path');
+            $fileName = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/images', $fileName);
+            $user->update(["avatar_path" => $fileName]);
+            $status = "success";
+            $returnData = $status;
+        }
+        dd($returnData);
 
-            $mainImage['image'] = $data['main_image'] = Storage::disk('public')->put('/images', $data['main_image']);
-            $mainImage['type_id'] = DishImage::TYPE_MAIN;
-            unset($data['main_image']);
-
-            $allImages = [$previewImage, $mainImage];
-            $dish = Dish::firstOrCreate($data);
-
-            if (isset($tagIds)) {
-                $dish->tags()->attach($tagIds);
-            }
-
-            foreach ($allImages as $image) {
-                $image['dish_id'] = $dish->id;
-                $image = DishImage::firstOrCreate($image);
-                $dish->dishImages()->save($image);
-            }
-        });
-
+        return $returnData;
     }
 
-    public function update($data, $dish)
+    public function favoriteDishes(array $favoriteDishes):array
     {
-        DB::transaction(function () use ($data, $dish) {
-            if (isset($data['tag_ids'])) {
-                $tagIds = $data['tag_ids'];
-                unset($data['tag_ids']);
-            }
+        $favoriteDishesId = [];
+        $returnData = [];
 
-            if (isset($data['preview_image'])) {
-                $previewImage['image'] = $data['preview_image'] = Storage::disk('public')->put('/images', $data['preview_image']);
-                $previewImage['type_id'] = DishImage::TYPE_PREVIEW;
-                unset($data['preview_image']);
-            }
+        foreach ($favoriteDishes as $favoriteDish) {
+            array_push($favoriteDishesId, $favoriteDish['dish_id']);
+        }
 
-            if (isset($data['main_image'])) {
-                $mainImage['image'] = $data['main_image'] = Storage::disk('public')->put('/images', $data['main_image']);
-                $mainImage['type_id'] = DishImage::TYPE_MAIN;
-                unset($data['main_image']);
-            }
+        $returnData['data'] = Dish::with('dishImages', 'tags')->whereIn('id', $favoriteDishesId)->paginate(8);
+        $returnData['status'] = 200;
 
-            $dish->update($data);
 
-            if (isset($tagIds)) {
-                $dish->tags()->sync($tagIds);
-            }
+        if (!$returnData['data']) {
+            $returnData['data'] = array(
+                'status' => 'error',
+                'message' => 'Your your filter doesn\'t\ match any dishes'
+            );
+            $returnData['status'] = 422;
+        }
 
-            ///вот эта часть с картинка мне не нравитсья, надо бы сделаеить ее в форич но я не могу понять как ее так организоват ///
-
-            if (isset($previewImage, $mainImage)) {
-                $allImages = [$previewImage, $mainImage];
-
-                foreach ($allImages as $image) {
-                    $image['dish_id'] = $dish->id;
-                    $images = DishImage::where('dish_id', $image['dish_id'])->delete();;
-                    $image = DishImage::firstOrCreate($image);
-                    $dish->getDishImages()->save($image);
-                }
-            } else if (isset($previewImage)) {
-                $previewImage['dish_id'] = $dish->id;
-                $images = DishImage::where('dish_id', $previewImage['dish_id'])->where('type_id', DishImage::TYPE_PREVIEW)->delete();
-                $previewImage = DishImage::firstOrCreate($previewImage);
-                $dish->getDishImages()->save($previewImage);
-            } else if (isset($mainImage)) {
-                $mainImage['dish_id'] = $dish->id;
-                $images = DishImage::where('dish_id', $mainImage['dish_id'])->where('type_id', DishImage::TYPE_MAIN)->delete();
-                $mainImage = DishImage::firstOrCreate($mainImage);
-                $dish->getDishImages()->save($mainImage);
-            }
-
-            if (isset($allImages)) {
-                foreach ($allImages as $image) {
-                    $image['dish_id'] = $dish->id;
-                    $image = DishImage::firstOrCreate($image);
-                    $dish->getDishImages()->save($image);
-                }
-            }
-        });
-
-        return $dish;
+        return $returnData;
     }
 }

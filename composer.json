@@ -13,7 +13,8 @@
         "laravel/sanctum": "^3.0",
         "laravel/socialite": "^5.6",
         "laravel/tinker": "^2.7",
-        "laravel/ui": "^4.2"
+        "laravel/ui": "^4.2",
+         "ext-mysql_xdevapi": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
