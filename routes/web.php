@@ -31,8 +31,8 @@ Route::get('/catalog', [App\Http\Controllers\HomeController::class, 'catalog'])-
 Route::get('/catalog/pagination', [App\Http\Controllers\HomeController::class, 'paginationAjax']);
 Route::get('/catalog/dish/getTags', [App\Http\Controllers\HomeController::class, 'tags']);
 Route::post('/catalog/filter', [App\Http\Controllers\HomeController::class, 'filter']);
-Route::view('/catalog/dish/{dish}', 'dish.show');
-Route::get('/catalog/dish/show/{dish}', [App\Http\Controllers\HomeController::class, 'show']);
+Route::view('/catalog/dish/{id}', 'dish.show');
+Route::get('/catalog/dish/show/{id}', [App\Http\Controllers\HomeController::class, 'show']);
 
 Route::get('auth/facebook', [SocialController::class, 'facebookRedirect']);
 Route::get('auth/facebook/callback', [SocialController::class, 'loginWithFacebook']);
@@ -62,10 +62,10 @@ Route::group(['namespace' => 'App\Http\Controllers\User', 'prefix' => 'user', 'm
         //      Route::get('/', [DishController::class, 'index']);
 
         Route::group(['middleware' => ['dish.verified']], function () {
-            Route::view('/{dishId}/edit', 'dish.edit');
-            Route::get('/{dishId}/editData', [DishController::class, 'edit']);
-            Route::patch('/{dishId}', [DishController::class, 'update']);
-            Route::delete('/{dishId}', [DishController::class, 'delete']);
+            Route::view('/{id}/edit', 'dish.edit');
+            Route::get('/{id}/editData', [DishController::class, 'edit']);
+            Route::patch('/{id}', [DishController::class, 'update']);
+            Route::delete('/{id}', [DishController::class, 'delete']);
             // Route::get('/{dishId}/edit', [DishController::class,'editView'])->name('user.dish.edit');
         });
     });

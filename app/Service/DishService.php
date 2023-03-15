@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Service;
 
@@ -11,14 +12,15 @@ use Illuminate\Support\Facades\Storage;
 
 class DishService
 {
-    public function store(array $data)
+    //DTO и передавать DTO!!!!!!!!!
+    public function store(array $data): Dish
     {
-        DB::transaction(function () use ($data) {
+        return DB::transaction(function () use ($data) {
             if (isset($data['tag_ids'])) {
                 $tagIds = $data['tag_ids'];
                 unset($data['tag_ids']);
             }
-
+            
             $previewImage['image'] = $data['preview_image'] = Storage::disk('public')->put('/images', $data['preview_image']);
             $previewImage['type_id'] = DishImage::TYPE_PREVIEW;
             unset($data['preview_image']);
@@ -39,13 +41,15 @@ class DishService
                 $image = DishImage::firstOrCreate($image);
                 $dish->dishImages()->save($image);
             }
+
+            return $dish;
         });
 
     }
-
-    public function update($data, $dish)
+    //
+    public function update($data, int $id)
     {
-        DB::transaction(function () use ($data, $dish) {
+        return DB::transaction(function () use ($data, $id) {
             if (isset($data['tag_ids'])) {
                 $tagIds = $data['tag_ids'];
                 unset($data['tag_ids']);
@@ -82,6 +86,7 @@ class DishService
                 }
             } else if (isset($previewImage)) {
                 $previewImage['dish_id'] = $dish->id;
+                //WHERE по проекту нигде не должны быть. ТОлько использования SCOPE!!!!!!!!!!!!Прочитать scope.
                 $images = DishImage::where('dish_id', $previewImage['dish_id'])->where('type_id', DishImage::TYPE_PREVIEW)->delete();
                 $previewImage = DishImage::firstOrCreate($previewImage);
                 $dish->getDishImages()->save($previewImage);
@@ -99,8 +104,15 @@ class DishService
                     $dish->getDishImages()->save($image);
                 }
             }
-        });
 
-        return $dish;
+            return $dish;
+        });
     }
+
+
+    public function getData(int $id)
+    {
+
+    }
+    
 }
