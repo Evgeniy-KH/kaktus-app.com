@@ -3,36 +3,45 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Http\Controllers\Dish\DishController;
 use App\Models\Dish;
 use Closure;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
-//TODO  не верное имя.
-class DishIsValide
+class DishMiddleware
 {
-
-    public function handle(Request $request, Closure $next): RedirectResponse
+    public function handle(Request $request, Closure $next):Response
     {
-        $dish = Dish::find($request->route('dishId'));
+        $id = $request->route('id');
+        $dish = Dish::find($id);
 
         if ($dish) {
-            //TODo ты уверена что у тебя тут есть авторизация?!?!?!?!
+            $dishBelongsToUser = Auth::user()->dishes->find($id);
 
-            // Auth::user()->dishes - возвращает все блюда!!!!
-            $dishBelongsToUser = Auth::user()->dishes->contains($request->route('dishId'));
-            // ->dishes->contains($dishId) из всех блюд ищешь вот это. 
-            // Пользователь, отдай мне все свои блюда, я среди них поищу то которое мне нужно!!!!
-            // Пользователь, есть ли у тебя такое блюдо?!??! 
-            
+//
+
             if ($dishBelongsToUser) {
-                return $next($request);
+//                $response = new RedirectResponse('/user/dish/{{$id}}/edit');
+//                $response->setParameter('request', $request);
+
+                // return  redirect()->route('user.dish.edit', ['id' => $id]);
+                // return new RedirectResponse("/user/dish/{$id}/edit");
+                // return $response;
+
+//                return redirect()->action(
+//                    [DishController::class, 'edit'], ['id' => $id]
+//                );
+               return $next($request);
             } else {
                 //TODO прочитать коды ошибок, которые отдаются, стандратный набор!!!! Какой код ошибки за что озхначает. Какой нужно использовать в данной ситуации!!! Даю подсказку 403!!!!!! Но можешь почитать и найти лучше вариант.
-                return response('Unauthorized User', 401);
+                return response('You are not allowed', 403);
             }
         } else {
-            //return response('Invalid dish Id', 400);
+            return response('You are not allowed', 403);
         }
     }
 }

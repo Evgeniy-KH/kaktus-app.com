@@ -7,7 +7,7 @@
                 <div class="row mb-3">
                     <h2 class="col-12 tm-text-primary">Edit your Recipes</h2>
                 </div>
-                <div class="card mb-3 tm-bg-gray elevation-3" id="dish_card" data-id="{{ $dishId }}">
+                <div class="card mb-3 tm-bg-gray elevation-3" id="dish_card" data-id="{{ $id }}">
                     <div class="tm-video-details">
                         <div class="row mb-3">
                             <label for="title"
@@ -113,22 +113,22 @@
 
         function yourDish(data = {}) {
             $.ajax({
-                url: '/user/dish/{{$dishId}}/editData',
+                url: '/user/dish/{{$id}}/editData',
                 method: 'get',
                 dataType: 'json',
                 data: data,
                 success: function (data) {
                     let title = `<input id="title" type="text"
                                        class="form-control rounded-0" name="title"
-                                       value="${data[0]['title']}" required autocomplete="Recipe title" autofocus>`
+                                       value="${data['title']}" required autocomplete="Recipe title" autofocus>`
                     let ingredients = `<textarea id="ingredients" class="form-control rounded-0"
-                                  name="ingredients" required autocomplete="ingredients">${data[0]['ingredients']}</textarea>`
+                                  name="ingredients" required autocomplete="ingredients">${data['ingredients']}</textarea>`
                     let description = `<textarea id="description" class="form-control rounded-0"
-                                  name="description" required autocomplete="description">${data[0]['description']}</textarea>`
-                    let price = ` <input type="number" min="0.00" max="10000.00" step="0.01"  name="price"  value="${data[0]['price']}" id="price"/>`
+                                  name="description" required autocomplete="description">${data['description']}</textarea>`
+                    let price = ` <input type="number" min="0.00" max="10000.00" step="0.01"  name="price"  value="${data['price']}" id="price"/>`
 
-                    let preview_image = `<img src="/storage/${data[0]['dish_images'][0]['image']}" width="200" class="img-fluid img-thumbnail">`
-                    let main_image = `<img src="/storage/${data[0]['dish_images'][1]['image']}" width="200" class="img-fluid img-thumbnail">`
+                    let preview_image = `<img src="/storage/${data['dish_images'][0]['image']}" width="200" class="img-fluid img-thumbnail">`
+                    let main_image = `<img src="/storage/${data['dish_images'][1]['image']}" width="200" class="img-fluid img-thumbnail">`
 
                     $('#input-group-title').append(title);
                     $('#input-group-ingredients').append(ingredients);
@@ -152,7 +152,7 @@
 
                 formData.append(' _method', 'PATCH');
                 formData.append("user_id", user_id);
-                formData.append("dish_id", $('#dish_card').attr('data-id'));
+                formData.append("id", $('#dish_card').attr('data-id'));
                 formData.append("title", $('#title').val());
                 formData.append("description", $('#description').val());
                 formData.append("ingredients", $('#ingredients').val());
@@ -169,7 +169,7 @@
                 }
 
                 $.ajax({
-                    url: `/user/dish/${dish_id}`,
+                    url: `/user/dish/${id}`,
                     type: 'post',
                     data: formData,
                     processData: false,
