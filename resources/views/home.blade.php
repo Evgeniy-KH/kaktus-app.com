@@ -391,7 +391,7 @@
                 type: 'post',
                 url: '/user/dish/favorite',
                 data: {
-                    'dish_id': dishId,
+                    'id': dishId,
                 },
                 success: function () {
                 },
@@ -407,7 +407,7 @@
                 type: 'post',
                 url: '/user/dish/disfavouring',
                 data: {
-                    'dish_id': dishId,
+                    'id': dishId,
                 },
                 success: function () {
                 },
@@ -426,7 +426,7 @@
                 data: data,
                 success: function (data) {
                     $.each(data, function (index, item) {
-                        let element = $(document).find('#favorite_' + item['dish_id']);
+                        let element = $(document).find('#favorite_' + item['id']);
                         element.removeClass('favourite').addClass('disfavouring')
                         element.find('i').removeClass('far').addClass('fas IM here');
                     })
@@ -454,7 +454,7 @@
                     type: 'post',
                     url: '/user/dish/like',
                     data: {
-                        'dish_id': dishId,
+                        'id': dishId,
                         'likeable_type': 'Dish'
                     },
                     success: function (data) {
@@ -476,7 +476,7 @@
                     dataType: 'json',
                     data: {
                         _method: 'delete',
-                        'dish_id': dishId,
+                        'id': dishId,
                         'likeable_type': 'Dish'
                     },
                     success: function (data) {

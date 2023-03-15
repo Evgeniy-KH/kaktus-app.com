@@ -14,7 +14,7 @@ class DishEditComposer
      */
     public function compose(View $view)
     {
-        $dishId = $view->getData()["dishId"];
-        $view->with('dishId',  $dishId);
+        $id = $view->getData()["id"];
+        $view->with('id',  $id);
     }
 }

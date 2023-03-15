@@ -44,7 +44,7 @@
         });
 
         let userId = $('#user-edit').attr('data-id');
-        let dishId = {{$dishId}};
+        let id = {{$id}};
 
         function checkImages(images) {
             let previewImage = '';
@@ -63,7 +63,7 @@
 
         function initDish(data = {}) {
             $.ajax({
-                url: '/catalog/dish/show/{{$dishId}}',
+                url: '/catalog/dish/show/{{$id}}',
                 method: 'get',
                 dataType: 'json',
                 data: data,
@@ -84,7 +84,7 @@
                        <h2 class="dish-action justify-content-between">
                        <div class="row mt-3 mb-0" style="color:inherit; font-size: 5rem">
                         <div class="col mr-4" id="edit-btn"><a href="/user/dish/${data['id']}/edit" style="color:inherit;">Edit</a></div>
-                       <div class="col mr-4" id="delete-btn" data-id="${dishId}">Delete</div></div></h2>
+                       <div class="col mr-4" id="delete-btn" data-id="${id}">Delete</div></div></h2>
                     </figcaption>
                   </figure>`
                     let description = `<h4 class="tm-text-gray-dark mb-3">${data['description']}</h4>`;
@@ -132,7 +132,7 @@
 
             $(document).on("click", "#delete-btn", function () {
                 $.ajax({
-                    url: `/user/dish/` + dishId,
+                    url: `/user/dish/` + id,
                     type: 'delete',
                     data: {_method: 'delete'},
                     dataType: 'json',

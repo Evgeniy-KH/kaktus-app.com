@@ -14,7 +14,7 @@ class DishShowComposer
      */
     public function compose(View $view)
     {
-        $dishId = $view->getData()["dish"];
-        $view->with('dishId',  $dishId);
+        $id = $view->getData()["id"];
+        $view->with('id',  $id);
     }
 }

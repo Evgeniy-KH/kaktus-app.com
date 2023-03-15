@@ -20,7 +20,7 @@ class DishService
                 $tagIds = $data['tag_ids'];
                 unset($data['tag_ids']);
             }
-            
+
             $previewImage['image'] = $data['preview_image'] = Storage::disk('public')->put('/images', $data['preview_image']);
             $previewImage['type_id'] = DishImage::TYPE_PREVIEW;
             unset($data['preview_image']);
@@ -47,7 +47,7 @@ class DishService
 
     }
     //
-    public function update($data, int $id)
+    public function update($data, int $id):Dish
     {
         return DB::transaction(function () use ($data, $id) {
             if (isset($data['tag_ids'])) {
@@ -110,9 +110,19 @@ class DishService
     }
 
 
-    public function getData(int $id)
+    public function getData(int $id):Dish
     {
-
+        return Dish::where('id', $id)->with('dishImages', 'tags')->first();
     }
-    
+
+    public function deleteData(int $id):bool
+    {
+        return DB::transaction(function () use ($id) {
+            auth()->user()->favoriteDishes()->where('dish_id', $id)->delete();
+            Dish::findOrFail($id)->delete();
+
+            return true;
+        });
+    }
+
 }

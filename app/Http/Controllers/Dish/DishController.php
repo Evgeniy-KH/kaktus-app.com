@@ -10,13 +10,14 @@ use App\Models\Dish;
 use App\Models\Tag;
 use App\Service\DishService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class DishController 
+class DishController
 {
     public function __construct(
-        protected DishService $dishService
+        protected DishService $service
     )
     {
     }
@@ -26,7 +27,7 @@ class DishController
         //TODO полный бред!!! Ты делаешь запись, но не проверяешь результат, и вслучае падения или ошибки, ты всё вернешь ответ.!!!
 
          $result = $this->service->store($request->validated());
-        
+
          if ($result) {
             //TODO resource laravel
             return response()->json(["data" => result, "success" => true]);
@@ -35,10 +36,10 @@ class DishController
          return response()->json(["success" => false]);
     }
 
-    public function edit(int $dishId): JsonResponse
+    public function edit(int $id): JsonResponse
     {
         //TODO ресурс
-        return response()->json($this->service->getData(id: $dishId));
+        return response()->json($this->service->getData(id: $id));
     }
 
     public function update(int $id, UpdateRequest $request): \Illuminate\Http\JsonResponse
@@ -50,15 +51,16 @@ class DishController
         return response()->json();
     }
 
-    public function delete(int $dishId): \Illuminate\Http\JsonResponse
+    public function delete(int $id): \Illuminate\Http\JsonResponse
     {
         //TODO сервис,
-        DB::transaction(function () use ($dishId) {
-            auth()->user()->favoriteDishes()->where('dish_id', $dishId)->delete();
-            Dish::findOrFail($dishId)->delete();
-        });
-        
-        return response()->json();
+        $result = $this->service->deleteData($id);
+
+        if ($result) {
+            return response()->json([ "success" => true]);
+        }
+
+        return response()->json(["success" => false]);
     }
 
     //    public function create(): View

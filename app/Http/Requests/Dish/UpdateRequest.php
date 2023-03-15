@@ -25,7 +25,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'user_id' => ["required", "exists:users,id"],
-            'dish_id' => ["required", "exists:dishes,id"],
+            'id' => ["required", "exists:dishes,id"],
             'title' => ["sometimes", "required", "string", "min:2", "max:100", "alpha_dash"],
             'ingredients' => ["sometimes", "required", "string", "min:1", "max:1250", "alpha_dash"],
             'description' => ["sometimes", "required", "string", "min:3", "max:4000", "alpha_dash"],

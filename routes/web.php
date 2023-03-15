@@ -63,7 +63,7 @@ Route::group(['namespace' => 'App\Http\Controllers\User', 'prefix' => 'user', 'm
 
         Route::group(['middleware' => ['dish.verified']], function () {
             Route::view('/{id}/edit', 'dish.edit');
-            Route::get('/{id}/editData', [DishController::class, 'edit']);
+            Route::get('/{id}/editData', [DishController::class, 'edit'])->name('user.dish.edit');
             Route::patch('/{id}', [DishController::class, 'update']);
             Route::delete('/{id}', [DishController::class, 'delete']);
             // Route::get('/{dishId}/edit', [DishController::class,'editView'])->name('user.dish.edit');
