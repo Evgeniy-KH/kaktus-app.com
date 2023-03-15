@@ -13,52 +13,51 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class DishController extends BaseController
+class DishController 
 {
     public function __construct(
-        protected Dish        $dish,
-        protected Tag         $tag,
         protected DishService $dishService
     )
     {
-        parent::__construct($dishService);
     }
 
-    public function store(StoreRequest $request): \Illuminate\Http\JsonResponse
+    public function store(StoreRequest $request): JsonResponse
+    {
+        //TODO полный бред!!! Ты делаешь запись, но не проверяешь результат, и вслучае падения или ошибки, ты всё вернешь ответ.!!!
+
+         $result = $this->service->store($request->validated());
+        
+         if ($result) {
+            //TODO resource laravel
+            return response()->json(["data" => result, "success" => true]);
+         }
+
+         return response()->json(["success" => false]);
+    }
+
+    public function edit(int $dishId): JsonResponse
+    {
+        //TODO ресурс
+        return response()->json($this->service->getData(id: $dishId));
+    }
+
+    public function update(int $id, UpdateRequest $request): \Illuminate\Http\JsonResponse
     {
         $data = $request->validated();
-        $this->service->store($data);
-
-        return response()->json();
-    }
-
-    public function edit(int $dishId): \Illuminate\Http\JsonResponse
-    {
-        $dish = $this->dish->with('dishImages')->findOrFail($dishId);
-        $tags = $this->tag->all();
-        $returnData = [$dish, $tags];
-
-        return response()->json($returnData);
-    }
-
-    public function update(UpdateRequest $request): \Illuminate\Http\JsonResponse
-    {
-        $data = $request->validated();
-        $dish = $this->dish->findOrFail($data['dish_id']);
-        unset($data['dish_id']);
-
-        $dish = $this->service->update($data, $dish);
+        //DTO передаём.
+        $dish = $this->service->update($data, $id);
 
         return response()->json();
     }
 
     public function delete(int $dishId): \Illuminate\Http\JsonResponse
     {
+        //TODO сервис,
         DB::transaction(function () use ($dishId) {
             auth()->user()->favoriteDishes()->where('dish_id', $dishId)->delete();
             Dish::findOrFail($dishId)->delete();
         });
-
+        
         return response()->json();
     }
 

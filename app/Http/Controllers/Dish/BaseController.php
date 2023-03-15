@@ -9,11 +9,7 @@ use App\Service\DishService;
 
 class BaseController extends Controller
 {
-    public DishService $service;
-
-    public function __construct(DishService $service)
+    public function __construct(public DishService $service)
     {
-        $this->service = $service;
     }
-
 }
