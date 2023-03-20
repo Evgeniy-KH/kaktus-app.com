@@ -50,7 +50,7 @@
                             <label for="tags"
                                    class=" col-form-label  tm-text-primary">{{ __('Tags') }}</label>
                             <div>
-                                <select name="tag_ids[]" class="select2" multiple="multiple"
+                                <select name="tag_ids[]" class="select2 select-tags" multiple="multiple"
                                         data-placeholder="Select a Tag" style="width: 100%;" id="input-group-tags">
                                     {{--                                        <option--}}
                                     {{--                                            {{ is_array( old('tag_ids')) && in_array($tag->id, old('tag_ids')) ? ' selected' : ''}} value="{{ $tag->id }}"--}}
@@ -118,6 +118,7 @@
                 dataType: 'json',
                 data: data,
                 success: function (data) {
+                    showTags(data['tags']);
                     let title = `<input id="title" type="text"
                                        class="form-control rounded-0" name="title"
                                        value="${data['title']}" required autocomplete="Recipe title" autofocus>`
@@ -143,6 +144,39 @@
             });
         }
 
+        function showTags(data = {}) {
+            let tagsArray = data[0]['title'];
+
+            $.ajax({
+                url: `/catalog/dish/getTags`,
+                type: 'get',
+                dataType: 'json',
+                data: data,
+                success: function (data) {
+                    $.each(data, function (i, item) {
+                        if (tagsArray.indexOf(item['title']) !== -1) {
+                            $('.select-tags').append($('<option>', {
+                                value: item['id'],
+                                text: item['title'],
+                                selected: true
+                            }));
+                        } else {
+                            let tags = `<option
+                            {{
+                            is_array( old('tag_ids')) && in_array(item['id'], old('tag_ids')) ? ' selected' : ''}} value="${item['id']}"
+                                                             >${item['title']}</option>`
+                            $('.select-tags').append(tags);
+                        }
+
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('Error: ' + textStatus + ' - ' + errorThrown);
+                },
+            });
+
+        }
+
         $(document).ready(function () {
             yourDish();
             let dish_id = $('#dish_card').attr('data-id');
@@ -153,9 +187,9 @@
                 formData.append(' _method', 'PATCH');
                 formData.append("user_id", user_id);
                 formData.append("id", $('#dish_card').attr('data-id'));
-                formData.append("title", $('#title').val());
-                formData.append("description", $('#description').val());
-                formData.append("ingredients", $('#ingredients').val());
+                formData.append("title", $('#title').val().replace(/[^a-zA-Za-åa-ö-w-я 0-9/@%!"#?¨'_.,]+/g, ""));
+                formData.append("description", $('#description').val().replace(/[^a-zA-Za-åa-ö-w-я 0-9/@%!"#?¨'_.,] +/g, ""));
+                formData.append("ingredients", $('#ingredients').val().replace(/[^a-zA-Za-åa-ö-w-я 0-9/@%!"#?¨'_.,]+/g, ""));
                 formData.append("price", $('#price').val());
 
                 if ($('#preview_image')[0].files[0]) {
@@ -168,8 +202,17 @@
                     formData.append("main_image", main_image);
                 }
 
+                let tags = $('.select-tags').val();
+                for (let i = 0; i < tags.length; i++) {
+                    formData.append('tag_ids[]',  tags[i]);
+                }
+
+                for (let [key, value] of  formData) {
+                    console.log(`${key}: ${value}`)
+                }
+
                 $.ajax({
-                    url: `/user/dish/${id}`,
+                    url: `/user/dish/{{$id}}`,
                     type: 'post',
                     data: formData,
                     processData: false,

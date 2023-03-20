@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Dish;
 
+use App\Data\DishUpdateDto;
 use App\Http\Requests\Dish\StoreRequest;
 use App\Http\Requests\Dish\UpdateRequest;
 use App\Models\Dish;
@@ -24,16 +25,16 @@ class DishController
 
     public function store(StoreRequest $request): JsonResponse
     {
+        $dishDto = $request->DTO();
         //TODO полный бред!!! Ты делаешь запись, но не проверяешь результат, и вслучае падения или ошибки, ты всё вернешь ответ.!!!
+        $result = $this->service->store($dishDto);
 
-         $result = $this->service->store($request->validated());
-
-         if ($result) {
+        if ($result) {
             //TODO resource laravel
-            return response()->json(["data" => result, "success" => true]);
-         }
+            return response()->json(["data" => $result, "success" => true]);
+        }
 
-         return response()->json(["success" => false]);
+        return response()->json(["success" => false]);
     }
 
     public function edit(int $id): JsonResponse
@@ -44,9 +45,8 @@ class DishController
 
     public function update(int $id, UpdateRequest $request): \Illuminate\Http\JsonResponse
     {
-        $data = $request->validated();
-        //DTO передаём.
-        $dish = $this->service->update($data, $id);
+        $dishDto = $request->DTO();
+        $dish = $this->service->update($dishDto, $id);
 
         return response()->json();
     }
@@ -57,7 +57,7 @@ class DishController
         $result = $this->service->deleteData($id);
 
         if ($result) {
-            return response()->json([ "success" => true]);
+            return response()->json(["success" => true]);
         }
 
         return response()->json(["success" => false]);
