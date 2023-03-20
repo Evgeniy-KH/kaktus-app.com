@@ -27,4 +27,9 @@ class DishImage extends Model
     {
         return $this->belongsTo(Dish::class, 'dish_id', 'id');
     }
+
+    public function scopeFindIdAndType($query, $dishId, $typeId)
+    {
+        return $query->where('dish_id', $dishId)->where('type_id', $typeId);
+    }
 }

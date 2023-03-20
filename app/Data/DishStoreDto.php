@@ -10,15 +10,14 @@ class DishStoreDto extends Data
 {
 
     public function __construct(
-        private readonly int         $id,
-        private readonly int         $user_id,
-        private readonly string|null $title,
-        private readonly string|null $ingredients,
-        private readonly string|null $description,
-        private readonly string|null $price,
-        private readonly object|null $preview_image,
-        private readonly object|null $main_image,
-        private readonly array|null  $tag_ids)
+        private readonly int        $user_id,
+        private readonly string     $title,
+        private readonly string     $ingredients,
+        private readonly string     $description,
+        private readonly string     $price,
+        private readonly object     $preview_image,
+        private readonly object     $main_image,
+        private readonly array|null $tag_ids)
     {
     }
 
@@ -35,32 +34,32 @@ class DishStoreDto extends Data
         return $this->user_id;
     }
 
-    public final function getTitle(): string|null
+    public final function getTitle(): string
     {
         return $this->title;
     }
 
-    public final function getIngredients(): string|null
+    public final function getIngredients(): string
     {
         return $this->ingredients;
     }
 
-    public final function getDescription(): string|null
+    public final function getDescription(): string
     {
         return $this->description;
     }
 
-    public final function getPrice(): string|null
+    public final function getPrice(): string
     {
         return $this->price;
     }
 
-    public final function getPreviewImage(): object|null
+    public final function getPreviewImage(): object
     {
         return $this->preview_image;
     }
 
-    public final function getMainImage(): object|null
+    public final function getMainImage(): object
     {
         return $this->main_image;
     }

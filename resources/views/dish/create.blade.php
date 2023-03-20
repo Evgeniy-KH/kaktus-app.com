@@ -138,10 +138,15 @@
                 title = title.replace(/[^\w\s]/gi, '')
 
                 let description = $('#description').val();
-                description = description.replace(/[^\w\s]/gi, '')
+                description = description.replace(/[^a-zA-Za-åa-ö-w-я 0-9/@%!"#?¨'_.,]+/g, "");
 
                 let ingredients = $('#ingredients').val();
-                ingredients = ingredients.replace(/[^\w\s]/gi, '')
+                ingredients = ingredients.replace(/[^a-zA-Za-åa-ö-w-я 0-9/@%!"#?¨'_.,]+/g, "");
+
+                let tags = $('.select-tags').val();
+                for (let i = 0; i < tags.length; i++) {
+                    formData.append('tag_ids[]',  tags[i]);
+                }
 
 
                 formData.append("user_id", $('#user-edit').attr('data-id'));
