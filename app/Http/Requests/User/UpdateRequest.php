@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\User;
 
+use App\Data\User\UserUpdateDto;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateRequest extends FormRequest
@@ -31,5 +32,17 @@ class UpdateRequest extends FormRequest
             'current_password' => ['sometimes', 'required', 'string', 'min:8', 'current_password'],
             'avatar_path' => ['sometimes', 'required', 'image', 'mimes:jpg,png,jpeg,gif,svg', 'max:20480'],
         ];
+    }
+
+    public final function DTO(): UserUpdateDto
+    {
+        return new UserUpdateDto(
+            $this->input('name'),
+            $this->input('birthday'),
+            $this->input('email'),
+            $this->input('password'),
+            $this->input('current_password'),
+            $this->file('avatar_path'),
+        );
     }
 }

@@ -17,75 +17,74 @@ use mysql_xdevapi\Collection;
 
 class UserService
 {
-    public function update(array $data, User $user):string
+    public final function update(object $userDto, int $id): string
     {
-        if (array_key_exists('name', $data) || array_key_exists('birthday', $data)) {
-            $name = $data['name'];
+        $user = $this->getUser($id);
+
+        if ($userDto->getName() !== null || $userDto->getBirthday() !== null) {
 //          $birthday = Carbon::createFromFormat('m/d/Y', $data['birthday'])->format('Y-m-d');
-            $birthday = $data['birthday'];
             $user->update([
-                'name' => $name,
-                'birthday' => $birthday
+                'name' => $userDto->getName(),
+                'birthday' => $userDto->getBirthday()
             ]);
-            $status = "success";
-            $returnData = $status;
+            $return = "success";
         }
 
-        if (array_key_exists('current_password', $data) && array_key_exists('password', $data)) {
+        if ($userDto->getCurrentPassword() !== null && $userDto->getPassword() !== null) {
 
-            if (Hash::check($data['current_password'], $user->password)) {
+            if (Hash::check($userDto->getCurrentPassword(), $user->password)) {
                 $user->update([
-                    'password' => Hash::make($data['password'])
+                    'password' => Hash::make($userDto->getPassword())
                 ]);
-                $status = "success";
-                $returnData = $status;
+                $return = "success";
             } else {
-                $returnData = array(
-                    'status' => '422',
+                $return = array(
+                    'code' => '406', ///Unprocessable Content (WebDAV) or 406 Not Acceptable
                     'message' => 'Your current password is incorrect'
                 );
             }
         }
 
-        if (array_key_exists('avatar_path', $data)) {
-
+        if ($userDto->getAvatarPath() !== null) {
             if ($user->avatar_path) {
                 Storage::delete('public/images/' . $user->avatar_path);
             }
 
-            $file = $request->file('avatar_path');
+            $file = $userDto->getAvatarPath();
             $fileName = time() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public/images', $fileName);
             $user->update(["avatar_path" => $fileName]);
-            $status = "success";
-            $returnData = $status;
-        }
-        dd($returnData);
 
-        return $returnData;
+            $return = "success";
+        }
+
+        return $return;
     }
 
-    public function favoriteDishes(array $favoriteDishes):array
+    public function favoriteDishes(array $favoriteDishesArray): array
     {
         $favoriteDishesId = [];
         $returnData = [];
 
-        foreach ($favoriteDishes as $favoriteDish) {
+        foreach ($favoriteDishesArray as $favoriteDish) {
             array_push($favoriteDishesId, $favoriteDish['dish_id']);
         }
 
-        $returnData['data'] = Dish::with('dishImages', 'tags')->whereIn('id', $favoriteDishesId)->paginate(8);
-        $returnData['status'] = 200;
+        $return['data'] = Dish::with('dishImages', 'tags')->whereIn('id', $favoriteDishesId)->paginate(8);
+        $return['status'] = 'success';
 
 
-        if (!$returnData['data']) {
-            $returnData['data'] = array(
-                'status' => 'error',
-                'message' => 'Your your filter doesn\'t\ match any dishes'
-            );
-            $returnData['status'] = 422;
+        if ($return['data']->isEmpty()) {
+            unset($return['data']);
+            $return['message'] = 'Your favorites list are empty';
+            $return['status'] = 422;
         }
 
-        return $returnData;
+        return $return;
+    }
+
+    public final function getUser(int $id): User
+    {
+        return User::find($id);
     }
 }
