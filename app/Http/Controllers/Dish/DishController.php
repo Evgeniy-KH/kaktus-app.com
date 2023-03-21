@@ -4,16 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Dish;
 
-use App\Data\DishUpdateDto;
 use App\Http\Requests\Dish\StoreRequest;
 use App\Http\Requests\Dish\UpdateRequest;
-use App\Models\Dish;
-use App\Models\Tag;
 use App\Service\DishService;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class DishController
 {

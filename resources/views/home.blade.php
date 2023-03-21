@@ -265,8 +265,9 @@
                     tagsId: filters['tagsId'],
                 },
                 success: function (data) {
+                    console.log(data);
                     catalog(data['data']);
-                    pagination(data['links']);
+                    pagination(data['meta']);
                 },
                 error: function (data) {
                     var errors = data.responseJSON.message;

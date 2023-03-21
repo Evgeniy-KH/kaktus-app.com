@@ -1,9 +1,8 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Data;
+namespace App\Data\Dish;
 
-use Illuminate\Database\Eloquent\Collection;
 use Spatie\LaravelData\Data;
 
 class DishUpdateDto extends Data

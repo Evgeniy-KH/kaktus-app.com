@@ -1,72 +1,51 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Data\Dish;
+namespace App\Data\User;
 
 use Spatie\LaravelData\Data;
 
-class DishUpdateDto extends Data
+class UserUpdateDto extends Data
 {
 
     public function __construct(
-        private readonly int         $id,
-        private readonly int         $user_id,
-        private readonly string|null $title,
-        private readonly string|null $ingredients,
-        private readonly string|null $description,
-        private readonly string|null $price,
-        private readonly object|null $preview_image,
-        private readonly object|null $main_image,
-        private readonly array|null  $tag_ids)
+        private readonly string|null $name,
+        private readonly string|null $birthday,
+        private readonly string|null $email,
+        private readonly string|null $password,
+        private readonly string|null $current_password,
+        private readonly object|null $avatar_path,
+    )
     {
     }
 
-    /**
-     * @return int
-     */
-    public final function getId(): int
+    public final function getName(): string|null
     {
-        return $this->id;
+        return $this->name;
     }
 
-    public final function getUserId(): int
+    public final function getBirthday(): string|null
     {
-        return $this->user_id;
+        return $this->birthday;
     }
 
-    public final function getTitle(): string|null
+    public final function getEmail(): string|null
     {
-        return $this->title;
+        return $this->email;
     }
 
-    public final function getIngredients(): string|null
+    public final function getPassword(): string|null
     {
-        return $this->ingredients;
+        return $this->password;
     }
 
-    public final function getDescription(): string|null
+    public final function getCurrentPassword(): string|null
     {
-        return $this->description;
+        return $this->current_password;
     }
 
-    public final function getPrice(): string|null
+    public final function getAvatarPath(): object|null
     {
-        return $this->price;
+        return $this->avatar_path;
     }
-
-    public final function getPreviewImage(): object|null
-    {
-        return $this->preview_image;
-    }
-
-    public final function getMainImage(): object|null
-    {
-        return $this->main_image;
-    }
-
-    public final function getTagsArray(): array|null
-    {
-        return $this->tag_ids;
-    }
-
 }

@@ -21,9 +21,8 @@ class UserController extends BaseController
 
     public function update(int $id, UpdateRequest $request): \Illuminate\Http\JsonResponse
     {
-        $user = User::find($id);
-        $data = $request->validated();
-        $returnData = $this->service->update($data, $user);
+        $userDto = $request->DTO();
+        $returnData = $this->service->update( $userDto, $id);
 
         return response()->json($returnData);
     }
@@ -38,25 +37,8 @@ class UserController extends BaseController
     public function myFavoritesDishes(DishFilter $filters): \Illuminate\Http\JsonResponse
     {
         $favoriteDishes = auth()->user()->favoriteDishes()->get();
-        $favoriteDishes =  $favoriteDishes->toArray();
-
-        $returnData = $this->service->favoriteDishes($favoriteDishes);
-
-
-//        foreach ($favoriteDishes as $favoriteDish) {
-//            array_push($favoriteDishesId, $favoriteDish['dish_id']);
-//        }
-//
-//        $returnData = Dish::with('dishImages', 'tags')->whereIn('id', $favoriteDishesId)->paginate(8);
-//        $code = 200;
-//
-//        if ($returnData->isEmpty()) {
-//            $returnData = array(
-//                'status' => 'error',
-//                'message' => 'Your your filter doesn\'t\ match any dishes'
-//            );
-//            $code = 422;
-//        }
+        $favoriteDishesArray =  $favoriteDishes->toArray();
+        $returnData = $this->service->favoriteDishes($favoriteDishesArray);
 
         return response()->json($returnData);
     }

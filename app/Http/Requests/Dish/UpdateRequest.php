@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Dish;
 
-use App\Data\DishUpdateDto;
+use App\Data\Dish\DishUpdateDto;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateRequest extends FormRequest
