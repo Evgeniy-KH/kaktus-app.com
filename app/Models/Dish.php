@@ -34,10 +34,6 @@ class Dish extends Model  implements Likeable
 //        return $filters->apply($query);
 //    }
 
-    public function scopeHasRevenue($query)
-    {
-        return $query->where('total_revenue', '>', 0);
-    }
 
     public function favorites()
     {

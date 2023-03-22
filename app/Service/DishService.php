@@ -37,10 +37,8 @@ class DishService
 
             return $dish;
         });
-
     }
 
-    //
     public function update(object $dishDto, int $id): Dish
     {
         return DB::transaction(function () use ($id, $dishDto) {
@@ -71,6 +69,35 @@ class DishService
                 'description' => $dishDto->getDescription() ?? $dish->description,
                 'price' => $dishDto->getPrice() ?? $dish->price
             ]);
+            return $dish;
+        });
+    }
+
+
+    public function getData(int $id): Dish
+    {
+        return Dish::where('id', $id)->with('dishImages', 'tags')->first();
+    }
+
+    public function deleteData(int $id): bool
+    {
+        return DB::transaction(function () use ($id) {
+            auth()->user()->favoriteDishes()->where('dish_id', $id)->delete();
+            Dish::findOrFail($id)->delete();
+
+            return true;
+        });
+    }
+
+    public function updateImage(array $image, Dish $dish): DishImage
+    {
+        $currentImages = DishImage::findIdAndType($image['dish_id'], $image['type_id'])->delete();
+        $newImage = DishImage::firstOrCreate($image);
+        return $dish->dishImages()->save($newImage);
+    }
+}
+
+
 
 //            if (isset($tagIds)) {
 //                $dish->tags()->sync($tagIds);
@@ -106,31 +133,3 @@ class DishService
 //                }
 //            }
 
-            return $dish;
-        });
-    }
-
-
-    public function getData(int $id): Dish
-    {
-        return Dish::where('id', $id)->with('dishImages', 'tags')->first();
-    }
-
-    public function deleteData(int $id): bool
-    {
-        return DB::transaction(function () use ($id) {
-            auth()->user()->favoriteDishes()->where('dish_id', $id)->delete();
-            Dish::findOrFail($id)->delete();
-
-            return true;
-        });
-    }
-
-    public function updateImage(array $image, Dish $dish): DishImage
-    {
-        $currentImages = DishImage::findIdAndType($image['dish_id'], $image['type_id'])->delete();
-        $newImage = DishImage::firstOrCreate($image);
-        return $dish->dishImages()->save($newImage);
-    }
-
-}

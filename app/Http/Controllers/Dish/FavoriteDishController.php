@@ -17,38 +17,34 @@ class FavoriteDishController extends BaseController
         $dish = auth()->user()->favoriteDishes()->updateOrCreate(['dish_id' => $dishId]);
 
         if(!$dish) {
-            $response = [
-                'status' => false,
+            return (new MessageResource([
+                'success' => false,
                 'message' => 'Failed to create favorite'
-            ];
-            return (new MessageResource($response))->response()
+            ]))->response()
                 ->setStatusCode(500); //500 Internal Server Error
         } else {
-            $response = [
-                'status' => 'success',
-            ];
-
-            return (new MessageResource($response));
+            return new MessageResource( [
+                "success" => true,
+            ]);
         }
     }
 
     public final function removeFromFavoriteDish(AddToFavoriteDishRequest $request): MessageResource|JsonResponse
     {
         $dishId = $request->DTO()->getId();;
-        $dish= auth()->user()->favoriteDishes()->where('dish_id', $dishId)->delete();
+       // $dish= auth()->user()->favoriteDishes()->where('dish_id', $dishId)->delete();
+        $dish= auth()->user()->favoriteDishes()->findById($dishId)->delete();
 
         if(!$dish === '1') {
-            $response = [
-                'status' => false,
+            return (new MessageResource([
+                'success' => false,
                 'message' => 'Failed to create favorite'
-            ];
-            return (new MessageResource($response))->response()
+            ]))->response()
                 ->setStatusCode(500); //500 Internal Server Error
         }else {
-            $response = [
-                'status' => 'success',
-            ];
-            return (new MessageResource($response));
+            return new MessageResource( [
+                "success" => true,
+            ]);
         }
     }
 }

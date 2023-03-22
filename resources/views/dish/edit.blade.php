@@ -207,11 +207,9 @@
                 for (let i = 0; i < tags.length; i++) {
                     formData.append('tag_ids[]', tags[i]);
                 }
-
-                for (let [key, value] of formData) {
-                    console.log(`${key}: ${value}`)
-                }
-
+                // for (let [key, value] of formData) {
+                //     console.log(`${key}: ${value}`)
+                // }
                 $.ajax({
                     url: `/user/dish/{{$id}}`,
                     type: 'post',
@@ -253,6 +251,7 @@
                                 }
                             });
                         }
+
                         if (data.status === 500) {
                             let errors = data.responseJSON.data;
                             alert(errors['message']);
