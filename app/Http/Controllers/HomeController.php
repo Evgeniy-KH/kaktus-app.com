@@ -15,11 +15,6 @@ use Illuminate\Contracts\Support\Renderable;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct
     (
         protected Dish $dish,
@@ -28,11 +23,6 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public final function index(): Renderable
     {
         return view('home');
@@ -64,9 +54,4 @@ class HomeController extends Controller
 
         return new DishResource($dish);
     }
-
-//    public function show(int $id)
-//    {
-//        return view('dish', compact('id'));
-//    }
 }

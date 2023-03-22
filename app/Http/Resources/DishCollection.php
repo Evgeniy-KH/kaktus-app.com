@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -20,7 +21,7 @@ class DishCollection extends ResourceCollection
      */
     public $collects = DishResource::class;
 
-    public final function toArray($request):array
+    public final function toArray($request): array
     {
         return [
             'data' => $this->collection,

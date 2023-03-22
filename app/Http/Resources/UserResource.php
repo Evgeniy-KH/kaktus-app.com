@@ -12,7 +12,7 @@ class UserResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
-    public final function toArray($request):array
+    public final function toArray($request): array
     {
         return [
             'id' => $this->id,

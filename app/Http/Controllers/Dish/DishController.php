@@ -26,11 +26,11 @@ class DishController
         $result = $this->service->store($dishDto);
 
         if ($result) {
-            return new MessageResource( [
+            return new MessageResource([
                 "success" => true,
-                'message'=>'You dish have been successfully stored'
+                'message' => 'You dish have been successfully stored'
             ]);
-           // return response()->json(["data" => $result, "success" => true]);
+            // return response()->json(["data" => $result, "success" => true]);
         } else {
             return (new MessageResource([
                 'success' => false,
@@ -38,10 +38,9 @@ class DishController
             ]))->response()
                 ->setStatusCode(500);
         }
-      //  return response()->json(["success" => false]);
     }
 
-    public final function edit(int $id):DishResource
+    public final function edit(int $id): DishResource
     {
         return new DishResource($this->service->getData(id: $id));
     }
@@ -54,7 +53,7 @@ class DishController
         if ($dish) {
             return new MessageResource([
                 "success" => true,
-                'message'=>'You dish have been successfully stored'
+                'message' => 'You dish have been successfully stored'
             ]);
         } else {
             return (new MessageResource([
@@ -63,8 +62,6 @@ class DishController
             ]))->response()
                 ->setStatusCode(500);
         }
-
-       // return response()->json();
     }
 
     public final function delete(int $id): JsonResponse|MessageResource
@@ -75,7 +72,7 @@ class DishController
         if ($result) {
             return new MessageResource([
                 "success" => true,
-                'message'=>'You dish have been successfully delete'
+                'message' => 'You dish have been successfully delete'
             ]);
         } else {
             return (new MessageResource([
@@ -84,7 +81,7 @@ class DishController
             ]))->response()
                 ->setStatusCode(500);
         }
-       // return response()->json(["success" => false]);
+        // return response()->json(["success" => false]);
     }
 
     //    public final function create(): View
@@ -98,6 +95,4 @@ class DishController
 //    {
 //        return view('dish.edit', compact('dishId'));
 //    }
-
-
 }
