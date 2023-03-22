@@ -6,7 +6,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class TagResource extends  JsonResource
 {
-    public function toArray($request):array
+    public final function toArray($request):array
     {
         return [
             'id' => $this->id,

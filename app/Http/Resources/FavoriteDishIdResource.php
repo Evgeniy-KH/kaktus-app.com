@@ -15,18 +15,8 @@ class FavoriteDishIdResource extends JsonResource
     public final function toArray($request):array
     {
         return [
-            'id' => $this->id,
-            'user_id' => $this->user_id,
-            'title' => $this->title,
-            'ingredients' => $this->ingredients,
-            'description' => $this->description,
-            'price' => $this->price,
-            'likes_count' => $this->likes_count,
-            'dish_images' => DishImageResource::collection($this->whenLoaded('dishImages')),
-            'tags' => TagResource::collection($this->whenLoaded('tags')),
-            'likes' => LikesResource::collection($this->whenLoaded('likes')),
-            'created_at' => $this->created_at->toDateTimeString(),
-            'updated_at' => $this->updated_at->toDateTimeString(),
+            'user_id' => $this->resource->user_id,
+            'dish_id' => $this->resource->dish_id,
         ];
     }
 }

@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Http\Requests;
 
 use App\Contracts\Likeable;
@@ -36,19 +36,19 @@ class LikeRequest extends FormRequest
                 "string",
             ],
             // the id of the liked object
-            'dish_id' => [
+            'id' => [
                 "required",
                 "exists:dishes,id"
             ],
         ];
     }
 
-    public function likeable(): Likeable
+    public final function likeable(): Likeable
     {
         $className =  $this->input('likeable_type');
         $class = new $this->likeableClass[$className];
 
-        return $class::findOrFail($this->input('dish_id'));
+        return $class::findOrFail($this->input('id'));
     }
 
 }

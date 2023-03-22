@@ -77,7 +77,7 @@
                 type: 'get',
                 data: {},
                 success: function (data) {
-                    list(data)
+                    list(data['data'])
                 },
                 error: function (data) {
                     var errors = data.responseJSON.message;

@@ -17,9 +17,10 @@ use mysql_xdevapi\Collection;
 
 class UserService
 {
-    public final function update(object $userDto, int $id): string
+    public final function update(object $userDto, int $id): array
     {
         $user = $this->getUser($id);
+        $return=['success' => true ];
 
         if ($userDto->getName() !== null || $userDto->getBirthday() !== null) {
 //          $birthday = Carbon::createFromFormat('m/d/Y', $data['birthday'])->format('Y-m-d');
@@ -27,7 +28,6 @@ class UserService
                 'name' => $userDto->getName(),
                 'birthday' => $userDto->getBirthday()
             ]);
-            $return = "success";
         }
 
         if ($userDto->getCurrentPassword() !== null && $userDto->getPassword() !== null) {
@@ -36,9 +36,9 @@ class UserService
                 $user->update([
                     'password' => Hash::make($userDto->getPassword())
                 ]);
-                $return = "success";
             } else {
                 $return = array(
+                    'success' => false,
                     'code' => '406', ///Unprocessable Content (WebDAV) or 406 Not Acceptable
                     'message' => 'Your current password is incorrect'
                 );
@@ -54,8 +54,6 @@ class UserService
             $fileName = time() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public/images', $fileName);
             $user->update(["avatar_path" => $fileName]);
-
-            $return = "success";
         }
 
         return $return;
@@ -71,13 +69,14 @@ class UserService
         }
 
         $return['data'] = Dish::with('dishImages', 'tags')->whereIn('id', $favoriteDishesId)->paginate(8);
-        $return['status'] = 'success';
+        $return['success'] = true;
 
 
         if ($return['data']->isEmpty()) {
             unset($return['data']);
+            $return['success'] = false;
             $return['message'] = 'Your favorites list are empty';
-            $return['status'] = 422;
+            $return['code'] = 422;
         }
 
         return $return;

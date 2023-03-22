@@ -6,8 +6,14 @@ namespace App\Http\Controllers\User;
 
 use App\Filters\Dish\DishFilter;
 use App\Http\Requests\User\UpdateRequest;
+use App\Http\Resources\DishCollection;
+use App\Http\Resources\FavoriteDishIdResource;
+use App\Http\Resources\MessageResource;
+use App\Models\Dish;
 use App\Models\User;
 use App\Service\UserService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UserController extends BaseController
 {
@@ -19,36 +25,55 @@ class UserController extends BaseController
         parent::__construct($userService);
     }
 
-    public function update(int $id, UpdateRequest $request): \Illuminate\Http\JsonResponse
+    public function update(int $id, UpdateRequest $request): MessageResource|JsonResponse
     {
         $userDto = $request->DTO();
-        $returnData = $this->service->update( $userDto, $id);
+        $returnData = $this->service->update($userDto, $id);
 
-        return response()->json($returnData);
+        if ($returnData['success'] === true) {
+            return new MessageResource([
+                "success" => true,
+                'message' => 'You dish have been successfully updated'
+            ]);
+        } else {
+            return (new MessageResource([
+                'success' => false,
+                'message' => $returnData['message']
+            ]))->response()
+                ->setStatusCode($returnData['code']);
+        }
     }
 
-    public function getFavoriteDishes(): \Illuminate\Http\JsonResponse
+    public function getFavoriteDishes(): AnonymousResourceCollection
     {
         $favoriteDishes = auth()->user()->favoriteDishes()->get();
 
-        return response()->json($favoriteDishes);
+        return FavoriteDishIdResource::collection($favoriteDishes);
     }
 
-    public function myFavoritesDishes(DishFilter $filters): \Illuminate\Http\JsonResponse
+    public function myFavoritesDishes(DishFilter $filters): DishCollection| JsonResponse
     {
         $favoriteDishes = auth()->user()->favoriteDishes()->get();
-        $favoriteDishesArray =  $favoriteDishes->toArray();
-        $returnData = $this->service->favoriteDishes($favoriteDishesArray);
+        $returnData = $this->service->favoriteDishes($favoriteDishes->toArray());
 
-        return response()->json($returnData);
+        if ($returnData['success'] === true) {
+            return new DishCollection($returnData['data']);
+        } else {
+            return (new MessageResource([
+                'success' => false,
+                'message' => $returnData['message']
+            ]))->response()
+                ->setStatusCode($returnData['code']);
+        }
+
+    ///    return response()->json($returnData);
     }
 
-    public function usersDishes(): \Illuminate\Http\JsonResponse
+    public function usersDishes(): DishCollection
     {
         $usersDishes = auth()->user()->dishes()->with('dishImages', 'tags', 'likes')->withCount('likes')->paginate(8);
-        $returnData = $usersDishes;
 
-        return response()->json($returnData);
+        return new DishCollection($usersDishes);
     }
 
     /* public function favoritesDishes()

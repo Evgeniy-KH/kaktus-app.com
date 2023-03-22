@@ -143,7 +143,7 @@
                 },
                 success: function (data) {
                     catalog(data['data']);
-                    pagination(data['links']);
+                    pagination(data['meta']);
                 },
                 error: function (data) {
                     let errors = data.responseJSON.message;
@@ -224,11 +224,11 @@
         function pagination(data = {}) {
             $('.tm-paging-link').remove();
 
-            $.each(data, function (i, item) {
+            $.each(data['links'], function (i, item) {
                 if (i === 0) {
                     let row = `<a class="btn btn-primary mb-2 tm-paging-link filter-input-btn"  href="${item['url']}" >Previous</a>`
                     $('.pagination').prepend(row);
-                } else if (i === data.length - 1) {
+                } else if (i === data['links'].length - 1) {
                     let row = `<a class="btn btn-primary tm-paging-link filter-input-btn " href="${item['url']}">Next Page</a>`
                     $('.pagination').append(row);
                 } else {
@@ -266,7 +266,7 @@
                     },
                     success: function (data) {
                         catalog(data['data']);
-                        pagination(data['links']);
+                        pagination(data['meta']);
                     }
                 });
             }

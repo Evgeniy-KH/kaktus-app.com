@@ -1,14 +1,17 @@
 <?php
 declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use App\Filters\Dish\DishFilter;
 use App\Http\Resources\DishCollection;
-use App\Http\Resources\DishResourceOld;
-use App\Http\Resources\DishResourceCollectionOld;
+use App\Http\Resources\DishResource;
+use App\Http\Resources\TagResource;
 use App\Models\Dish;
 use App\Models\Tag;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Contracts\Support\Renderable;
 
 class HomeController extends Controller
 {
@@ -30,39 +33,36 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index(): \Illuminate\Contracts\Support\Renderable
+    public final function index(): Renderable
     {
         return view('home');
     }
 
-    public function tags(): \Illuminate\Http\JsonResponse
+    public final function tags(): AnonymousResourceCollection
     {
         $tags = $this->tag->all();
 
-        return response()->json($tags);
+        return TagResource::collection($tags);
     }
 
-    public function catalog(Request $request)
+    public final function catalog(Request $request): DishCollection|JsonResponse
     {
         $dishes = $this->dish->filter($request->all())->with('dishImages', 'tags', 'likes')->withCount('likes')->paginate(4);
-       // return response()->json($dishes);
-        return new DishCollection($dishes);
 
-//        if ($dishes->isEmpty()) {
-//            return response()->json([
-//                'message' => 'Your your filter doesn\'t\ match any dishes','code'
-//            ], 404);
-//        }
-////
-//       //   return new DishResource($dishes);
-//        return DishResourceCollectionOld::collection($dishes);
+        if ($dishes->isEmpty()) {
+            return response()->json([
+                'message' => 'Your your filter doesn\'t\ match any dishes', 'code'
+            ], 404); ///404 Not Found
+        }
+
+        return new DishCollection($dishes);
     }
 
-    public function show(int $id): \Illuminate\Http\JsonResponse
+    public final function show(int $id): DishResource
     {
         $dish = $this->dish->with('dishImages')->findOrFail($id);
 
-        return response()->json($dish);
+        return new DishResource($dish);
     }
 
 //    public function show(int $id)

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LikeRequest;
 use App\Http\Requests\UnlikeRequest;
+use App\Http\Resources\DishCollection;
+use App\Http\Resources\UserResource;
 use App\Models\Dish;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -27,9 +29,9 @@ class LikeController extends Controller
     public function users(Request $request)
     {
         $usersId = $request->usersId;
-        $users = User::find($usersId)->take(4);;
+        $users = User::find($usersId)->take(4);
 
-        return response()->json($users);
+        return UserResource::collection($users);
     }
 
     public function likedDishes()
@@ -41,8 +43,9 @@ class LikeController extends Controller
             array_push($likedDishesId, $likedDish['likeable_id']);
         }
 
-        $returnData = Dish::with('dishImages', 'tags')->whereIn('id', $likedDishesId)->get();
+        $dishes = Dish::with('dishImages', 'tags')->whereIn('id', $likedDishesId)->get();
 
-        return response()->json($returnData);
+        return new DishCollection($dishes);
+       // return response()->json($returnData);
     }
 }
