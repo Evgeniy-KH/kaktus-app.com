@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Filters\Dish\DishFilter;
-use App\Http\Resources\DishResource;
-use App\Http\Resources\DishResourceCollection;
+use App\Http\Resources\DishCollection;
+use App\Http\Resources\DishResourceOld;
+use App\Http\Resources\DishResourceCollectionOld;
 use App\Models\Dish;
 use App\Models\Tag;
 use Illuminate\Http\Request;
@@ -44,15 +45,17 @@ class HomeController extends Controller
     public function catalog(Request $request)
     {
         $dishes = $this->dish->filter($request->all())->with('dishImages', 'tags', 'likes')->withCount('likes')->paginate(4);
-        return response()->json($dishes);
+       // return response()->json($dishes);
+        return new DishCollection($dishes);
 
 //        if ($dishes->isEmpty()) {
 //            return response()->json([
 //                'message' => 'Your your filter doesn\'t\ match any dishes','code'
 //            ], 404);
 //        }
-//
-   //  return new DishResource($dishes);
+////
+//       //   return new DishResource($dishes);
+//        return DishResourceCollectionOld::collection($dishes);
     }
 
     public function show(int $id): \Illuminate\Http\JsonResponse

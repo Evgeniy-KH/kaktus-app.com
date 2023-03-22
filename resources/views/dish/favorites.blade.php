@@ -117,6 +117,7 @@
                     tagsId: filters['tagsId'],
                 },
                 success: function (data) {
+                    console.log(data);
                     catalog(data['data']['data']);
                     pagination(data['data']['links']);
                 },
@@ -210,6 +211,7 @@
                         tagsId: filters['tagsId'],
                     },
                     success: function (data) {
+                        console.log(data);
                         catalog(data['data']);
                         pagination(data['links']);
                     }
