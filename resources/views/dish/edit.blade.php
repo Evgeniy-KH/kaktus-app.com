@@ -118,6 +118,7 @@
                 dataType: 'json',
                 data: data,
                 success: function (data) {
+                    data = data['data'];
                     showTags(data['tags']);
                     let title = `<input id="title" type="text"
                                        class="form-control rounded-0" name="title"
@@ -204,10 +205,10 @@
 
                 let tags = $('.select-tags').val();
                 for (let i = 0; i < tags.length; i++) {
-                    formData.append('tag_ids[]',  tags[i]);
+                    formData.append('tag_ids[]', tags[i]);
                 }
 
-                for (let [key, value] of  formData) {
+                for (let [key, value] of formData) {
                     console.log(`${key}: ${value}`)
                 }
 
@@ -224,7 +225,6 @@
                     error: function (data) {
                         if (data.status === 422) {
                             let errors = data.responseJSON.errors;
-
                             $.each(errors, function (key, value) {
                                 if (key === 'title') {
                                     $('#title').addClass('is-invalid');
@@ -252,6 +252,10 @@
                                     $('#input-group-main-image').append(rowError);
                                 }
                             });
+                        }
+                        if (data.status === 500) {
+                            let errors = data.responseJSON.data;
+                            alert(errors['message']);
                         }
                     },
                 });

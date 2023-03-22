@@ -68,6 +68,7 @@
                 dataType: 'json',
                 data: data,
                 success: function (data) {
+                    data = data['data'];
                     data['created_at'] = new Date(data['created_at']).toLocaleDateString("en-US", {
                         day: 'numeric',
                         month: 'short',

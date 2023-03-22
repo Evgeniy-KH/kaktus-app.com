@@ -4,10 +4,10 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DishImageResource extends JsonResource
+class UserResource extends JsonResource
 {
     /**
-     * Transform the resource collection into an array.
+     * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
@@ -15,11 +15,11 @@ class DishImageResource extends JsonResource
     public final function toArray($request):array
     {
         return [
-            'dish_id' => $this->dish_id,
-            'image' => $this->image,
-            'type_id' => $this->type_id,
-            'created_at' => $this->created_at->toDateTimeString(),
-            'updated_at' => $this->updated_at->toDateTimeString(),
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'birthday' => $this->birthday,
+            'avatar_path' => $this->avatar_path,
         ];
     }
 }

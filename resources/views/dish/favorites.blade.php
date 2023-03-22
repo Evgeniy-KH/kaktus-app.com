@@ -56,6 +56,7 @@
         }
 
         function catalog(data) {
+            console.log(data);
             $('#catalog').remove()
             let row = `<div class="row tm-mb-90 tm-gallery" id="catalog">`
             $('#main-catalog').prepend(row);
@@ -117,9 +118,8 @@
                     tagsId: filters['tagsId'],
                 },
                 success: function (data) {
-                    console.log(data);
-                    catalog(data['data']['data']);
-                    pagination(data['data']['links']);
+                    catalog(data['data']);
+                    pagination(data['meta']);
                 },
                 error: function (data) {
                     let errors = data.responseJSON.message;
@@ -136,11 +136,11 @@
         function pagination(data = {}) {
             $('.tm-paging-link').remove();
 
-            $.each(data, function (i, item) {
+            $.each(data['links'], function (i, item) {
                 if (i === 0) {
                     let row = `<a class="btn btn-primary mb-2 tm-paging-link filter-input-btn"  href="${item['url']}" >Previous</a>`
                     $('.pagination').prepend(row);
-                } else if (i === data.length - 1) {
+                } else if (i === data['links'].length - 1) {
                     let row = `<a class="btn btn-primary tm-paging-link filter-input-btn " href="${item['url']}">Next Page</a>`
                     $('.pagination').append(row);
                 } else {
@@ -211,9 +211,8 @@
                         tagsId: filters['tagsId'],
                     },
                     success: function (data) {
-                        console.log(data);
                         catalog(data['data']);
-                        pagination(data['links']);
+                        pagination(data['meta']);
                     }
                 });
             }
