@@ -53,14 +53,14 @@ class DishService
                 $previewImage['image'] = Storage::disk('public')->put('/images', $dishDto->getPreviewImage());
                 $previewImage['type_id'] = DishImage::TYPE_PREVIEW;
                 $previewImage['dish_id'] = $dish->id;
-                $updatedImage = $this->updateImage($previewImage, $dish);
+                $updatedImage = $this->updateImage(image: $previewImage, dish: $dish);
             }
 
             if ($dishDto->getMainImage() !== null) {
                 $mainImage['image'] = Storage::disk('public')->put('/images', $dishDto->getMainImage());
                 $mainImage['type_id'] = DishImage::TYPE_MAIN;
                 $mainImage['dish_id'] = $dish->id;
-                $updatedImage = $this->updateImage($mainImage, $dish);
+                $updatedImage = $this->updateImage(image: $mainImage, dish: $dish);
             }
 
             $dish->update([
@@ -83,7 +83,7 @@ class DishService
     {
         return DB::transaction(function () use ($id) {
             auth()->user()->favoriteDishes()->where('dish_id', $id)->delete();
-            Dish::findOrFail($id)->delete();
+            Dish::find($id)->delete();
 
             return true;
         });

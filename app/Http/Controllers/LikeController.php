@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LikeRequest;
@@ -24,24 +25,24 @@ class LikeController extends Controller
     {
     }
 
-    public final function like(LikeRequest $request):MessageResource|JsonResponse
+    public final function like(LikeRequest $request): MessageResource|JsonResponse
     {
-       $user =  $request->user()->like($request->likeable());
+        $user = $request->user()->like($request->likeable());
 
-        return $this->returnData($user);
+        return $this->returnData(dataReturn: $user);
     }
 
-    public final function unlike(UnlikeRequest $request):MessageResource|JsonResponse
+    public final function unlike(UnlikeRequest $request): MessageResource|JsonResponse
     {
         $user = $request->user()->unlike($request->likeable());
 
-        return $this->returnData($user);
+        return $this->returnData(dataReturn: $user);
     }
 
     public final function users(Request $request): AnonymousResourceCollection
     {
         $usersId = $request->usersId;
-        $users = User::find($usersId)->take(4);
+        $users = User::find(id: $usersId)->take(4);
 
         return UserResource::collection($users);
     }
@@ -49,23 +50,23 @@ class LikeController extends Controller
     public final function likedDishes(): DishCollection
     {
         $likedDishes = auth()->user()->likes()->where('likeable_type', '=', 'App\\Models\\Dish')->get();
-        $dishes = $this->service->getDishes($likedDishes);
+        $dishes = $this->service->getDishes(likedDishes: $likedDishes);
 
-        if (!$dishes){
+        if (!$dishes) {
             $dishes = array();
         }
 
         return new DishCollection($dishes);
-       // return response()->json($returnData);
+        // return response()->json($returnData);
     }
 
     public final function returnData(object $dataReturn): MessageResource|JsonResponse
     {
         if ($dataReturn) {
-            return new MessageResource( [
+            return new MessageResource([
                 "success" => true,
             ]);
-        }else {
+        } else {
             return (new MessageResource([
                 'success' => false,
             ]))->response()

@@ -16,14 +16,14 @@ class FavoriteDishController extends BaseController
         $dishId = $request->DTO()->getId();
         $dish = auth()->user()->favoriteDishes()->updateOrCreate(['dish_id' => $dishId]);
 
-        if(!$dish) {
+        if (!$dish) {
             return (new MessageResource([
                 'success' => false,
                 'message' => 'Failed to create favorite'
             ]))->response()
                 ->setStatusCode(500); //500 Internal Server Error
         } else {
-            return new MessageResource( [
+            return new MessageResource([
                 "success" => true,
             ]);
         }
@@ -32,17 +32,17 @@ class FavoriteDishController extends BaseController
     public final function removeFromFavoriteDish(AddToFavoriteDishRequest $request): MessageResource|JsonResponse
     {
         $dishId = $request->DTO()->getId();;
-       // $dish= auth()->user()->favoriteDishes()->where('dish_id', $dishId)->delete();
-        $dish= auth()->user()->favoriteDishes()->findById($dishId)->delete();
+        // $dish= auth()->user()->favoriteDishes()->where('dish_id', $dishId)->delete();
+        $dish = auth()->user()->favoriteDishes()->findById(dishId: $dishId)->delete();
 
-        if(!$dish === '1') {
+        if (!$dish === '1') {
             return (new MessageResource([
                 'success' => false,
                 'message' => 'Failed to create favorite'
             ]))->response()
                 ->setStatusCode(500); //500 Internal Server Error
-        }else {
-            return new MessageResource( [
+        } else {
+            return new MessageResource([
                 "success" => true,
             ]);
         }
