@@ -23,7 +23,7 @@ class DishController
     {
         $dishDto = $request->DTO();
         //TODO полный бред!!! Ты делаешь запись, но не проверяешь результат, и вслучае падения или ошибки, ты всё вернешь ответ.!!!
-        $result = $this->service->store($dishDto);
+        $result = $this->service->store(dishDto: $dishDto);
 
         if ($result) {
             return new MessageResource([
@@ -48,7 +48,7 @@ class DishController
     public final function update(int $id, UpdateRequest $request): JsonResponse|MessageResource
     {
         $dishDto = $request->DTO();
-        $dish = $this->service->update($dishDto, $id);
+        $dish = $this->service->update(dishDto: $dishDto, id: $id);
 
         if ($dish) {
             return new MessageResource([
@@ -67,7 +67,7 @@ class DishController
     public final function delete(int $id): JsonResponse|MessageResource
     {
         //TODO сервис,
-        $result = $this->service->deleteData($id);
+        $result = $this->service->deleteData(id: $id);
 
         if ($result) {
             return new MessageResource([

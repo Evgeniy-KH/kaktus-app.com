@@ -28,7 +28,7 @@ class UserController extends BaseController
     public function update(int $id, UpdateRequest $request): MessageResource|JsonResponse
     {
         $userDto = $request->DTO();
-        $returnData = $this->service->update($userDto, $id);
+        $returnData = $this->service->update(userDto: $userDto, id: $id);
 
         if ($returnData['success'] === true) {
             return new MessageResource([
@@ -54,7 +54,7 @@ class UserController extends BaseController
     public function myFavoritesDishes(DishFilter $filters): DishCollection|JsonResponse
     {
         $favoriteDishes = auth()->user()->favoriteDishes()->get();
-        $returnData = $this->service->favoriteDishes($favoriteDishes->toArray());
+        $returnData = $this->service->favoriteDishes(favoriteDishesArray: $favoriteDishes->toArray());
 
         if ($returnData['success'] === true) {
             return new DishCollection($returnData['data']);
