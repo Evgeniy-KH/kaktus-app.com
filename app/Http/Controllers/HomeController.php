@@ -50,7 +50,7 @@ class HomeController extends Controller
 
     public final function show(int $id): DishResource
     {
-        $dish = $this->dish->with('dishImages')->findOrFail($id);
+        $dish = $this->dish->with('dishImages')->find($id);
 
         return new DishResource($dish);
     }

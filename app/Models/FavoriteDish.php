@@ -26,4 +26,9 @@ class FavoriteDish extends Model
     {
         return $this->belongsToMany(Dish::class);
     }
+
+    public function scopeFindById($query, $dishId)
+    {
+        return $query->where('dish_id', $dishId);
+    }
 }
