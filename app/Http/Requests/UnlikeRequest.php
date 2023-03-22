@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use App\Contracts\Likeable;
@@ -17,7 +18,7 @@ class UnlikeRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->user()->can('unlike', $this->likeable());
     }
@@ -28,7 +29,7 @@ class UnlikeRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'likeable_type' => [

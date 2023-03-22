@@ -6,11 +6,12 @@ namespace App\Http\Controllers\Dish;
 
 use App\Http\Requests\Dish\AddToFavoriteDishRequest;
 use App\Http\Resources\MessageResource;
+use Illuminate\Http\JsonResponse;
 
 class FavoriteDishController extends BaseController
 {
 
-    public function addToFavoriteDish(AddToFavoriteDishRequest $request)
+    public final function addToFavoriteDish(AddToFavoriteDishRequest $request): MessageResource|JsonResponse
     {
         $dishId = $request->DTO()->getId();
         $dish = auth()->user()->favoriteDishes()->updateOrCreate(['dish_id' => $dishId]);
@@ -31,7 +32,7 @@ class FavoriteDishController extends BaseController
         }
     }
 
-    public function removeFromFavoriteDish(AddToFavoriteDishRequest $request)
+    public final function removeFromFavoriteDish(AddToFavoriteDishRequest $request): MessageResource|JsonResponse
     {
         $dishId = $request->DTO()->getId();;
         $dish= auth()->user()->favoriteDishes()->where('dish_id', $dishId)->delete();

@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use App\Contracts\Likeable;
@@ -12,12 +13,13 @@ class LikeRequest extends FormRequest
     protected array $likeableClass = [
         'Dish' => Dish::class,
     ];
+
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -27,7 +29,7 @@ class LikeRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'likeable_type' => [
@@ -45,7 +47,7 @@ class LikeRequest extends FormRequest
 
     public final function likeable(): Likeable
     {
-        $className =  $this->input('likeable_type');
+        $className = $this->input('likeable_type');
         $class = new $this->likeableClass[$className];
 
         return $class::findOrFail($this->input('id'));

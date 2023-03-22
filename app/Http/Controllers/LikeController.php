@@ -5,28 +5,57 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LikeRequest;
 use App\Http\Requests\UnlikeRequest;
 use App\Http\Resources\DishCollection;
+use App\Http\Resources\MessageResource;
 use App\Http\Resources\UserResource;
 use App\Models\Dish;
 use App\Models\User;
+use App\Service\LikeService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class LikeController extends Controller
 {
-    public function like(LikeRequest $request)
+    public function __construct(
+        protected LikeService $service
+    )
     {
-        $request->user()->like($request->likeable());
-
-        return response()->json();
     }
 
-    public function unlike(UnlikeRequest $request)
+    public function like(LikeRequest $request):MessageResource|JsonResponse
     {
-        $request->user()->unlike($request->likeable());
+       $user =  $request->user()->like($request->likeable());
 
-        return response()->json();
+        if ($user) {
+            return new MessageResource( [
+                "success" => true,
+            ]);
+        }else {
+            return (new MessageResource([
+                'success' => false,
+            ]))->response()
+                ->setStatusCode(500);
+        }
+
     }
 
-    public function users(Request $request)
+    public function unlike(UnlikeRequest $request):MessageResource|JsonResponse
+    {
+        $user = $request->user()->unlike($request->likeable());
+
+        if ($user) {
+            return new MessageResource( [
+                "success" => true,
+            ]);
+        }else {
+            return (new MessageResource([
+                'success' => false,
+            ]))->response()
+                ->setStatusCode(500);
+        }
+    }
+
+    public function users(Request $request): AnonymousResourceCollection
     {
         $usersId = $request->usersId;
         $users = User::find($usersId)->take(4);
@@ -34,16 +63,14 @@ class LikeController extends Controller
         return UserResource::collection($users);
     }
 
-    public function likedDishes()
+    public function likedDishes(): DishCollection
     {
         $likedDishes = auth()->user()->likes()->where('likeable_type', '=', 'App\\Models\\Dish')->get();
-        $likedDishesId = [];
+        $dishes = $this->service->getDishes($likedDishes);
 
-        foreach ($likedDishes as $likedDish) {
-            array_push($likedDishesId, $likedDish['likeable_id']);
+        if (!$dishes){
+            $dishes = array();
         }
-
-        $dishes = Dish::with('dishImages', 'tags')->whereIn('id', $likedDishesId)->get();
 
         return new DishCollection($dishes);
        // return response()->json($returnData);

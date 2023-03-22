@@ -16,7 +16,7 @@ class DishService
             $previewImage['image'] = Storage::disk('public')->put('/images', $dishDto->getPreviewImage());
             $previewImage['type_id'] = DishImage::TYPE_PREVIEW;
 
-            $mainImage['image'] = $data['main_image'] = Storage::disk('public')->put('/images',$dishDto->getMainImage());
+            $mainImage['image'] = $data['main_image'] = Storage::disk('public')->put('/images', $dishDto->getMainImage());
             $mainImage['type_id'] = DishImage::TYPE_MAIN;
 
             $allImages = [$previewImage, $mainImage];

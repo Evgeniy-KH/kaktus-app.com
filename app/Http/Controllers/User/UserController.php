@@ -51,7 +51,7 @@ class UserController extends BaseController
         return FavoriteDishIdResource::collection($favoriteDishes);
     }
 
-    public function myFavoritesDishes(DishFilter $filters): DishCollection| JsonResponse
+    public function myFavoritesDishes(DishFilter $filters): DishCollection|JsonResponse
     {
         $favoriteDishes = auth()->user()->favoriteDishes()->get();
         $returnData = $this->service->favoriteDishes($favoriteDishes->toArray());
@@ -65,8 +65,6 @@ class UserController extends BaseController
             ]))->response()
                 ->setStatusCode($returnData['code']);
         }
-
-    ///    return response()->json($returnData);
     }
 
     public function usersDishes(): DishCollection
@@ -76,8 +74,4 @@ class UserController extends BaseController
         return new DishCollection($usersDishes);
     }
 
-    /* public function favoritesDishes()
- {
-     return view('favorites-dishes');
- }*/
 }

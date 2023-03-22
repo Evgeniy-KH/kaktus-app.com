@@ -9,7 +9,9 @@ class DishLikedDto extends Data
 {
 
     public function __construct(
-        private readonly int $id,
+        private readonly int $user_id,
+        private readonly string $likeable_type,
+        private readonly int $likeable_id,
     )
     {
     }

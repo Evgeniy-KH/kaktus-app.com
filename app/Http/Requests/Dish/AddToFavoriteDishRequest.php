@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace App\Http\Requests\Dish;
 
 use App\Data\Dish\DishFavoriteDto;
@@ -12,7 +13,7 @@ class AddToFavoriteDishRequest extends FormRequest
      *
      * @return bool
      */
-    public final function authorize()
+    public final function authorize(): bool
     {
         return true;
     }
@@ -22,14 +23,14 @@ class AddToFavoriteDishRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public final function rules()
+    public final function rules(): array
     {
         return [
             'id' => ["required", "exists:dishes,id"],
         ];
     }
 
-    public final function DTO (): DishFavoriteDto
+    public final function DTO(): DishFavoriteDto
     {
         return new DishFavoriteDto(
             (int)$this->input('id')
