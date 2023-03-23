@@ -44,14 +44,13 @@ class HomeController extends Controller
                 'message' => 'Your your filter doesn\'t\ match any dishes', 'code'
             ], 404); ///404 Not Found
         }
-
-        return new DishCollection($dishes);
+        
+        //Для примера.  Но твой вариант будет более уместен, так как будет обвертка для пагинации и прочего. 
+        return DishResource::collection($dishes);
     }
 
     public final function show(int $id): DishResource
     {
-        $dish = $this->dish->with('dishImages')->find(id: $id);
-
-        return new DishResource($dish);
+        return new DishResource($this->dish->with('dishImages')->find(id: $id));
     }
 }

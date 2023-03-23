@@ -13,17 +13,18 @@ use Illuminate\Http\JsonResponse;
 
 class DishController
 {
-    public function __construct(
-        protected DishService $service
-    )
+    public function __construct(protected DishService $service)
     {
     }
 
-    public final function store(StoreRequest $request): MessageResource|JsonResponse
+    // тут метод индекс. Тут метод ИНДЕКС.  И только тут будет логика что бы отдать все блюда для польхователя.!!!!!!
+
+
+    public final function store(StoreRequest $request): JsonResponse
     {
-        $dishDto = $request->DTO();
+
         //TODO полный бред!!! Ты делаешь запись, но не проверяешь результат, и вслучае падения или ошибки, ты всё вернешь ответ.!!!
-        $result = $this->service->store(dishDto: $dishDto);
+        $result = $this->service->store(dishDto: $request->DTO());
 
         if ($result) {
             return new MessageResource([
@@ -38,6 +39,13 @@ class DishController
             ]))->response()
                 ->setStatusCode(500);
         }
+        
+        //Не сильно логично. 
+        // 200 ['status' => true, message => fdsfdsfdsf] 
+        // 500 [ message => fdsfdsfdsf] 
+
+
+
     }
 
     public final function edit(int $id): DishResource
@@ -48,7 +56,8 @@ class DishController
     public final function update(int $id, UpdateRequest $request): JsonResponse|MessageResource
     {
         $dishDto = $request->DTO();
-        $dish = $this->service->update(dishDto: $dishDto, id: $id);
+        //TODO  полменял что бы сломать класс.
+        $dish = $this->service->update(dto: $dishDto, id: $id);
 
         if ($dish) {
             return new MessageResource([
@@ -83,16 +92,4 @@ class DishController
         }
         // return response()->json(["success" => false]);
     }
-
-    //    public final function create(): View
-//    {
-//        $user = Auth::user();
-//
-//        return view('dish.create', compact('user'));
-//    }
-
-//    public function editView(int $dishId)
-//    {
-//        return view('dish.edit', compact('dishId'));
-//    }
 }

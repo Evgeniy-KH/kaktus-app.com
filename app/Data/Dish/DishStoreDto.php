@@ -1,12 +1,16 @@
 <?php
+// ПОчему папка дата???? дата означает данные а тут у тебя не данные тут у тебя классы которые отвечают. Папка Dto
 declare(strict_types=1);
 
 namespace App\Data\Dish;
 
 use Spatie\LaravelData\Data;
-
+// StoreDto
+//StoreDishDto.
 class DishStoreDto extends Data
 {
+
+    //выучить чем отличается пхп 7 версии от 8. 
 
     public function __construct(
         private readonly int        $user_id,
@@ -14,15 +18,15 @@ class DishStoreDto extends Data
         private readonly string     $ingredients,
         private readonly string     $description,
         private readonly string     $price,
-        private readonly object     $preview_image,
-        private readonly object     $main_image,
+        //более детально описать тип переменной. Я думаю там всё таки экземпляр какого то ларавелевского класса, который является обверткой вокруг метаданных картинки и т.д. Может быть там какой то класс. 
+        private readonly object     $previewImage,
+        //ПЕРЕМЕННЫЕ только в камел кейс
+        private readonly object     $mainImage,
         private readonly array|null $tag_ids)
     {
     }
 
-    /**
-     * @return int
-     */
+
     public final function getId(): int
     {
         return $this->id;
@@ -67,5 +71,4 @@ class DishStoreDto extends Data
     {
         return $this->tag_ids;
     }
-
 }
