@@ -10,9 +10,10 @@ use Illuminate\Support\Facades\Storage;
 
 class DishService
 {
-    public function store(object $dishDto): Dish
+    //TODO. Внёс измененияч которые ломают код. 
+    public function store(StoreDto $dto): Dish
     {
-        return DB::transaction(function () use ($dishDto) {
+        return DB::transaction(function () use ($dto) {
             $previewImage['image'] = Storage::disk('public')->put('/images', $dishDto->getPreviewImage());
             $previewImage['type_id'] = DishImage::TYPE_PREVIEW;
 
@@ -20,7 +21,8 @@ class DishService
             $mainImage['type_id'] = DishImage::TYPE_MAIN;
 
             $allImages = [$previewImage, $mainImage];
-
+            
+            //ТОЛЬКО СОЗДАТЬ!!!!!!!!!!!!!!!!!!
             $dish = Dish::firstOrCreate([
                 'user_id' => $dishDto->getUserId(),
                 'title' => $dishDto->getTitle(),
