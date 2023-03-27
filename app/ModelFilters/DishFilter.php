@@ -17,8 +17,8 @@ class DishFilter extends ModelFilter
 
     public function keyword(string $keyword)
     {
-        return $this->where(function ($q) use ($keyword) {
-            return $q->where('title', 'LIKE', "%$keyword%")
+        return $this->where(function ($query) use ($keyword) {
+            return $query->where('title', 'LIKE', "%$keyword%")
                 ->orWhere('description', 'LIKE', "%$keyword%");
         });
     }
@@ -34,11 +34,16 @@ class DishFilter extends ModelFilter
 
     public function tagsId(string $tagsId)
     {
-        $filter = function ($q) use ($tagsId) {
-            $q->where('tag_id', $tagsId);
+        $filter = function ($query) use ($tagsId) {
+            $query->where('tag_id', $tagsId);
         };
 
         return $this->whereHas('tags', $filter);
+    }
+
+    public function userId ( int $userId )
+    {
+        return $this->where('user_id', $userId);
     }
 
 }

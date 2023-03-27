@@ -5,7 +5,7 @@ namespace App\Data\Dish;
 
 use Spatie\LaravelData\Data;
 
-class DishFavoriteDto extends Data
+class FavoriteDto extends Data
 {
 
     public function __construct(

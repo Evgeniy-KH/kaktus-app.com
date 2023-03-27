@@ -19,12 +19,15 @@ class DishMiddleware
     {
         $id = $request->route('id');
 
+//        $isExistsDish = Auth::user()
+//        ->whereHas('dishes', function ($query) use ($id) {
+//            $query->first($id);
+//        })
+//        ->doesntExist(); ////Column not found: 1054 Unknown column 'users.id' in 'where clause
+
         $isExistsDish = Auth::user()
-        //SCOPE!!!!!!!!!
-        ->whereHas('dishes', function ($query) use ($id) {
-            $query->first($id);
-        })
-        ->doesntExist();
+            ->hasDish(id: $id)
+            ->doesntExist();
 
         if ($isExistsDish) {
             return response('You are not allowed', 403);

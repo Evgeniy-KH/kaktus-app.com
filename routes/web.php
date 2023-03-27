@@ -27,12 +27,12 @@ Auth::routes();
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
 Route::view('/home', 'home');
-Route::get('/catalog', [App\Http\Controllers\HomeController::class, 'catalog'])->name('home.catalog');
-Route::get('/catalog/pagination', [App\Http\Controllers\HomeController::class, 'paginationAjax']);
-Route::get('/catalog/dish/getTags', [App\Http\Controllers\HomeController::class, 'tags']);
-Route::post('/catalog/filter', [App\Http\Controllers\HomeController::class, 'filter']);
+Route::get('/catalog', [DishController::class, 'index'])->name('home.catalog');
+//Route::get('/catalog/pagination', [App\Http\Controllers\HomeController::class, 'paginationAjax']);
+Route::get('/catalog/dish/getTags', [DishController::class, 'tags']);
+//Route::post('/catalog/filter', [App\Http\Controllers\HomeController::class, 'filter']);
 Route::view('/catalog/dish/{id}', 'dish.show');
-Route::get('/catalog/dish/show/{id}', [App\Http\Controllers\HomeController::class, 'show']);
+Route::get('/catalog/dish/show/{id}', [DishController::class, 'show']);
 
 Route::get('auth/facebook', [SocialController::class, 'facebookRedirect']);
 Route::get('auth/facebook/callback', [SocialController::class, 'loginWithFacebook']);
@@ -44,8 +44,8 @@ Route::group(['namespace' => 'App\Http\Controllers\User', 'prefix' => 'user', 'm
     Route::view('/my_dishes', 'dish.my_dishes');
     Route::view('{userId}', 'user.edit');
     Route::post('{userId}', [UserController::class, 'update']);
-    Route::get('/favorite/dish', [UserController::class, 'getFavoriteDishes']);
-    Route::get('/favorite/dishes', [UserController::class, 'myFavoritesDishes']);
+    Route::get('/favorite/dish', [FavoriteDishController::class, 'getFavoriteDishesId']);
+    Route::get('/favorite/dishes', [FavoriteDishController::class, 'myFavoritesDishes']);
 
     Route::group(['prefix' => 'dish'], function () {
         Route::view('/create', 'dish.create');

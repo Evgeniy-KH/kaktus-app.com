@@ -28,7 +28,7 @@
             }
         });
 
-        let user_id = $('#user-edit').attr('data-id');
+        let userId = $('#user-edit').attr('data-id');
 
         function checkImages(images) {
             let previewImage = '';
@@ -134,12 +134,10 @@
 
         function initCatalog(filters = {}) {
             $.ajax({
-                url: '/user/dishes',
+                url: '/catalog',
                 type: 'get',
                 data: {
-                    price: filters['price'],
-                    keyword: filters['keyword'],
-                    tagsId: filters['tagsId'],
+                    userId:userId,
                 },
                 success: function (data) {
                     catalog(data['data']);
@@ -214,7 +212,7 @@
             let classLikes = 'likeable far';
             let usersIds = getLikedUsersIds(likes)
 
-            if ($.inArray(parseInt(user_id), usersIds) > -1) {
+            if ($.inArray(parseInt(userId), usersIds) > -1) {
                 classLikes = 'unlikeable fas';
             }
 
@@ -247,22 +245,18 @@
                 event.preventDefault();
 
                 let page = $(this).attr('href').split('page=')[1];
-                let filters = getFilters()
 
-                updateUrl(filters);
                 let url = $(location).attr('href')
                 window.history.replaceState(null, null, url + "page=" + page);
 
-                fetch_user_data(filters, page);
+                fetch_user_data(page);
             });
 
-            function fetch_user_data(filters, page) {
+            function fetch_user_data( page) {
                 $.ajax({
                     url: "/catalog?page=" + page,
                     data: {
-                        price: filters['price'],
-                        keyword: filters['keyword'],
-                        tagsId: filters['tagsId'],
+                        userId:userId,
                     },
                     success: function (data) {
                         catalog(data['data']);

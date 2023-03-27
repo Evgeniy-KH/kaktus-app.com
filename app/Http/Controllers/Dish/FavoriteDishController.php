@@ -4,12 +4,24 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Dish;
 
+use App\Filters\Dish\DishFilter;
+use App\Http\Controllers\User\BaseController;
 use App\Http\Requests\Dish\AddToFavoriteDishRequest;
+use App\Http\Resources\DishCollection;
+use App\Http\Resources\FavoriteDishIdResource;
 use App\Http\Resources\MessageResource;
+use App\Service\UserService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class FavoriteDishController extends BaseController
 {
+    public function __construct(
+        protected UserService $userService
+    )
+    {
+        parent::__construct($userService);
+    }
 
     public final function addToFavoriteDish(AddToFavoriteDishRequest $request): MessageResource|JsonResponse
     {
@@ -45,6 +57,29 @@ class FavoriteDishController extends BaseController
             return new MessageResource([
                 "success" => true,
             ]);
+        }
+    }
+
+    public final function getFavoriteDishesId(): AnonymousResourceCollection
+    {
+        $favoriteDishesId = auth()->user()->favoriteDishes()->get();
+
+        return FavoriteDishIdResource::collection($favoriteDishesId);
+    }
+
+    public final function myFavoritesDishes(DishFilter $filters): DishCollection|JsonResponse
+    {
+        $favoriteDishes = auth()->user()->favoriteDishes()->get();
+        $returnData = $this->service->favoriteDishes(favoriteDishesArray: $favoriteDishes->toArray());
+
+        if ($returnData['success'] === true) {
+            return new DishCollection($returnData['data']);
+        } else {
+            return (new MessageResource([
+                'success' => false,
+                'message' => $returnData['message']
+            ]))->response()
+                ->setStatusCode($returnData['code']);
         }
     }
 }

@@ -47,17 +47,16 @@ class LikeController extends Controller
         return UserResource::collection($users);
     }
 
-    public final function likedDishes(): DishCollection
+    public final function likedDishes(): AnonymousResourceCollection
     {
-        $likedDishes = auth()->user()->likes()->where('likeable_type', '=', 'App\\Models\\Dish')->get();
+        $likedDishes = auth()->user()->likes()->dishLikes()->get();
         $dishes = $this->service->getDishes(likedDishes: $likedDishes);
 
         if (!$dishes) {
             $dishes = array();
         }
 
-        return new DishCollection($dishes);
-        // return response()->json($returnData);
+        return DishResource::collection($dishes);
     }
 
     public final function returnData(object $dataReturn): MessageResource|JsonResponse

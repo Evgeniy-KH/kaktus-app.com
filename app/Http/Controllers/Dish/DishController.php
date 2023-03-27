@@ -4,34 +4,53 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Dish;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Dish\StoreRequest;
 use App\Http\Requests\Dish\UpdateRequest;
 use App\Http\Resources\DishResource;
 use App\Http\Resources\MessageResource;
+use App\Http\Resources\TagResource;
+use App\Models\Dish;
+use App\Models\Tag;
 use App\Service\DishService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class DishController
+class DishController extends Controller
 {
-    public function __construct(protected DishService $service)
+    public function __construct(protected DishService $service, protected  Dish $dish, protected Tag  $tag)
     {
+        $this->middleware('auth');
     }
 
-    // тут метод индекс. Тут метод ИНДЕКС.  И только тут будет логика что бы отдать все блюда для польхователя.!!!!!!
-
-
-    public final function store(StoreRequest $request): JsonResponse
+    public final function index(Request $request): AnonymousResourceCollection
     {
+      $dishes = $this->dish->filter($request->all())->with('dishImages', 'tags', 'likes')->withCount('likes')->paginate(4);
 
-        //TODO полный бред!!! Ты делаешь запись, но не проверяешь результат, и вслучае падения или ошибки, ты всё вернешь ответ.!!!
-        $result = $this->service->store(dishDto: $request->DTO());
+        if ($dishes->isEmpty()) {
+            return response()->json([
+                'message' => 'Your your filter doesn\'t\ match any dishes', 'code'
+            ], 404); ///404 Not Found
+        }
+        //Для примера.  Но твой вариант будет более уместен, так как будет обвертка для пагинации и прочего.
+        return DishResource::collection($dishes);
+    }
+
+    public final function show(int $id): DishResource
+    {
+        return new DishResource($this->dish->with('dishImages')->find(id: $id));
+    }
+
+    public final function store(StoreRequest $request): JsonResponse|MessageResource
+    {
+        $result = $this->service->store(dto: $request->DTO());
 
         if ($result) {
             return new MessageResource([
                 "success" => true,
                 'message' => 'You dish have been successfully stored'
             ]);
-            // return response()->json(["data" => $result, "success" => true]);
         } else {
             return (new MessageResource([
                 'success' => false,
@@ -39,13 +58,6 @@ class DishController
             ]))->response()
                 ->setStatusCode(500);
         }
-        
-        //Не сильно логично. 
-        // 200 ['status' => true, message => fdsfdsfdsf] 
-        // 500 [ message => fdsfdsfdsf] 
-
-
-
     }
 
     public final function edit(int $id): DishResource
@@ -75,7 +87,6 @@ class DishController
 
     public final function delete(int $id): JsonResponse|MessageResource
     {
-        //TODO сервис,
         $result = $this->service->deleteData(id: $id);
 
         if ($result) {
@@ -91,5 +102,12 @@ class DishController
                 ->setStatusCode(500);
         }
         // return response()->json(["success" => false]);
+    }
+
+    public final function tags(): AnonymousResourceCollection
+    {
+        $tags = $this->tag->all();
+
+        return TagResource::collection($tags);
     }
 }
