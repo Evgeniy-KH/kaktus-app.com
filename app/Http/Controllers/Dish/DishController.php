@@ -68,7 +68,6 @@ class DishController extends Controller
     public final function update(int $id, UpdateRequest $request): JsonResponse|MessageResource
     {
         $dishDto = $request->DTO();
-        //TODO  полменял что бы сломать класс.
         $dish = $this->service->update(dto: $dishDto, id: $id);
 
         if ($dish) {

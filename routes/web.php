@@ -44,7 +44,7 @@ Route::group(['namespace' => 'App\Http\Controllers\User', 'prefix' => 'user', 'm
     Route::view('/my_dishes', 'dish.my_dishes');
     Route::view('{userId}', 'user.edit');
     Route::post('{userId}', [UserController::class, 'update']);
-    Route::get('/favorite/dish', [FavoriteDishController::class, 'getFavoriteDishesId']);
+    Route::get('/favorite/dishId', [FavoriteDishController::class, 'getFavoriteDishesId']);
     Route::get('/favorite/dishes', [FavoriteDishController::class, 'myFavoritesDishes']);
 
     Route::group(['prefix' => 'dish'], function () {

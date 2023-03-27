@@ -17,6 +17,7 @@ class MessageResource extends JsonResource
     {
         if ($this->resource['success'] === false) {
             return [
+                'status' => $this->resource['success'],
                 'message' => $this->resource['message'],
             ];
         }

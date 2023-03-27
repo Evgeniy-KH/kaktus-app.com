@@ -29,14 +29,14 @@ class LikeController extends Controller
     {
         $user = $request->user()->like($request->likeable());
 
-        return $this->returnData(dataReturn: $user);
+        return $this->returnMessage(dataReturn: $user);
     }
 
     public final function unlike(UnlikeRequest $request): MessageResource|JsonResponse
     {
         $user = $request->user()->unlike($request->likeable());
 
-        return $this->returnData(dataReturn: $user);
+        return $this->returnMessage(dataReturn: $user);
     }
 
     public final function users(Request $request): AnonymousResourceCollection
@@ -59,7 +59,7 @@ class LikeController extends Controller
         return DishResource::collection($dishes);
     }
 
-    public final function returnData(object $dataReturn): MessageResource|JsonResponse
+    public final function returnMessage(object $dataReturn): MessageResource|JsonResponse
     {
         if ($dataReturn) {
             return new MessageResource([
