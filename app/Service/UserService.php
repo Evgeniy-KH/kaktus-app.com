@@ -20,7 +20,7 @@ class UserService
     public final function update(object $userDto, int $id): array
     {
         $user = $this->getUser($id);
-        $return = ['success' => true];
+        $return=['success' => true ];
 
         if ($userDto->getName() !== null || $userDto->getBirthday() !== null) {
 //          $birthday = Carbon::createFromFormat('m/d/Y', $data['birthday'])->format('Y-m-d');
@@ -62,6 +62,7 @@ class UserService
     public function favoriteDishes(array $favoriteDishesArray): array
     {
         $favoriteDishesId = [];
+        $returnData = [];
 
         foreach ($favoriteDishesArray as $favoriteDish) {
             array_push($favoriteDishesId, $favoriteDish['dish_id']);
@@ -83,6 +84,6 @@ class UserService
 
     public final function getUser(int $id): User
     {
-        return User::find(id: $id);
+        return User::find($id);
     }
 }

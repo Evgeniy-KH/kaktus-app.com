@@ -18,4 +18,10 @@ class Like extends Model
     {
         return $this->morphTo();
     }
+
+    public function scopeDishLikes($query)
+    {
+        return $query->where('likeable_type', '=', 'App\\Models\\Dish');
+    }
+
 }

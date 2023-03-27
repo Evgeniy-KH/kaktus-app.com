@@ -111,7 +111,8 @@
                 dataType: 'json',
                 data: data,
                 success: function (data) {
-                    $.each(data, function (i, item) {
+                    console.log(data);
+                    $.each(data['data'], function (i, item) {
                         let tags = `<option
                             {{
                             is_array( old('tag_ids')) && in_array(item['id'], old('tag_ids')) ? ' selected' : ''}} value="${item['id']}"
@@ -145,16 +146,16 @@
                 let tags = $('.select-tags').val();
 
                 for (let i = 0; i < tags.length; i++) {
-                    formData.append('tag_ids[]',  tags[i]);
+                    formData.append('tagIds[]',  tags[i]);
                 }
 
-                formData.append("user_id", $('#user-edit').attr('data-id'));
+                formData.append("userId", $('#user-edit').attr('data-id'));
                 formData.append("title", title);
                 formData.append("description",  description);
                 formData.append("ingredients", ingredients);
                 formData.append("price", $('#price').val());
-                formData.append("preview_image", $('#preview_image')[0].files[0]);
-                formData.append("main_image", $('#main_image')[0].files[0]);
+                formData.append("previewImage", $('#preview_image')[0].files[0]);
+                formData.append("mainImage", $('#main_image')[0].files[0]);
                 // for (let [key, value] of  formData) {
                 //     console.log(`${key}: ${value}`)
                 // }
@@ -189,11 +190,11 @@
                                     $('#price').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
                                     $('#input-group-price').append(rowError);
-                                } else if (key === 'preview_image') {
+                                } else if (key === 'previewImage') {
                                     $('#preview_image').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
                                     $('#input-group-preview-image').append(rowError);
-                                } else if (key === 'main_image') {
+                                } else if (key === 'mainImage') {
                                     $('#main_image').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
                                     $('#input-group-main-image').append(rowError);

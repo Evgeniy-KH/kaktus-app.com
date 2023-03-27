@@ -146,7 +146,11 @@
         }
 
         function showTags(data = {}) {
-            let tagsArray = data[0]['title'];
+            let tagsArray = [];
+
+            if (data.length != 0) {
+                let tagsArray = data[0]['title'];
+            }
 
             $.ajax({
                 url: `/catalog/dish/getTags`,
@@ -154,7 +158,8 @@
                 dataType: 'json',
                 data: data,
                 success: function (data) {
-                    $.each(data, function (i, item) {
+                    console.log(data);
+                    $.each(data['data'], function (i, item) {
                         if (tagsArray.indexOf(item['title']) !== -1) {
                             $('.select-tags').append($('<option>', {
                                 value: item['id'],
@@ -186,7 +191,7 @@
                 let formData = new FormData();
 
                 formData.append(' _method', 'PATCH');
-                formData.append("user_id", user_id);
+                formData.append("userId", user_id);
                 formData.append("id", $('#dish_card').attr('data-id'));
                 formData.append("title", $('#title').val().replace(/[^a-zA-Za-åa-ö-w-я 0-9/@%!"#?¨'_.,]+/g, ""));
                 formData.append("description", $('#description').val().replace(/[^a-zA-Za-åa-ö-w-я 0-9/@%!"#?¨'_.,] +/g, ""));
@@ -195,17 +200,17 @@
 
                 if ($('#preview_image')[0].files[0]) {
                     let preview_image = $('#preview_image')[0].files[0];
-                    formData.append("preview_image", preview_image);
+                    formData.append("previewImage", preview_image);
                 }
 
                 if ($('#main_image')[0].files[0]) {
                     let main_image = $('#main_image')[0].files[0];
-                    formData.append("main_image", main_image);
+                    formData.append("mainImage", main_image);
                 }
 
                 let tags = $('.select-tags').val();
                 for (let i = 0; i < tags.length; i++) {
-                    formData.append('tag_ids[]', tags[i]);
+                    formData.append('tagIds[]', tags[i]);
                 }
                 // for (let [key, value] of formData) {
                 //     console.log(`${key}: ${value}`)
@@ -240,11 +245,11 @@
                                     $('#price').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
                                     $('#input-group-price').append(rowError);
-                                } else if (key === 'preview_image') {
+                                } else if (key === 'previewImage') {
                                     $('#preview_image').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
                                     $('#input-group-preview-image').append(rowError);
-                                } else if (key === 'main_image') {
+                                } else if (key === 'mainImage') {
                                     $('#main_image').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
                                     $('#input-group-main-image').append(rowError);

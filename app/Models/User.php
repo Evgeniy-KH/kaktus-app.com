@@ -4,8 +4,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use http\QueryString;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -102,5 +104,12 @@ class User extends Authenticatable
         return $likeable->likes()
             ->whereHas('user', fn($q) => $q->whereId($this->id))
             ->exists();
+    }
+
+    public function scopeHasDish($query, $id): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->whereHas('dishes', function ($query) use ( $id) {
+            $query->where('id', $id);
+        });
     }
 }

@@ -43,35 +43,4 @@ class UserController extends BaseController
                 ->setStatusCode($returnData['code']);
         }
     }
-
-    public function getFavoriteDishes(): AnonymousResourceCollection
-    {
-        $favoriteDishes = auth()->user()->favoriteDishes()->get();
-
-        return FavoriteDishIdResource::collection($favoriteDishes);
-    }
-
-    public function myFavoritesDishes(DishFilter $filters): DishCollection|JsonResponse
-    {
-        $favoriteDishes = auth()->user()->favoriteDishes()->get();
-        $returnData = $this->service->favoriteDishes(favoriteDishesArray: $favoriteDishes->toArray());
-
-        if ($returnData['success'] === true) {
-            return new DishCollection($returnData['data']);
-        } else {
-            return (new MessageResource([
-                'success' => false,
-                'message' => $returnData['message']
-            ]))->response()
-                ->setStatusCode($returnData['code']);
-        }
-    }
-
-    public function usersDishes(): DishCollection
-    {
-        $usersDishes = auth()->user()->dishes()->with('dishImages', 'tags', 'likes')->withCount('likes')->paginate(8);
-
-        return new DishCollection($usersDishes);
-    }
-
 }
