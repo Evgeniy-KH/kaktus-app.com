@@ -5,6 +5,7 @@ namespace App\Http\Requests\Dish;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+
 class FilterRequest extends FormRequest
 {
     /**

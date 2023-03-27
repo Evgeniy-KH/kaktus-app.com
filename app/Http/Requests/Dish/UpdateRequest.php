@@ -39,7 +39,7 @@ class UpdateRequest extends FormRequest
         ];
     }
 
-    public final function DTO(): UpdateDto
+    public final function dto(): UpdateDto
     {
         return new UpdateDto(
             id:  (int)$this->input('id'),
