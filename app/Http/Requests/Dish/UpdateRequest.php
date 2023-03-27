@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Dish;
 
-use App\Data\Dish\UpdateDto;
+use App\Dto\Dish\UpdateDto;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateRequest extends FormRequest
@@ -26,16 +26,16 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'userId' => ["required", "integer", "exists:users,id"],
+            'user_id' => ["required", "integer", "exists:users,id"],
             'id' => ["required", "integer", "exists:dishes,id"],
             'title' => ["sometimes", "required", "string", "min:2", "max:200"],
             'ingredients' => ["sometimes", "required", "string", "min:1", "max:1250"],
             'description' => ["sometimes", "required", "string", "min:3", "max:4000"],
             'price' => ["sometimes", "required", "numeric", "min:0", "regex:/^\d{1,13}(\.\d{1,2})?$/"],
-            'previewImage' => ["sometimes", "required", "image", "mimes:jpg,png,jpeg,gif,svg", "max:2048"],
-            'mainImage' => ["sometimes", "required", "image", "max:20480"],
-            'tagIds' => ["nullable", "array"],
-            'tagIds.*' => ["nullable", "integer", "exists:tags,id"]
+            'preview_image' => ["sometimes", "required", "image", "mimes:jpg,png,jpeg,gif,svg", "max:2048"],
+            'main_image' => ["sometimes", "required", "image", "max:20480"],
+            'tag_ids' => ["nullable", "array"],
+            'tag_ids.*' => ["nullable", "integer", "exists:tags,id"]
         ];
     }
 
@@ -43,14 +43,14 @@ class UpdateRequest extends FormRequest
     {
         return new UpdateDto(
             id:  (int)$this->input('id'),
-            userId:  (int)$this->input('userId'),
+            userId:  (int)$this->input('user_id'),
             title:  $this->input('title'),
             ingredients: $this->input('ingredients'),
             description: $this->input('description'),
             price: (float) $this->input('price'),
-            previewImage:  $this->file('previewImage'),
-            mainImage: $this->file('mainImage'),
-            tagIds: $this->input('tagIds'),
+            previewImage:  $this->file('preview_image'),
+            mainImage: $this->file('main_image'),
+            tagIds: $this->input('tag_ids'),
         );
     }
 }

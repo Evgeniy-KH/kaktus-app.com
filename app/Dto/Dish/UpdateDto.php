@@ -1,30 +1,26 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Data\Dish;
+namespace App\Dto\Dish;
 
 use Illuminate\Http\UploadedFile;
 use Spatie\LaravelData\Data;
 
 class UpdateDto extends Data
 {
-
     public function __construct(
-        private readonly int         $id,
-        private readonly int         $userId,
-        private readonly string|null $title,
-        private readonly string|null $ingredients,
-        private readonly string|null $description,
-        private readonly float|null $price,
-        private readonly UploadedFile |null $previewImage,
-        private readonly UploadedFile |null $mainImage,
-        private readonly array|null  $tagIds)
+        private readonly int               $id,
+        private readonly int               $userId,
+        private readonly string|null       $title,
+        private readonly string|null       $ingredients,
+        private readonly string|null       $description,
+        private readonly float|null        $price,
+        private readonly UploadedFile|null $previewImage,
+        private readonly UploadedFile|null $mainImage,
+        private readonly array|null        $tagIds)
     {
     }
 
-    /**
-     * @return int
-     */
     public final function getId(): int
     {
         return $this->id;
@@ -60,7 +56,7 @@ class UpdateDto extends Data
         return $this->previewImage;
     }
 
-    public final function getMainImage():UploadedFile|null
+    public final function getMainImage(): UploadedFile|null
     {
         return $this->mainImage;
     }
@@ -69,5 +65,4 @@ class UpdateDto extends Data
     {
         return $this->tagIds;
     }
-
 }
