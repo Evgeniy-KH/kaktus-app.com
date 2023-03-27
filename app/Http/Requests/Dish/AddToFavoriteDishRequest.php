@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Dish;
 
-use App\Data\Dish\DishFavoriteDto;
+
+use App\Dto\Dish\FavoriteDto;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AddToFavoriteDishRequest extends FormRequest
@@ -30,7 +31,7 @@ class AddToFavoriteDishRequest extends FormRequest
         ];
     }
 
-    public final function DTO(): DishFavoriteDto
+    public final function DTO(): FavoriteDto
     {
         return new DishFavoriteDto(
             (int)$this->input('id')

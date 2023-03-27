@@ -191,7 +191,7 @@
                 let formData = new FormData();
 
                 formData.append(' _method', 'PATCH');
-                formData.append("userId", user_id);
+                formData.append("user_id", user_id);
                 formData.append("id", $('#dish_card').attr('data-id'));
                 formData.append("title", $('#title').val().replace(/[^a-zA-Za-åa-ö-w-я 0-9/@%!"#?¨'_.,]+/g, ""));
                 formData.append("description", $('#description').val().replace(/[^a-zA-Za-åa-ö-w-я 0-9/@%!"#?¨'_.,] +/g, ""));
@@ -200,17 +200,17 @@
 
                 if ($('#preview_image')[0].files[0]) {
                     let preview_image = $('#preview_image')[0].files[0];
-                    formData.append("previewImage", preview_image);
+                    formData.append("preview_image", preview_image);
                 }
 
                 if ($('#main_image')[0].files[0]) {
                     let main_image = $('#main_image')[0].files[0];
-                    formData.append("mainImage", main_image);
+                    formData.append("main_image", main_image);
                 }
 
                 let tags = $('.select-tags').val();
                 for (let i = 0; i < tags.length; i++) {
-                    formData.append('tagIds[]', tags[i]);
+                    formData.append('tag_ids[]', tags[i]);
                 }
                 // for (let [key, value] of formData) {
                 //     console.log(`${key}: ${value}`)
@@ -245,11 +245,11 @@
                                     $('#price').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
                                     $('#input-group-price').append(rowError);
-                                } else if (key === 'previewImage') {
+                                } else if (key === 'preview_image') {
                                     $('#preview_image').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
                                     $('#input-group-preview-image').append(rowError);
-                                } else if (key === 'mainImage') {
+                                } else if (key === 'main_image') {
                                     $('#main_image').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
                                     $('#input-group-main-image').append(rowError);

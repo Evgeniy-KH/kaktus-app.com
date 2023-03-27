@@ -149,13 +149,13 @@
                     formData.append('tagIds[]',  tags[i]);
                 }
 
-                formData.append("userId", $('#user-edit').attr('data-id'));
+                formData.append("user_id", $('#user-edit').attr('data-id'));
                 formData.append("title", title);
                 formData.append("description",  description);
                 formData.append("ingredients", ingredients);
                 formData.append("price", $('#price').val());
-                formData.append("previewImage", $('#preview_image')[0].files[0]);
-                formData.append("mainImage", $('#main_image')[0].files[0]);
+                formData.append("preview_image", $('#preview_image')[0].files[0]);
+                formData.append("main_image", $('#main_image')[0].files[0]);
                 // for (let [key, value] of  formData) {
                 //     console.log(`${key}: ${value}`)
                 // }
@@ -190,11 +190,11 @@
                                     $('#price').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
                                     $('#input-group-price').append(rowError);
-                                } else if (key === 'previewImage') {
+                                } else if (key === 'preview_image') {
                                     $('#preview_image').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
                                     $('#input-group-preview-image').append(rowError);
-                                } else if (key === 'mainImage') {
+                                } else if (key === 'main_image') {
                                     $('#main_image').addClass('is-invalid');
                                     let rowError = `<div class="invalid-feedback"> ${value[0]} </div>`
                                     $('#input-group-main-image').append(rowError);

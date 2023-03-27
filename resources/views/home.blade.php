@@ -121,6 +121,7 @@
 
                 let classLikes = classLike(item['likes']);
                 let likedUsersIds = getLikedUsersIds(item['likes']);
+                console.log( likedUsersIds)
                 let rows = '';
 
                 if (likedUsersIds.length != 0) {
