@@ -25,15 +25,11 @@ Route::get('/', function () {
 
 Auth::routes();
 
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
 Route::view('/home', 'home');
 Route::get('/catalog', [DishController::class, 'index'])->name('home.catalog');
-//Route::get('/catalog/pagination', [App\Http\Controllers\HomeController::class, 'paginationAjax']);
 Route::get('/catalog/dish/getTags', [DishController::class, 'tags']);
-//Route::post('/catalog/filter', [App\Http\Controllers\HomeController::class, 'filter']);
 Route::view('/catalog/dish/{id}', 'dish.show');
 Route::get('/catalog/dish/show/{id}', [DishController::class, 'show']);
-
 Route::get('auth/facebook', [SocialController::class, 'facebookRedirect']);
 Route::get('auth/facebook/callback', [SocialController::class, 'loginWithFacebook']);
 
@@ -42,8 +38,8 @@ Route::group(['namespace' => 'App\Http\Controllers\User', 'prefix' => 'user', 'm
     Route::view('/favorites_dishes', 'dish.favorites');
     Route::view('/liked_dishes', 'dish.my_liked');
     Route::view('/my_dishes', 'dish.my_dishes');
-    Route::view('{userId}', 'user.edit');
-    Route::post('{userId}', [UserController::class, 'update']);
+    Route::view('{id}', 'user.edit');
+    Route::post('{id}', [UserController::class, 'update']);
     Route::get('/favorite/dishId', [FavoriteDishController::class, 'getFavoriteDishesId']);
     Route::get('/favorite/dishes', [FavoriteDishController::class, 'myFavoritesDishes']);
 
@@ -56,17 +52,11 @@ Route::group(['namespace' => 'App\Http\Controllers\User', 'prefix' => 'user', 'm
         Route::post('/store', [DishController::class, 'store']);
         Route::post('/favorite', [FavoriteDishController::class, 'addToFavoriteDish']);
         Route::post('/disfavouring', [FavoriteDishController::class, 'removeFromFavoriteDish']);
-//        Route::get('/{dishId}/edit', [DishController::class,'editView'])->name('user.dish.edit');
-//        Route::get('/{dishId}/editData', [DishController::class,'editData']);
-        // Route::get('/create', [DishController::class,'create'])->name('user.dish.create');
-        //      Route::get('/', [DishController::class, 'index']);
-
         Route::group(['middleware' => ['dish.verified']], function () {
             Route::view('/{id}/edit', 'dish.edit');
             Route::get('/{id}/editData', [DishController::class, 'edit'])->name('user.dish.edit');
             Route::patch('/{id}', [DishController::class, 'update']);
             Route::delete('/{id}', [DishController::class, 'delete']);
-            // Route::get('/{dishId}/edit', [DishController::class,'editView'])->name('user.dish.edit');
         });
     });
 
