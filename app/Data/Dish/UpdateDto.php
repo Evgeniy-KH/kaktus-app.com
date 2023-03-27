@@ -3,21 +3,22 @@ declare(strict_types=1);
 
 namespace App\Data\Dish;
 
+use Illuminate\Http\UploadedFile;
 use Spatie\LaravelData\Data;
 
-class DishUpdateDto extends Data
+class UpdateDto extends Data
 {
 
     public function __construct(
         private readonly int         $id,
-        private readonly int         $user_id,
+        private readonly int         $userId,
         private readonly string|null $title,
         private readonly string|null $ingredients,
         private readonly string|null $description,
-        private readonly string|null $price,
-        private readonly object|null $preview_image,
-        private readonly object|null $main_image,
-        private readonly array|null  $tag_ids)
+        private readonly float|null $price,
+        private readonly UploadedFile |null $previewImage,
+        private readonly UploadedFile |null $mainImage,
+        private readonly array|null  $tagIds)
     {
     }
 
@@ -31,7 +32,7 @@ class DishUpdateDto extends Data
 
     public final function getUserId(): int
     {
-        return $this->user_id;
+        return $this->userId;
     }
 
     public final function getTitle(): string|null
@@ -49,24 +50,24 @@ class DishUpdateDto extends Data
         return $this->description;
     }
 
-    public final function getPrice(): string|null
+    public final function getPrice(): float|null
     {
         return $this->price;
     }
 
-    public final function getPreviewImage(): object|null
+    public final function getPreviewImage(): UploadedFile|null
     {
-        return $this->preview_image;
+        return $this->previewImage;
     }
 
-    public final function getMainImage(): object|null
+    public final function getMainImage():UploadedFile|null
     {
-        return $this->main_image;
+        return $this->mainImage;
     }
 
     public final function getTagsArray(): array|null
     {
-        return $this->tag_ids;
+        return $this->tagIds;
     }
 
 }
