@@ -429,7 +429,7 @@
 
         function favoriteDish(data = {}) {
             $.ajax({
-                url: `/user/favorite/dish`,
+                url: `/user/favorite/dishId`,
                 type: 'get',
                 dataType: 'json',
                 data: data,

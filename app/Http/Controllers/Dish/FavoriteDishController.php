@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Dish;
 
 use App\Filters\Dish\DishFilter;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\User\BaseController;
 use App\Http\Requests\Dish\AddToFavoriteDishRequest;
 use App\Http\Resources\DishCollection;
@@ -14,13 +15,12 @@ use App\Service\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class FavoriteDishController extends BaseController
+class FavoriteDishController extends Controller
 {
     public function __construct(
         protected UserService $userService
     )
     {
-        parent::__construct($userService);
     }
 
     public final function addToFavoriteDish(AddToFavoriteDishRequest $request): MessageResource|JsonResponse

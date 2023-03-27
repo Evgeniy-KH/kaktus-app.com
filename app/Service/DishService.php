@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-
-use App\Data\Dish\StoreDto;
-use App\Data\Dish\UpdateDto;
+use App\Dto\Dish\StoreDto;
+use App\Dto\Dish\UpdateDto;
 use App\Models\Dish;
 use App\Models\DishImage;
 use Illuminate\Support\Facades\DB;
