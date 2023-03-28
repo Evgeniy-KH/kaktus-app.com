@@ -32,7 +32,7 @@ class StoreRequest extends FormRequest
     }
 
     // нужно писатьс маленькой. dto() dTO()
-    public final function DTO(): StoreDto
+    public final function dto(): StoreDto
     {
         return new StoreDto(
             userId: (int)$this->input('user_id'),

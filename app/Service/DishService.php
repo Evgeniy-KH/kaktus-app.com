@@ -7,12 +7,25 @@ use App\Dto\Dish\StoreDto;
 use App\Dto\Dish\UpdateDto;
 use App\Models\Dish;
 use App\Models\DishImage;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class DishService
 {
     //TODO. Внёс измененияч которые ломают код.
+
+    public function index(Request $request):LengthAwarePaginator
+    {
+       return Dish::filter($request->all())->with('dishImages', 'tags', 'likes')->withCount('likes')->paginate(4);
+    }
+
+    public final function show(int $id): Dish
+    {
+      return Dish::with('dishImages', 'tags')->find(id: $id);
+    }
+
     public function store(StoreDto $dto): Dish
     {
         return DB::transaction(function () use ($dto) {
@@ -82,7 +95,7 @@ class DishService
         return Dish::with('dishImages', 'tags')->find($id);
     }
 
-    public function deleteData(int $id): bool
+    public function delete(int $id): bool
     {
         return DB::transaction(function () use ($id) {
             auth()->user()->favoriteDishes()->where('dish_id', $id)->delete();
