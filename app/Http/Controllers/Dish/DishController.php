@@ -7,7 +7,9 @@ namespace App\Http\Controllers\Dish;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dish\StoreRequest;
 use App\Http\Requests\Dish\UpdateRequest;
+use App\Http\Resources\DishCollection;
 use App\Http\Resources\DishResource;
+use App\Http\Resources\MessageCollection;
 use App\Http\Resources\MessageResource;
 use App\Http\Resources\TagResource;
 use App\Models\Dish;
@@ -16,63 +18,55 @@ use App\Service\DishService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Psy\Util\Json;
 
 class DishController extends Controller
 {
-
     //Dish $dish этого не должно быть!!!!!!!!!!!!! Или у тебя сервис или у тебя модель. Но не сервис и работа с моделью
-    //protected Tag  $tag так же само и это. Но тут подумать нужно. У тебя сервис, 
+    //protected Tag  $tag так же само и это. Но тут подумать нужно. У тебя сервис,
 
 
-    public function __construct(protected DishService $service, protected  Dish $dish, protected Tag  $tag)
+    public function __construct(protected DishService $service)
     {
-
-        //TODO написать мне почему этот код очень тупой и показывает, что вообще ничего не понимаешь в MVC  и Laravel!!!!
-        $this->middleware('auth');
     }
 
-    public final function index(Request $request): AnonymousResourceCollection
+    public final function index(Request $request): JsonResponse|DishCollection
     {
-      $dishes = $this->dish->filter($request->all())->with('dishImages', 'tags', 'likes')->withCount('likes')->paginate(4);
+        $dishes = $this->service->index(request: $request);
 
-        if ($dishes->isEmpty()) {
-            return response()->json([
-                'message' => 'Your your filter doesn\'t\ match any dishes', 'code'
-            ], 404); ///404 Not Found
+        if (!$dishes->isEmpty()) {
+            return new DishCollection($dishes);
+        } else {
+            return (new MessageResource([
+                "success" => !$dishes->isEmpty(),
+                "message" => !$dishes->isEmpty() ? '' : 'Your your filter doesn\'t\ match any dishes',
+                "data" => '',
+            ]))->response()
+                ->setStatusCode(!$dishes->isEmpty() ? 200 : 404);
         }
-        //Для примера.  Но твой вариант будет более уместен, так как будет обвертка для пагинации и прочего.
-
-        // return response()->json([
-        //     'message' => 'blalal',
-        //     'data' => DishResource::collection($dishes), 
-        // ]);
-
-        return DishResource::collection($dishes);
+//        return (new MessageResource([
+//            "success" => !$dishes->isEmpty(),
+//            "message" => !$dishes->isEmpty() ? '' : 'Your your filter doesn\'t\ match any dishes',
+//            "data" => !$dishes->isEmpty() ? new DishCollection($dishes) : '',
+//        ]))->response()
+//            ->setStatusCode(!$dishes->isEmpty() ? 200 : 404);
     }
 
     public final function show(int $id): DishResource
     {
-        //это в сервис
-        return new DishResource($this->dish->with('dishImages')->find(id: $id));
+        return new DishResource($this->service->show(id: $id));
     }
 
     public final function store(StoreRequest $request): JsonResponse|MessageResource
     {
-        //dto маленькой буквы
-        $result = $this->service->store(dto: $request->DTO());
+        $dish = $this->service->store(dto: $request->DTO());
 
-        if ($result) {
-            return new MessageResource([
-                "success" => true,
-                'message' => 'You dish have been successfully stored'
-            ]);
-        } else {
-            return (new MessageResource([
-                'success' => false,
-                'message' => 'Failed to create favorite'
-            ]))->response()
-                ->setStatusCode(500);
-        }
+        return (new MessageResource([
+            "success" => $dish->exists(),
+            "message" => $dish->exists() ? 'You dish have been successfully stored' : 'Failed to create favorite',
+            "data" => $dish->exists() ? new DishResource($dish) : '',
+        ]))->response()
+            ->setStatusCode($dish->exists() ? 200 : 500);
     }
 
     public final function edit(int $id): DishResource
@@ -82,45 +76,23 @@ class DishController extends Controller
 
     public final function update(int $id, UpdateRequest $request): JsonResponse|MessageResource
     {
-        $dishDto = $request->DTO();
-        $dish = $this->service->update(dto: $dishDto, id: $id);
+        $dish = $this->service->update(dto: $request->dto(), id: $id);
 
-        if ($dish) {
-            return new MessageResource([
-                "success" => true,
-                'message' => 'You dish have been successfully stored'
-            ]);
-        } else {
-            return (new MessageResource([
-                'success' => false,
-                'message' => 'Failed to create favorite'
-            ]))->response()
-                ->setStatusCode(500);
-        }
+        return (new MessageResource([
+            "success" => $dish->exists(),
+            "message" => $dish->exists() ? 'You dish have been successfully updated' : 'Failed to update',
+            "data" => $dish->exists() ? new DishResource($dish) : '',
+        ]))->response()
+            ->setStatusCode($dish->exists() ? 200 : 500);
     }
 
     public final function delete(int $id): JsonResponse|MessageResource
     {
-        $result = $this->service->deleteData(id: $id);
+        $result = $this->service->delete(id: $id);
 
-        if ($result) {
-            return new MessageResource([
-                "success" => true,
-                'message' => 'You dish have been successfully delete'
-            ]);
-        } else {
-            return (new MessageResource([
-                'success' => false,
-                'message' => 'Failed to create favorite'
-            ]))->response()
-                ->setStatusCode(500);
-        }
-        // return response()->json(["success" => false]);
-    }
-
-    //controller tag index.
-    public final function tags(): AnonymousResourceCollection
-    {
-        return TagResource::collection($this->tag->all());
+        return (new MessageResource([
+            "success" =>$result,
+            "message" => $result ? 'You dish have been successfully delete' : 'Failed to delete']))->response()
+            ->setStatusCode($result ? 200 : 500);
     }
 }

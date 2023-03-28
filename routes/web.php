@@ -5,6 +5,7 @@ use App\Http\Controllers\Dish\DishController;
 use App\Http\Controllers\Dish\FavoriteDishController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\SocialController;
+use App\Http\Controllers\Tag\TagController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,7 +28,7 @@ Auth::routes();
 
 Route::view('/home', 'home');
 Route::get('/catalog', [DishController::class, 'index'])->name('home.catalog');
-Route::get('/catalog/dish/getTags', [DishController::class, 'tags']);
+Route::get('/catalog/dish/getTags', [TagController::class, 'index']);
 Route::view('/catalog/dish/{id}', 'dish.show');
 Route::get('/catalog/dish/show/{id}', [DishController::class, 'show']);
 Route::get('auth/facebook', [SocialController::class, 'facebookRedirect']);
@@ -40,8 +41,8 @@ Route::group(['namespace' => 'App\Http\Controllers\User', 'prefix' => 'user', 'm
     Route::view('/my_dishes', 'dish.my_dishes');
     Route::view('{id}', 'user.edit');
     Route::post('{id}', [UserController::class, 'update']);
-    Route::get('/favorite/dishId', [FavoriteDishController::class, 'getFavoriteDishesId']);
-    Route::get('/favorite/dishes', [FavoriteDishController::class, 'myFavoritesDishes']);
+    Route::get('/favorite/dishId', [FavoriteDishController::class, 'show']);
+    Route::get('/favorite/dishes', [FavoriteDishController::class, 'index']);
 
     Route::group(['prefix' => 'dish'], function () {
         Route::view('/create', 'dish.create');
@@ -50,8 +51,8 @@ Route::group(['namespace' => 'App\Http\Controllers\User', 'prefix' => 'user', 'm
         Route::get('/liked', [LikeController::class, 'likedDishes']);
         Route::delete('/unlike', [LikeController::class, 'unlike']);
         Route::post('/store', [DishController::class, 'store']);
-        Route::post('/favorite', [FavoriteDishController::class, 'addToFavoriteDish']);
-        Route::post('/disfavouring', [FavoriteDishController::class, 'removeFromFavoriteDish']);
+        Route::post('/favorite', [FavoriteDishController::class, 'store']);
+        Route::post('/disfavouring', [FavoriteDishController::class, 'delete']);
         Route::group(['middleware' => ['dish.verified']], function () {
             Route::view('/{id}/edit', 'dish.edit');
             Route::get('/{id}/editData', [DishController::class, 'edit'])->name('user.dish.edit');

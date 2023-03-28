@@ -19,12 +19,15 @@ class MessageCollection extends ResourceCollection
      * @
      * var string
      */
-    public $collects = DishResource::class;
+    public $collects = DishCollection::class;
 
     public final function toArray($request): array
     {
+        dd($this);
         return [
-            'data' => $this->collection,
+//            'message'=>$this->resource['message'],
+//            'status' => $this->resource['success'],
+            'data' => $this->resource['data'],
         ];
     }
 }

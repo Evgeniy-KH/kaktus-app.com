@@ -15,15 +15,10 @@ class MessageResource extends JsonResource
      */
     public final function toArray($request): array
     {
-        if ($this->resource['success'] === false) {
-            return [
-                'status' => $this->resource['success'],
-                'message' => $this->resource['message'],
-            ];
-        }
-
         return [
+            'message'=>$this->resource['message'],
             'status' => $this->resource['success'],
+            'data' => $this->resource['data'],
         ];
     }
 }

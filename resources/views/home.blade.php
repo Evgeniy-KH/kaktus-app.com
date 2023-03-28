@@ -121,12 +121,12 @@
 
                 let classLikes = classLike(item['likes']);
                 let likedUsersIds = getLikedUsersIds(item['likes']);
-                console.log( likedUsersIds)
-                let rows = '';
+                // console.log( likedUsersIds)
+                // let rows = '';
 
-                if (likedUsersIds.length != 0) {
-                    rows = likeUserData(likedUsersIds, item['id']);
-                }
+                // if (likedUsersIds.length != 0) {
+                //     rows = likeUserData(likedUsersIds, item['id']);
+                // }
 
                 item['created_at'] = new Date(item['created_at']).toLocaleDateString("en-US", {
                     day: 'numeric',
@@ -222,6 +222,7 @@
         }
 
         function getLikedUsersIds(data) {
+            console.log(data+'get liked users ');
             let usersIds = [];
 
             if (data.length != 0) {
@@ -271,6 +272,7 @@
                     pagination(data['meta']);
                 },
                 error: function (data) {
+                    console.log(data)
                     var errors = data.responseJSON.message;
                     alert('Error: ' + errors);
                     // $(':input', '#filter-form')
