@@ -59,11 +59,13 @@ class UserService
         return $return;
     }
 
+    //
     public function favoriteDishes(array $favoriteDishesArray): array
     {
         $favoriteDishesId = [];
         $returnData = [];
-
+        
+        //TODO сделать это через коллекции ларавель!!!!!!!!!!!!!!!!!
         foreach ($favoriteDishesArray as $favoriteDish) {
             array_push($favoriteDishesId, $favoriteDish['dish_id']);
         }
@@ -71,7 +73,8 @@ class UserService
         $return['data'] = Dish::with('dishImages', 'tags')->whereIn('id', $favoriteDishesId)->paginate(8);
         $return['success'] = true;
 
-
+        
+        // TODO это не зона отвественности  сервиса писать сообщения или коды ошибок. 
         if ($return['data']->isEmpty()) {
             unset($return['data']);
             $return['success'] = false;
@@ -79,8 +82,37 @@ class UserService
             $return['code'] = 422;
         }
 
-        return $return;
+        return $Dish::with('dishImages', 'tags')->whereIn('id', $favoriteDishesId)->get();
     }
+
+    //колекция элоквиента
+    public function favoriteWithPagination(Collection $favoriteDishesArray, $paginateCount = 0): array
+    {
+        $favoriteDishesId = [];
+        $returnData = [];
+        
+        //TODO сделать это через коллекции ларавель!!!!!!!!!!!!!!!!!
+        foreach ($favoriteDishesArray as $favoriteDish) {
+            array_push($favoriteDishesId, $favoriteDish['dish_id']);
+        }
+
+        $return['data'] = Dish::with('dishImages', 'tags')->whereIn('id', $favoriteDishesId)->paginate(8);
+        $return['success'] = true;
+
+        
+        //TODO это не зона отвественности  сервиса писать сообщения или коды ошибок. 
+        // if ($return['data']->isEmpty()) {
+        //     unset($return['data']);
+        //     $return['success'] = false;
+        //     $return['message'] = 'Your favorites list are empty';
+        //     $return['code'] = 422;
+        // }
+
+        return $Dish::with('dishImages', 'tags')->whereIn('id', $favoriteDishesId)->paginate($paginateCount);
+    }
+
+
+
 
     public final function getUser(int $id): User
     {
