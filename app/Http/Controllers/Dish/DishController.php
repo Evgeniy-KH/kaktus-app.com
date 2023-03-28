@@ -19,8 +19,15 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class DishController extends Controller
 {
+
+    //Dish $dish этого не должно быть!!!!!!!!!!!!! Или у тебя сервис или у тебя модель. Но не сервис и работа с моделью
+    //protected Tag  $tag так же само и это. Но тут подумать нужно. У тебя сервис, 
+
+
     public function __construct(protected DishService $service, protected  Dish $dish, protected Tag  $tag)
     {
+
+        //TODO написать мне почему этот код очень тупой и показывает, что вообще ничего не понимаешь в MVC  и Laravel!!!!
         $this->middleware('auth');
     }
 
@@ -34,16 +41,24 @@ class DishController extends Controller
             ], 404); ///404 Not Found
         }
         //Для примера.  Но твой вариант будет более уместен, так как будет обвертка для пагинации и прочего.
+
+        // return response()->json([
+        //     'message' => 'blalal',
+        //     'data' => DishResource::collection($dishes), 
+        // ]);
+
         return DishResource::collection($dishes);
     }
 
     public final function show(int $id): DishResource
     {
+        //это в сервис
         return new DishResource($this->dish->with('dishImages')->find(id: $id));
     }
 
     public final function store(StoreRequest $request): JsonResponse|MessageResource
     {
+        //dto маленькой буквы
         $result = $this->service->store(dto: $request->DTO());
 
         if ($result) {
@@ -103,10 +118,9 @@ class DishController extends Controller
         // return response()->json(["success" => false]);
     }
 
+    //controller tag index.
     public final function tags(): AnonymousResourceCollection
     {
-        $tags = $this->tag->all();
-
-        return TagResource::collection($tags);
+        return TagResource::collection($this->tag->all());
     }
 }

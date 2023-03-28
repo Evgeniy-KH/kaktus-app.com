@@ -18,16 +18,23 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 class FavoriteDishController extends Controller
 {
     public function __construct(
-        protected UserService $userService
+        protected UserService $userService, 
+
+        protected FavoriteDish $favoriteDishes
     )
     {
     }
-
+    
+    //store
     public final function addToFavoriteDish(AddToFavoriteDishRequest $request): MessageResource|JsonResponse
     {
-        $dishId = $request->DTO()->getId();
-        $dish = auth()->user()->favoriteDishes()->updateOrCreate(['dish_id' => $dishId]);
+        //dto  с маленькой буквы. 
+        // $dish = $this->favoriteDishes->updateOrCreate(['dish_id' =>  $request->dto()->getId()])
+        $dish = auth()->favoriteDishes()->updateOrCreate(['dish_id' => $dishId]);
 
+        
+        //TODO почитать хорошие практики как возвращать(ВНИМАЕНИЕ ДЛЯ ТУПЫХ, ТУТ СЛОВО ВОЗВРАЩАТЬ, А НЕ ОБРАБАТЫВАТЬ) ошибки и неудачные ответы
+        
         if (!$dish) {
             return (new MessageResource([
                 'success' => false,
@@ -37,49 +44,50 @@ class FavoriteDishController extends Controller
         } else {
             return new MessageResource([
                 "success" => true,
+                "data" => $dish,
             ]);
         }
     }
 
+    //delete
     public final function removeFromFavoriteDish(AddToFavoriteDishRequest $request): MessageResource|JsonResponse
     {
         $dishId = $request->DTO()->getId();;
         // $dish= auth()->user()->favoriteDishes()->where('dish_id', $dishId)->delete();
-        $dish = auth()->user()->favoriteDishes()->findById(dishId: $dishId)->delete();
+        auth()->favoriteDishes()->findById(dishId: $dishId)->delete();
+        
+        //TODO  в качесвет примера, метод exist просто для примера, в дб фасаде он как то иначе называется. 
+        
 
-        if (!$dish === '1') {
-            return (new MessageResource([
-                'success' => false,
-                'message' => 'Failed to create favorite'
-            ]))->response()
-                ->setStatusCode(500); //500 Internal Server Error
-        } else {
-            return new MessageResource([
-                "success" => true,
-            ]);
-        }
+        $isSuccess = auth()->favoriteDishes()->findById(dishId: $dishId)->exist();
+
+    
+        return new MessageResource([
+            "success" => $isSuccess,
+            "message" => $isSuccess ? 'yesdasdsadasdassssssssssssssssssssssssssssssssssssss' : 'noccccccccccccccccccccccccccccccccccccccccc'
+        ]);
     }
 
+    //show
     public final function getFavoriteDishesId(): AnonymousResourceCollection
     {
         $favoriteDishesId = auth()->user()->favoriteDishes()->get();
+        
 
-        return FavoriteDishIdResource::collection($favoriteDishesId);
+        return new MessageResource([
+            "success" => true,
+            "data" => $FavoriteDishIdResource::collection($favoriteDishesId),
+        ]);
+
+        // return FavoriteDishIdResource::collection($favoriteDishesId);
     }
 
-    public final function myFavoritesDishes(DishFilter $filters): DishCollection|JsonResponse
+    //index
+    public final function index(DishFilter $filters): JsonResponse
     {
-        $favoriteDishes = auth()->user()->favoriteDishes()->get();
-        $returnData = $this->service->favoriteDishes(favoriteDishesArray: $favoriteDishes->toArray());
-
-        if ($returnData['success'] === true) {
-            return new DishCollection($returnData['data']);
-        } else {
-            return (new MessageResource([
-                'success' => false,
-                'message' => $returnData['message']
-            ]))->response()
-                ->setStatusCode($returnData['code']);
-        }
+        return (new MessageResource([
+            'success' => true,
+            'data' => auth()->user()->favoriteDishes()->with('dish', 'dish.dishImages', 'dish.tags')->paginate(8),
+        ]));
     }
 }
