@@ -9,6 +9,7 @@ use App\Http\Requests\Dish\StoreRequest;
 use App\Http\Requests\Dish\UpdateRequest;
 use App\Http\Resources\DishCollection;
 use App\Http\Resources\DishResource;
+use App\Http\Resources\ErrorResource;
 use App\Http\Resources\MessageCollection;
 use App\Http\Resources\MessageResource;
 use App\Http\Resources\TagResource;
@@ -22,34 +23,19 @@ use Psy\Util\Json;
 
 class DishController extends Controller
 {
-    //Dish $dish этого не должно быть!!!!!!!!!!!!! Или у тебя сервис или у тебя модель. Но не сервис и работа с моделью
-    //protected Tag  $tag так же само и это. Но тут подумать нужно. У тебя сервис,
-
-
     public function __construct(protected DishService $service)
     {
     }
 
-    public final function index(Request $request): JsonResponse|DishCollection
+    public final function index(Request $request): JsonResponse|DishCollection|ErrorResource|MessageResource
     {
         $dishes = $this->service->index(request: $request);
 
-        if (!$dishes->isEmpty()) {
-            return new DishCollection($dishes);
-        } else {
-            return (new MessageResource([
-                "success" => !$dishes->isEmpty(),
-                "message" => !$dishes->isEmpty() ? '' : 'Your your filter doesn\'t\ match any dishes',
-                "data" => '',
-            ]))->response()
-                ->setStatusCode(!$dishes->isEmpty() ? 200 : 404);
-        }
-//        return (new MessageResource([
-//            "success" => !$dishes->isEmpty(),
-//            "message" => !$dishes->isEmpty() ? '' : 'Your your filter doesn\'t\ match any dishes',
-//            "data" => !$dishes->isEmpty() ? new DishCollection($dishes) : '',
-//        ]))->response()
-//            ->setStatusCode(!$dishes->isEmpty() ? 200 : 404);
+        return new MessageResource(
+            resource: !$dishes->isEmpty() ? new DishCollection($dishes) : '',
+            message:   !$dishes->isEmpty() ? '' : 'Your your filter doesn\'t\ match any dishes',
+            statusCode: !$dishes->isEmpty() ? 200 : 404
+        );
     }
 
     public final function show(int $id): DishResource
@@ -61,12 +47,11 @@ class DishController extends Controller
     {
         $dish = $this->service->store(dto: $request->DTO());
 
-        return (new MessageResource([
-            "success" => $dish->exists(),
-            "message" => $dish->exists() ? 'You dish have been successfully stored' : 'Failed to create favorite',
-            "data" => $dish->exists() ? new DishResource($dish) : '',
-        ]))->response()
-            ->setStatusCode($dish->exists() ? 200 : 500);
+        return new MessageResource(
+            resource: $dish->exists() ? new DishResource($dish) : '',
+            message:  $dish->exists() ? 'You dish have been successfully stored' : 'Failed to store dish',
+            statusCode: $dish->exists() ? 200 : 500
+        );
     }
 
     public final function edit(int $id): DishResource
@@ -78,21 +63,39 @@ class DishController extends Controller
     {
         $dish = $this->service->update(dto: $request->dto(), id: $id);
 
-        return (new MessageResource([
-            "success" => $dish->exists(),
-            "message" => $dish->exists() ? 'You dish have been successfully updated' : 'Failed to update',
-            "data" => $dish->exists() ? new DishResource($dish) : '',
-        ]))->response()
-            ->setStatusCode($dish->exists() ? 200 : 500);
+        return new MessageResource(
+            resource: $dish->exists() ? new DishResource($dish) : '',
+            message:  $dish->exists() ? 'You dish have been successfully updated' : 'Failed to update',
+            statusCode: $dish->exists() ? 200 : 500
+        );
     }
 
     public final function delete(int $id): JsonResponse|MessageResource
     {
         $result = $this->service->delete(id: $id);
 
-        return (new MessageResource([
-            "success" =>$result,
-            "message" => $result ? 'You dish have been successfully delete' : 'Failed to delete']))->response()
-            ->setStatusCode($result ? 200 : 500);
+        return new MessageResource(
+            message:  $result ? 'You dish have been successfully delete' : 'Failed to delete',
+            statusCode: $result ? 200 : 500
+        );
     }
 }
+
+
+//        if (!$dishes->isEmpty()) {
+//            return new DishCollection($dishes);
+//        } else {
+//            return new MessageResource( message: 'Your your filter doesn\'t\ match any dishes', statusCode: 404);
+////            return (new MessageResource([
+////                "success" => !$dishes->isEmpty(),
+////                "message" => !$dishes->isEmpty() ? '' : 'Your your filter doesn\'t\ match any dishes',
+////                "data" => '',
+////            ]))->response()
+////                ->setStatusCode(!$dishes->isEmpty() ? 200 : 404);
+//        }
+
+//        return (new MessageResource([
+//            "message" => !$dishes->isEmpty() ? '' : 'Your your filter doesn\'t\ match any dishes',
+//            "data" => !$dishes->isEmpty() ? new DishCollection($dishes) : '',
+//        ]))->response()
+//            ->setStatusCode(!$dishes->isEmpty() ? 200 : 404);
