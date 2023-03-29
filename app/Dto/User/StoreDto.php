@@ -3,17 +3,18 @@ declare(strict_types=1);
 
 namespace App\Dto\User;
 
+use Illuminate\Http\UploadedFile;
 use Spatie\LaravelData\Data;
 
 class StoreDto extends Data
 {
     public function __construct(
-        private readonly string $name,
-        private readonly string|null $birthday,
-        private readonly string $email,
-        private readonly string|null $password,
-        private readonly string $current_password,
-        private readonly object|null $avatar_path,
+        private readonly string            $name,
+        private readonly string|null       $birthday,
+        private readonly string            $email,
+        private readonly string|null       $password,
+        private readonly string            $currentPassword,
+        private readonly UploadedFile|null $avatarPath,
     )
     {
     }
@@ -40,11 +41,11 @@ class StoreDto extends Data
 
     public final function getCurrentPassword(): string|null
     {
-        return $this->current_password;
+        return $this->currentPassword;
     }
 
     public final function getAvatarPath(): object|null
     {
-        return $this->avatar_path;
+        return $this->avatarPath;
     }
 }

@@ -25,38 +25,33 @@ class LikeController extends Controller
     {
     }
 
-    public final function like(LikeRequest $request): ResponseResource|JsonResponse
+    public final function store(LikeRequest $request): ResponseResource
     {
-        $user = $request->user()->like($request->likeable());
+        $user = $this->service->store(likeable: $request->likeable());
 
-        return $this->returnMessage(dataReturn: $user);
+        return new ResponseResource(resource: $user);
     }
 
-    public final function unlike(UnlikeRequest $request): ResponseResource|JsonResponse
+    public final function delete(UnlikeRequest $request): ResponseResource|JsonResponse
     {
-        $user = $request->user()->unlike($request->likeable());
+        $user = $this->service->delete(likeable: $request->likeable());
 
-        return $this->returnMessage(dataReturn: $user);
+        return new ResponseResource(resource: $user);
     }
 
-    public final function users(Request $request): AnonymousResourceCollection
+    public final function showUsers(Request $request): ResponseResource
     {
-        $usersId = $request->usersId;
-        $users = User::find(id: $usersId)->take(4);
+        $users = $this->service->showUsers(id: $request->usersId);
 
-        return UserResource::collection($users);
+        return new ResponseResource(resource: UserResource::collection($users));
     }
 
-    public final function likedDishes(): AnonymousResourceCollection
+    public final function showDishes(Request $request): ResponseResource
     {
-        $likedDishes = auth()->user()->likes()->dishLikes()->get();
-        $dishes = $this->service->getDishes(likedDishes: $likedDishes);
+        $dishes = $this->service->showDishes(id: (int)$request->id);
 
-        if (!$dishes) {
-            $dishes = array();
-        }
+        return new ResponseResource(resource: DishResource::collection($dishes));
 
-        return DishResource::collection($dishes);
     }
 
     public final function returnMessage(object $dataReturn): ResponseResource|JsonResponse

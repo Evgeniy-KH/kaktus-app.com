@@ -46,10 +46,10 @@ Route::group(['namespace' => 'App\Http\Controllers\User', 'prefix' => 'user', 'm
 
     Route::group(['prefix' => 'dish'], function () {
         Route::view('/create', 'dish.create');
-        Route::post('/like', [LikeController::class, 'like']);
-        Route::get('/users', [LikeController::class, 'users']);
-        Route::get('/liked', [LikeController::class, 'likedDishes']);
-        Route::delete('/unlike', [LikeController::class, 'unlike']);
+        Route::post('/like', [LikeController::class, 'store']);
+        Route::get('/users', [LikeController::class, 'showUsers']);
+        Route::post('/liked', [LikeController::class, 'showDishes']);
+        Route::delete('/unlike', [LikeController::class, 'delete']);
         Route::post('/store', [DishController::class, 'store']);
         Route::post('/favorite', [FavoriteDishController::class, 'store']);
         Route::post('/disfavouring', [FavoriteDishController::class, 'delete']);

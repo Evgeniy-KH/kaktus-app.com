@@ -4,17 +4,18 @@ declare(strict_types=1);
 namespace App\Dto\User;
 
 use Cassandra\Date;
+use Illuminate\Http\UploadedFile;
 use Spatie\LaravelData\Data;
 
 class UpdateDto extends Data
 {
     public function __construct(
-        private readonly string|null $name,
-        private readonly string|null $birthday,
-        private readonly string|null $email,
-        private readonly string|null $password,
-        private readonly string|null $current_password,
-        private readonly object|null $avatar_path,
+        private readonly string|null       $name,
+        private readonly string|null       $birthday,
+        private readonly string|null       $email,
+        private readonly string|null       $password,
+        private readonly string|null       $currentPassword,
+        private readonly UploadedFile|null $avatarPath,
     )
     {
     }
@@ -41,11 +42,11 @@ class UpdateDto extends Data
 
     public final function getCurrentPassword(): string|null
     {
-        return $this->current_password;
+        return $this->currentPassword;
     }
 
-    public final function getAvatarPath(): object|null
+    public final function getAvatarPath(): UploadedFile|null
     {
-        return $this->avatar_path;
+        return $this->avatarPath;
     }
 }

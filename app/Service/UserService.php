@@ -20,10 +20,9 @@ class UserService
 {
     public final function update(UpdateDto $dto, int $id): User|string
     {
-        $user = $this->getUser($id);
+        $user = $this->show(id: $id);
 
         if ($dto->getName() !== null || $dto->getBirthday() !== null) {
-//          $birthday = Carbon::createFromFormat('m/d/Y', $data['birthday'])->format('Y-m-d');
             $user->update([
                 'name' => $dto->getName(),
                 'birthday' => $dto->getBirthday()
@@ -36,7 +35,7 @@ class UserService
                     'password' => Hash::make($dto->getPassword())
                 ]);
             } else {
-               return $message = 'Your current password is incorrect';
+                return $message = 'Your current password is incorrect';
             }
         }
 
@@ -54,8 +53,19 @@ class UserService
         return $user;
     }
 
-    public final function getUser(int $id): User
+    public final function show(int $id): User
     {
         return User::find($id);
     }
+
+    public final function delete(int $id): bool
+    {
+        return DB::transaction(function () use ($id) {
+            User::find($id)->delete();
+            return true;
+        });
+    }
 }
+
+
+//          $birthday = Carbon::createFromFormat('m/d/Y', $data['birthday'])->format('Y-m-d');
