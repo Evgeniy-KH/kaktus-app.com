@@ -12,6 +12,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Service\UserService;
 use Illuminate\Http\JsonResponse;
+use Nette\Utils\Json;
 
 class UserController extends Controller
 {
@@ -29,8 +30,18 @@ class UserController extends Controller
 
         return new ResponseResource(
             resource: $returnData instanceof User ? new UserResource($returnData) : '',
-            message:    $returnData instanceof User ? '' : $returnData,
-            statusCode: $returnData instanceof User  ? 200 : 422
+            message: $returnData instanceof User ? '' : $returnData,
+            statusCode: $returnData instanceof User ? 200 : 422
+        );
+    }
+
+    public final function delete(int $id): ResponseResource
+    {
+        $user = $this->service->delete(id: $id);
+
+        return new ResponseResource(
+            message: $user ? 'Successfully deleted' : 'Try later to delete',
+            statusCode: $user ? 200 : 422
         );
     }
 }

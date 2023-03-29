@@ -8,31 +8,20 @@ use App\Dto\User\UpdateDto;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
-
 class UpdateRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize(): bool
+    public final function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
-    public function rules(): array
+    public final function rules(): array
     {
         return [
             'name' => ['sometimes', 'required', 'alpha_dash', 'string'],
             'birthday' => ['sometimes', 'required', 'date', 'before:today'],
             'email' => ['sometimes', 'required', 'string', 'email',],
-            'password' => ['sometimes', 'required', 'string','min:8', 'confirmed', 'different:current_password',
+            'password' => ['sometimes', 'required', 'string', 'min:8', 'confirmed', 'different:current_password',
 //                Password::min(8)
 //                    ->letters()
 //                    ->mixedCase()
@@ -48,12 +37,12 @@ class UpdateRequest extends FormRequest
     public final function dto(): UpdateDto
     {
         return new UpdateDto(
-            $this->input('name'),
-            $this->input('birthday'),
-            $this->input('email'),
-            $this->input('password'),
-            $this->input('current_password'),
-            $this->file('avatar_path'),
+            name: $this->input('name'),
+            birthday: $this->input('birthday'),
+            email: $this->input('email'),
+            password: $this->input('password'),
+            currentPassword: $this->input('current_password'),
+            avatarPath: $this->file('avatar_path'),
         );
     }
 }

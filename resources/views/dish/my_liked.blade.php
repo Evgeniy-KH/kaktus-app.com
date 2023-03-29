@@ -74,8 +74,10 @@
         function initCatalog() {
             $.ajax({
                 url: '/user/dish/liked',
-                type: 'get',
-                data: {},
+                type: 'post',
+                data: {
+                    "id": user_id
+                },
                 success: function (data) {
                     list(data['data'])
                 },
