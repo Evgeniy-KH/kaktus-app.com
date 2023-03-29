@@ -120,15 +120,15 @@
                 success: function (data) {
                     catalog(data['data']['data']);
                     pagination(data['data']['links']);
+
+                    if (data['data'] ==='')
+                    {
+                        alert(data['message']);
+                    }
                 },
                 error: function (data) {
                     let errors = data.responseJSON.message;
                     alert('Error: ' + errors);
-                    // $(':input', '#filter-form')
-                    //     .not(':button, :submit, :reset, :hidden')
-                    //     .val('')
-                    //     .prop('checked', false)
-                    //     .prop('selected', false);
                 }
             });
         }
@@ -157,7 +157,7 @@
                 type: 'post',
                 url: '/user/dish/disfavouring',
                 data: {
-                    'dish_id': dishId,
+                    'id': dishId,
                 },
                 success: function () {
                     initCatalog();
@@ -196,6 +196,8 @@
 
             $(document).on('click', '.disfavouring', function (event) {
                 let dishId = $(this).attr('id').split('_')[1];
+                console.log($(this))
+                console.log(dishId);
 
                 removeFromFavourites(dishId)
 

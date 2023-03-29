@@ -399,7 +399,7 @@
                     'id': dishId,
                 },
                 success: function (data) {
-                    if (data['data']['status'] === true) {
+                    if (data['status'] === 200) {
                         element.removeClass('favourite').addClass('disfavouring');
                         element.find('i').removeClass('far').addClass('fas');
                     }
@@ -419,7 +419,7 @@
                     'id': dishId,
                 },
                 success: function (data) {
-                    if (data['data']['status'] === true) {
+                    if (data['status'] === 200) {
                         element.removeClass('disfavouring').addClass('favourite');
                         element.find('i').removeClass('fas').addClass('far');
                     }

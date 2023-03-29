@@ -154,13 +154,13 @@
                     },
                     dataType: 'json',
                     success: function (data) {
-                        if (data === 'success') {
-                            alert('Password has beed updated successfully');
-                        }
+                        console.log(data);
+                        alert('Password has beed updated successfully');
                     },
                     error: function (data) {
                         if (data.status === 422) {
                             let errors = data.responseJSON.errors;
+                            console.log(errors);
 
                             $.each(errors, function (key, value) {
                                 if (key === 'current_password') {

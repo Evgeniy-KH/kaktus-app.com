@@ -7,7 +7,7 @@ use App\Http\Requests\LikeRequest;
 use App\Http\Requests\UnlikeRequest;
 use App\Http\Resources\DishCollection;
 use App\Http\Resources\DishResource;
-use App\Http\Resources\MessageResource;
+use App\Http\Resources\ResponseResource;
 use App\Http\Resources\UserResource;
 use App\Models\Dish;
 use App\Models\User;
@@ -25,14 +25,14 @@ class LikeController extends Controller
     {
     }
 
-    public final function like(LikeRequest $request): MessageResource|JsonResponse
+    public final function like(LikeRequest $request): ResponseResource|JsonResponse
     {
         $user = $request->user()->like($request->likeable());
 
         return $this->returnMessage(dataReturn: $user);
     }
 
-    public final function unlike(UnlikeRequest $request): MessageResource|JsonResponse
+    public final function unlike(UnlikeRequest $request): ResponseResource|JsonResponse
     {
         $user = $request->user()->unlike($request->likeable());
 
@@ -59,14 +59,14 @@ class LikeController extends Controller
         return DishResource::collection($dishes);
     }
 
-    public final function returnMessage(object $dataReturn): MessageResource|JsonResponse
+    public final function returnMessage(object $dataReturn): ResponseResource|JsonResponse
     {
         if ($dataReturn) {
-            return new MessageResource([
+            return new ResponseResource([
                 "success" => true,
             ]);
         } else {
-            return (new MessageResource([
+            return (new ResponseResource([
                 'success' => false,
             ]))->response()
                 ->setStatusCode(500);
