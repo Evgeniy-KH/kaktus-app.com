@@ -21,7 +21,7 @@ class StoreRequest extends FormRequest
                     $query->where('id', auth()->user()->id);
                 })
             ],// проверить если ser_id равно айторизрпрваному юзеру
-            'title' => ["required", "string", "min:12", "max:255"],
+            'title' => ["required", "string", "min:4", "max:255"],
             'ingredients' => ["required", "string", "min:1", "max:1250"],
             'description' => ["required", "string", "min:3", "max:4000"],
             'price' => ["required", "numeric", "min:0", "regex:/^\d{1,13}(\.\d{1,2})?$/"],

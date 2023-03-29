@@ -16,14 +16,14 @@ class DishService
 {
     //TODO. Внёс измененияч которые ломают код.
 
-    public function index(Request $request):LengthAwarePaginator
+    public function index(Request $request): LengthAwarePaginator
     {
-       return Dish::filter($request->all())->with('dishImages', 'tags', 'likes')->withCount('likes')->paginate(4);
+        return Dish::filter($request->all())->with('dishImages', 'tags', 'likes')->withCount('likes')->paginate(4);
     }
 
     public final function show(int $id): Dish
     {
-      return Dish::with('dishImages', 'tags')->find(id: $id);
+        return Dish::with('dishImages', 'tags')->find(id: $id);
     }
 
     public function store(StoreDto $dto): Dish
@@ -107,8 +107,9 @@ class DishService
 
     public function updateImage(array $image, Dish $dish): DishImage
     {
-        $currentImages = DishImage::findIdAndType($image['dish_id'], $image['type_id'])->delete();
+        DishImage::findIdAndType($image['dish_id'], $image['type_id'])->delete();
         $newImage = DishImage::firstOrCreate($image);
+
         return $dish->dishImages()->save($newImage);
     }
 }

@@ -4,21 +4,28 @@ declare(strict_types=1);
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class MessageResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
-     */
+    public function __construct(mixed $resource = null, string $message = '', int $statusCode = 200)
+    {
+        $this->resource = $resource;
+        $this->message = $message;
+        $this->statusCode = $statusCode;
+    }
+
     public final function toArray($request): array
     {
         return [
-            'message'=>$this->resource['message'],
-            'status' => $this->resource['success'],
-            'data' => $this->resource['data'],
+            'message' => $this->message,
+            'status' => $this->statusCode,
+            'data' => $this->resource,
         ];
+    }
+
+    public final function withResponse($request, $response): void
+    {
+        $response->setStatusCode($this->statusCode);
     }
 }
