@@ -8,11 +8,11 @@ use Spatie\LaravelData\Data;
 class StoreDto extends Data
 {
     public function __construct(
-        private readonly string|null $name,
+        private readonly string $name,
         private readonly string|null $birthday,
-        private readonly string|null $email,
+        private readonly string $email,
         private readonly string|null $password,
-        private readonly string|null $current_password,
+        private readonly string $current_password,
         private readonly object|null $avatar_path,
     )
     {

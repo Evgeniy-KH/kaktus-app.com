@@ -6,7 +6,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class MessageResource extends JsonResource
+class ResponseResource extends JsonResource
 {
     public function __construct(mixed $resource = null, string $message = '', int $statusCode = 200)
     {

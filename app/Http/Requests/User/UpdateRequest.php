@@ -4,7 +4,10 @@ declare(strict_types=1);
 namespace App\Http\Requests\User;
 
 use App\Data\User\UserUpdateDto;
+use App\Dto\User\UpdateDto;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
+
 
 class UpdateRequest extends FormRequest
 {
@@ -28,16 +31,23 @@ class UpdateRequest extends FormRequest
         return [
             'name' => ['sometimes', 'required', 'alpha_dash', 'string'],
             'birthday' => ['sometimes', 'required', 'date', 'before:today'],
-            'email' => ['sometimes', 'required', 'string', 'email'],
-            'password' => ['sometimes', 'required', 'string', 'min:8', 'confirmed', 'different:current_password'],
-            'current_password' => ['sometimes', 'required', 'string', 'min:8', 'current_password'],
+            'email' => ['sometimes', 'required', 'string', 'email',],
+            'password' => ['sometimes', 'required', 'string','min:8', 'confirmed', 'different:current_password',
+//                Password::min(8)
+//                    ->letters()
+//                    ->mixedCase()
+//                    ->numbers()
+//                    ->symbols()
+//                    ->uncompromised()
+            ],
+            'current_password' => ['sometimes', 'required', 'string', 'min:8'],
             'avatar_path' => ['sometimes', 'required', 'image', 'mimes:jpg,png,jpeg,gif,svg', 'max:20480'],
         ];
     }
 
-    public final function DTO(): UserUpdateDto
+    public final function dto(): UpdateDto
     {
-        return new UserUpdateDto(
+        return new UpdateDto(
             $this->input('name'),
             $this->input('birthday'),
             $this->input('email'),

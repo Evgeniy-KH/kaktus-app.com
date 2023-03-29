@@ -10,7 +10,7 @@ use App\Http\Controllers\User\BaseController;
 use App\Http\Requests\Dish\AddToFavoriteDishRequest;
 use App\Http\Resources\DishCollection;
 use App\Http\Resources\FavoriteDishIdResource;
-use App\Http\Resources\MessageResource;
+use App\Http\Resources\ResponseResource;
 use App\Models\Dish;
 use App\Models\FavoriteDish;
 use App\Service\UserService;
@@ -28,44 +28,44 @@ class FavoriteDishController extends Controller
     }
 
     //store
-    public final function store(AddToFavoriteDishRequest $request): MessageResource|JsonResponse
+    public final function store(AddToFavoriteDishRequest $request): ResponseResource|JsonResponse
     {
-        $dish = auth()->favoriteDishes()->updateOrCreate(['dish_id' => $request->dto()->getId()]);
+        $dish =auth()->user()->favoriteDishes()->updateOrCreate(['dish_id' => $request->dto()->getId()]);
 
 //        if (!$dish) {
 //            return new MessageResource(message: 'Failed to create favorite', statusCode: 500);
 //        } else {
 //            return new MessageResource(resource: $dish, message: 'Store successfully', statusCode: 200);
 //        }
-        return new MessageResource(
+        return new ResponseResource(
             resource: !$dish  ? '' : $dish,
             message:  !$dish  ? 'Failed to create favorite' : 'Store successfully',
             statusCode:!$dish  ?  500 : 200
         );
     }
 
-    public final function delete(AddToFavoriteDishRequest $request): MessageResource|JsonResponse
+    public final function delete(AddToFavoriteDishRequest $request): ResponseResource|JsonResponse
     {
         $dishId = $request->DTO()->getId();;
-        auth()->favoriteDishes()->findById(dishId: $dishId)->delete();
-        $isSuccess = auth()->favoriteDishes()->findById(dishId: $dishId)->doesntExist();
+        auth()->user()->favoriteDishes()->findById(dishId: $dishId)->delete();
+        $isSuccess = auth()->user()->favoriteDishes()->findById(dishId: $dishId)->doesntExist();
 
-        return new MessageResource(
+        return new ResponseResource(
             message: $isSuccess ? 'Deleted successfully' : 'Try again later',
             statusCode: $isSuccess ? 200 : 404
         );
     }
 
-    public final function show(): AnonymousResourceCollection|MessageResource
+    public final function show(): AnonymousResourceCollection|ResponseResource
     {
         $favoriteDishesId = auth()->user()->favoriteDishes()->get();
 
-        return new MessageResource(
+        return new ResponseResource(
             resource: FavoriteDishIdResource::collection($favoriteDishesId),
         );
     }
 
-    public final function index(DishFilter $filters): MessageResource
+    public final function index(DishFilter $filters): ResponseResource
     {
         $dishes = Dish::select('dishes.*')
             ->join('favorite_dishes', 'favorite_dishes.dish_id', '=', 'dishes.id')
@@ -73,7 +73,7 @@ class FavoriteDishController extends Controller
             ->with('dishImages', 'tags')
             ->paginate(8);
 
-        return new MessageResource(
+        return new ResponseResource(
             resource: !$dishes->isEmpty() ? new DishCollection($dishes) : '',
             message:   !$dishes->isEmpty() ? '' : 'Your list of favorites dishes are empty',
         );

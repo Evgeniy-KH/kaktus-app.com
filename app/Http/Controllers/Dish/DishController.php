@@ -10,16 +10,10 @@ use App\Http\Requests\Dish\UpdateRequest;
 use App\Http\Resources\DishCollection;
 use App\Http\Resources\DishResource;
 use App\Http\Resources\ErrorResource;
-use App\Http\Resources\MessageCollection;
-use App\Http\Resources\MessageResource;
-use App\Http\Resources\TagResource;
-use App\Models\Dish;
-use App\Models\Tag;
+use App\Http\Resources\ResponseResource;
 use App\Service\DishService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Psy\Util\Json;
 
 class DishController extends Controller
 {
@@ -27,11 +21,11 @@ class DishController extends Controller
     {
     }
 
-    public final function index(Request $request): JsonResponse|DishCollection|ErrorResource|MessageResource
+    public final function index(Request $request): JsonResponse|DishCollection|ErrorResource|ResponseResource
     {
         $dishes = $this->service->index(request: $request);
 
-        return new MessageResource(
+        return new ResponseResource(
             resource: !$dishes->isEmpty() ? new DishCollection($dishes) : '',
             message:   !$dishes->isEmpty() ? '' : 'Your your filter doesn\'t\ match any dishes',
             statusCode: !$dishes->isEmpty() ? 200 : 404
@@ -43,11 +37,11 @@ class DishController extends Controller
         return new DishResource($this->service->show(id: $id));
     }
 
-    public final function store(StoreRequest $request): JsonResponse|MessageResource
+    public final function store(StoreRequest $request): JsonResponse|ResponseResource
     {
         $dish = $this->service->store(dto: $request->DTO());
 
-        return new MessageResource(
+        return new ResponseResource(
             resource: $dish->exists() ? new DishResource($dish) : '',
             message:  $dish->exists() ? 'You dish have been successfully stored' : 'Failed to store dish',
             statusCode: $dish->exists() ? 200 : 500
@@ -59,22 +53,22 @@ class DishController extends Controller
         return new DishResource($this->service->getData(id: $id));
     }
 
-    public final function update(int $id, UpdateRequest $request): JsonResponse|MessageResource
+    public final function update(int $id, UpdateRequest $request): JsonResponse|ResponseResource
     {
         $dish = $this->service->update(dto: $request->dto(), id: $id);
 
-        return new MessageResource(
+        return new ResponseResource(
             resource: $dish->exists() ? new DishResource($dish) : '',
             message:  $dish->exists() ? 'You dish have been successfully updated' : 'Failed to update',
             statusCode: $dish->exists() ? 200 : 500
         );
     }
 
-    public final function delete(int $id): JsonResponse|MessageResource
+    public final function delete(int $id): JsonResponse|ResponseResource
     {
         $result = $this->service->delete(id: $id);
 
-        return new MessageResource(
+        return new ResponseResource(
             message:  $result ? 'You dish have been successfully delete' : 'Failed to delete',
             statusCode: $result ? 200 : 500
         );
