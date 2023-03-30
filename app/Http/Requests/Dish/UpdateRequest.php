@@ -28,7 +28,7 @@ class UpdateRequest extends FormRequest
         return [
             'user_id' => ["required", "integer", "exists:users,id"],
             'id' => ["required", "integer", "exists:dishes,id"],
-            'title' => ["sometimes", "required", "string", "min:25", "max:255"],
+            'title' => ["sometimes", "string", "min:25", "max:255"],
             'ingredients' => ["sometimes", "required", "string", "min:1", "max:1250"],
             'description' => ["sometimes", "required", "string", "min:3", "max:4000"],
             'price' => ["sometimes", "required", "numeric", "min:0", "regex:/^\d{1,13}(\.\d{1,2})?$/"],
