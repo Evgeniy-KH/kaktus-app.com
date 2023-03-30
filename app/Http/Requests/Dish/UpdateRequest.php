@@ -28,13 +28,12 @@ class UpdateRequest extends FormRequest
         return [
             'user_id' => ["required", "integer", "exists:users,id"],
             'id' => ["required", "integer", "exists:dishes,id"],
-            'title' => ["sometimes", "string", "min:25", "max:255"],
-            'ingredients' => ["sometimes", "required", "string", "min:1", "max:1250"],
-            'description' => ["sometimes", "required", "string", "min:3", "max:4000"],
-            'price' => ["sometimes", "required", "numeric", "min:0", "regex:/^\d{1,13}(\.\d{1,2})?$/"],
-            'preview_image' => ["sometimes", "required", "image", "mimes:jpg,png,jpeg,gif,svg", "max:2048"],
-            'main_image' => ["sometimes", "required", "image", "max:20480"],
-            'tag_ids' => ["nullable", "array"],
+            'title' => ["sometimes", "string", "min:4", "max:255"],
+            'ingredients' => ["sometimes", "string", "min:1", "max:1250"],
+            'description' => ["sometimes", "string", "min:3", "max:4000"],
+            'price' => ["sometimes", "numeric", "min:0", "regex:/^\d{1,13}(\.\d{1,2})?$/"],
+            'preview_image' => ["sometimes", "image", "mimes:jpg,png,jpeg,gif,svg", "max:2048"],
+            'main_image' => ["sometimes", "image", "max:20480"],
             'tag_ids.*' => ["nullable", "integer", "exists:tags,id"]
         ];
     }

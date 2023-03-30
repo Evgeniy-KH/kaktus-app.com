@@ -36,9 +36,9 @@
 
             $.each(images, function (i, image) {
                 if (image['type_id'] == '0') {
-                    previewImage = image['image']
+                    previewImage = image['path']
                 } else if (image['type_id'] == '1') {
-                    mainImage = image['image']
+                    mainImage = image['path']
                 }
             })
 
@@ -57,11 +57,12 @@
         }
 
         function catalog(data) {
+
             $('#catalog').remove()
             let row = `<div class="row tm-mb-90 tm-gallery" id="catalog">`
             $('#main-catalog').prepend(row);
 
-            $.each(data, function (i, item) {
+            $.each(data['data'], function (i, item) {
                 let countLikes = likes(item['likes_count'])
                 let countLikesShow = 'hidden'
 
@@ -141,7 +142,7 @@
                 },
                 success: function (data) {
                     catalog(data['data']);
-                    pagination(data['meta']);
+                    pagination(data['data']);
                 },
                 error: function (data) {
                     let errors = data.responseJSON.message;
@@ -220,6 +221,7 @@
         }
 
         function pagination(data = {}) {
+            console.log(data);
             $('.tm-paging-link').remove();
 
             $.each(data['links'], function (i, item) {
@@ -260,7 +262,7 @@
                     },
                     success: function (data) {
                         catalog(data['data']);
-                        pagination(data['meta']);
+                        pagination(data['data']);
                     }
                 });
             }

@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DishImage extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     const TYPE_PREVIEW = 0;
     const TYPE_MAIN = 1;
@@ -15,12 +17,23 @@ class DishImage extends Model
     protected $guarded = false;
     protected $table = 'dish_images';
 
+    protected $fillable = [
+        'path',
+        'type_id'
+    ];
+
     public static function getTypes(): array
     {
         return [
-            self::TYPE_PREVIEW => 'preview',
-            self::TYPE_MAIN => 'main'
+            'preview' => self::TYPE_PREVIEW,
+            'main' => self::TYPE_MAIN
         ];
+    }
+
+    public static function getTypeConst(string $key): string|null
+    {
+        $types = self::getTypes();
+        return $types[$key] ?? null;
     }
 
     public function dishes(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -28,12 +41,12 @@ class DishImage extends Model
         return $this->belongsTo(Dish::class, 'dish_id', 'id');
     }
 
-    public function scopeGetByDishId(Builder $query, int $dishId): Builder
+    public function scopeGetByDishId($query, int $dishId)
     {
         return $query->where('dish_id', '=', $dishId);
     }
 
-    public function scopeGetByTypeId(Builder $query, int $typeId): Builder
+    public function scopeGetByTypeId($query, int $typeId)
     {
         return $query->where('type_id', '=', $typeId);
     }

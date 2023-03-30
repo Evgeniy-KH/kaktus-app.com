@@ -118,6 +118,7 @@
                 dataType: 'json',
                 data: data,
                 success: function (data) {
+                    console.log(data);
                     data = data['data'];
                     showTags(data['tags']);
                     let title = `<input id="title" type="text"
@@ -129,8 +130,8 @@
                                   name="description" required autocomplete="description">${data['description']}</textarea>`
                     let price = ` <input type="number" min="0.00" max="10000.00" step="0.01"  name="price"  value="${data['price']}" id="price"/>`
 
-                    let preview_image = `<img src="/storage/${data['dish_images'][0]['image']}" width="200" class="img-fluid img-thumbnail">`
-                    let main_image = `<img src="/storage/${data['dish_images'][1]['image']}" width="200" class="img-fluid img-thumbnail">`
+                    let preview_image = `<img src="/storage/${data['dish_images'][0]['path']}" width="200" class="img-fluid img-thumbnail">`
+                    let main_image = `<img src="/storage/${data['dish_images'][1]['path']}" width="200" class="img-fluid img-thumbnail">`
 
                     $('#input-group-title').append(title);
                     $('#input-group-ingredients').append(ingredients);

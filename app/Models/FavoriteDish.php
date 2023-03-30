@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FavoriteDish extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'favorite_dishes';
     protected $guarded = false;
@@ -24,7 +26,7 @@ class FavoriteDish extends Model
 
     public function dishes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Dish::class);
+        return $this->belongsToMany(Dish::class, 'favorite_dishes');
     }
 
     public function scopeFindById($query, $dishId)

@@ -25,9 +25,9 @@ class LikeService
         return auth()->user()->unlike($likeable);
     }
 
-    public final function showUsers(int $id): User
+    public final function showUsers(array $ids): \Illuminate\Database\Eloquent\Collection
     {
-        return User::find(id: $id)->take(4);
+        return User::find(id: $ids)->take(4);
     }
 
     public final function showDishes(int $id): \Illuminate\Database\Eloquent\Collection

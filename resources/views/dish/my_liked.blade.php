@@ -51,9 +51,9 @@
 
             $.each(images, function (i, image) {
                 if (image['type_id'] == '0') {
-                    previewImage = image['image']
+                    previewImage = image['path']
                 } else if (image['type_id'] == '1') {
-                    mainImage = image['image']
+                    mainImage = image['path']
                 }
             })
 
