@@ -40,11 +40,15 @@ class DishController extends Controller
     public final function store(StoreRequest $request): JsonResponse|ResponseResource
     {
         $dish = $this->service->store(dto: $request->DTO());
+        //TODO всё в одной переменной и её уже проверяем.
+        $isExistsDish = $dish->exists();
 
         return new ResponseResource(
-            resource: $dish->exists() ? new DishResource($dish) : '',
-            message:  $dish->exists() ? 'You dish have been successfully stored' : 'Failed to store dish',
-            statusCode: $dish->exists() ? 200 : 500
+            // resource: $dish->exists() ? new DishResource($dish) : '',
+            //null вместо пустой строки.
+            resource: $isExistsDish ? new DishResource($dish) : null,
+            message:  $isExistsDish ? 'You dish have been successfully stored' : 'Failed to store dish',
+            statusCode: $isExistsDish ? 200 : 500
         );
     }
 

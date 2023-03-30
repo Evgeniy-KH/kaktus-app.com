@@ -39,8 +39,11 @@ class LikeService
 //            $dishes = array();
 //        }
 
+        //1. Поменять на with
+        //2. СКАЗАТЬ ТОЧНО И ОТЧËТЛИВО чем будет отличаться запрос, результат и форма результата при запросе с with  и join.
         return Dish::select('dishes.*')
             ->join('likes', 'likes.likeable_id', '=', 'dishes.id')
+            //TODO какой то бред.
             ->where('likes.likeable_type', 'App\Models\Dish')
             ->where('likes.user_id', $id)
             ->with('dishImages', 'tags')
