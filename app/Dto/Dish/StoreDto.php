@@ -59,8 +59,13 @@ class StoreDto extends Data
         return $this->mainImage;
     }
 
-    public final function getTagsArray(): array|null
+    public final function getTagIds(): array|null
     {
         return $this->tagIds;
+    }
+
+    public final function getImages(): array
+    {
+        return (['preview'=> $this->previewImage,'main'=> $this->mainImage]);
     }
 }

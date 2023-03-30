@@ -17,7 +17,7 @@ class DishImageResource extends JsonResource
     {
         return [
             'dish_id' => $this->dish_id,
-            'image' => $this->image,
+            'path' => $this->path,
             'type_id' => $this->type_id,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),

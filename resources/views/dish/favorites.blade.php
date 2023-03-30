@@ -34,10 +34,11 @@
             let mainImage = '';
 
             $.each(images, function (i, image) {
+                console.log(image);
                 if (image['type_id'] == '0') {
-                    previewImage = image['image']
+                    previewImage = image['path']
                 } else if (image['type_id'] == '1') {
-                    mainImage = image['image']
+                    mainImage = image['path']
                 }
             })
 
@@ -56,7 +57,6 @@
         }
 
         function catalog(data) {
-            console.log(data);
             $('#catalog').remove()
             let row = `<div class="row tm-mb-90 tm-gallery" id="catalog">`
             $('#main-catalog').prepend(row);
@@ -134,7 +134,6 @@
         }
 
         function pagination(data = {}) {
-            console.log(data)
             $('.tm-paging-link').remove();
 
             $.each(data, function (i, item) {
@@ -196,8 +195,6 @@
 
             $(document).on('click', '.disfavouring', function (event) {
                 let dishId = $(this).attr('id').split('_')[1];
-                console.log($(this))
-                console.log(dishId);
 
                 removeFromFavourites(dishId)
 

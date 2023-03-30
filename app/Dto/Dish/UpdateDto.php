@@ -61,8 +61,22 @@ class UpdateDto extends Data
         return $this->mainImage;
     }
 
-    public final function getTagsArray(): array|null
+    public final function getTagIds(): array|null
     {
         return $this->tagIds;
+    }
+
+    public final function getImages(): array|null
+    {
+        if ($this->previewImage)
+        {
+            $data['preview'] = $this->previewImage;
+        }
+
+        if ($this->mainImage)
+        {
+            $data['main'] = $this->mainImage;
+        }
+        return $data;
     }
 }

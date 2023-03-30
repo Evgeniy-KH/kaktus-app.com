@@ -41,7 +41,7 @@ class LikeController extends Controller
 
     public final function showUsers(Request $request): ResponseResource
     {
-        $users = $this->service->showUsers(id: $request->usersId);
+        $users = $this->service->showUsers(ids: $request->usersId);
 
         return new ResponseResource(resource: UserResource::collection($users));
     }

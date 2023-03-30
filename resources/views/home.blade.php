@@ -58,14 +58,15 @@
         }
 
         function checkImages(images) {
+            console.log(images);
             let previewImage = '';
             let mainImage = '';
 
             $.each(images, function (i, image) {
                 if (image['type_id'] == '0') {
-                    previewImage = image['image'];
+                    previewImage = image['path'];
                 } else if (image['type_id'] == '1') {
-                    mainImage = image['image'];
+                    mainImage = image['path'];
                 }
             })
 
@@ -222,7 +223,6 @@
         }
 
         function getLikedUsersIds(data) {
-            console.log(data+'get liked users ');
             let usersIds = [];
 
             if (data.length != 0) {
@@ -268,12 +268,10 @@
                     tagsId: filters['tagsId'],
                 },
                 success: function (data) {
-                    console.log(data);
-                     catalog(data['data']['data']);
+                    catalog(data['data']['data']);
                     pagination(data['data']['links']);
                 },
                 error: function (data) {
-                    console.log(data)
                     var errors = data.responseJSON.message;
                     alert('Error: ' + errors);
                     // $(':input', '#filter-form')
@@ -286,7 +284,6 @@
         }
 
         function pagination(data = {}) {
-            console.log(data)
             $('.tm-paging-link').remove();
 
             $.each(data, function (i, item) {

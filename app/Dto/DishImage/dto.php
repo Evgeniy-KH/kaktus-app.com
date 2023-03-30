@@ -1,5 +1,4 @@
 <?php
-// ПОчему папка дата???? дата означает данные а тут у тебя не данные тут у тебя классы которые отвечают. Папка Dto
 declare(strict_types=1);
 
 namespace App\Dto\DishImage;
@@ -10,62 +9,26 @@ use Illuminate\Http\UploadedFile;
 class dto extends Data
 {
 
-    //выучить чем отличается пхп 7 версии от 8.
-
     public function __construct(
-        private readonly int          $userId,
-        private readonly string       $title,
-        private readonly string       $ingredients,
-        private readonly string       $description,
-        private readonly float        $price,
-        private readonly UploadedFile $previewImage,
-        private readonly UploadedFile $mainImage,
-        private readonly array|null   $tagIds)
+        private readonly int          $dishId,
+        private readonly int          $typeId,
+        private readonly string       $path,
+    )
     {
     }
 
-    public final function getUserId(): int
+    public final function getDishId(): int
     {
-        return $this->userId;
+        return $this->dishId;
     }
 
-    public final function getTitle(): string
+    public final function getTypeId(): int
     {
-        return $this->title;
+        return $this->typeId;
     }
 
-    public final function getIngredients(): string
+    public final function getPath(): string
     {
-        return $this->ingredients;
-    }
-
-    public final function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    public final function getPrice(): float
-    {
-        return $this->price;
-    }
-
-    public final function getPreviewImage(): UploadedFile
-    {
-        return $this->previewImage;
-    }
-
-    public final function getMainImage(): UploadedFile
-    {
-        return $this->mainImage;
-    }
-
-    public final function getTagIds(): array|null
-    {
-        return $this->tagIds;
-    }
-
-    public final function getImages(): array
-    {
-        return ([$this->previewImage, $this->mainImage] );
+        return $this->path;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Service;
 
 use App\Dto\Dish\StoreDto;
 use App\Dto\Dish\UpdateDto;
+use App\Dto\DishImage\dto;
 use App\Models\Dish;
 use App\Models\DishImage;
 use Illuminate\Http\Request;
@@ -14,17 +15,15 @@ use Illuminate\Support\Facades\Storage;
 
 class DishService
 {
-
-    //TODo почиитать внедрение зависимостей Laravel;!!!!!!!!!!!!!!
-    //поменять все модели.на иньекции.
-    public function _construct(private Dish $dish) 
+    public function __construct(
+        private readonly Dish      $dish,
+        private readonly Storage   $storage,
+        private readonly DishImage $dishImage,
+    )
     {
-
     }
 
-    //TODO. Внёс измененияч которые ломают код.
-
-    public function index(Request $request): LengthAwarePaginator
+    public final function index(Request $request): LengthAwarePaginator
     {
         return $this->dish->filter($request->all())->with('dishImages', 'tags', 'likes')->withCount('likes')->paginate(4);
     }
@@ -34,16 +33,16 @@ class DishService
         return $this->dish->with('dishImages', 'tags')->find(id: $id);
     }
 
-    public function store(StoreDto $dto): Dish
+    public final function store(StoreDto $dto): Dish
     {
         return DB::transaction(function () use ($dto) {
             //TODO через цикл.
 
-            $previewImage['image'] = Storage::disk('public')->put('/images', $dto->getPreviewImage());
-            $previewImage['type_id'] = DishImage::TYPE_PREVIEW;
+            $previewImage['path'] = $this->storage::disk('public')->put('/images', $dto->getPreviewImage());
+            $previewImage['type_id'] = $this->dishImage::TYPE_PREVIEW;
 
-            $mainImage['image'] = $data['main_image'] = Storage::disk('public')->put('/images', $dto->getMainImage());
-            $mainImage['type_id'] = DishImage::TYPE_MAIN;
+            $mainImage['path'] = $this->storage::disk('public')->put('/images', $dto->getMainImage());
+            $mainImage['type_id'] = $this->dishImage::TYPE_MAIN;
 
             $allImages = [$previewImage, $mainImage];
 
@@ -54,11 +53,27 @@ class DishService
                 'description' => $dto->getDescription(),
                 'price' => $dto->getPrice(),
             ]);
+            // переделать на креат а не апдейт
+//            if ($dto->getImages() !== null) {
+//                foreach ($dto->getImages() as $key => $value) {
+//                    $dishImage = new dto(
+//                        dishId: $dish->id,
+//                        typeId: (int)$this->dishImage::getTypeConst($key),
+//                        path: (string)$this->storage::disk('public')->put('/images', $value)
+//                    );
+//                    $this->updateImage(dto: $dishImage, dish: $dish);
+//                }
+//            }
+
+            if ($dto->getTagIds() !== null) {
+                $tagIds = $dto->getTagIds();
+                $dish->tags()->sync($tagIds);
+            }
 
             foreach ($allImages as $image) {
                 $image['dish_id'] = $dish->id;
-                // firstOrCreate почему тут опять этот гдскитй firstOrCreate. Почему это тут может быть ? ведь мы только создаём блюдо. 
-                $image = DishImage::firstOrCreate($image);
+                // firstOrCreate почему тут опять этот гдскитй firstOrCreate. Почему это тут может быть ? ведь мы только создаём блюдо.
+                $image = $this->dishImage::create($image);
                 $dish->dishImages()->save($image);
             }
 
@@ -66,80 +81,68 @@ class DishService
         });
     }
 
-    public function update(UpdateDto $dto, int $id): Dish
+    public final function update(UpdateDto $dto, int $id): Dish
     {
         return DB::transaction(function () use ($id, $dto) {
-            $dish = $this->getData($id);
-            
-            //TODO переименовать метод. 
-            //getTagsArray ?????? // getTagIds
-            if ($dto->getTagsArray() !== null) {
-                $tagIds = $dto->getTagsArray();
+            $dish = $this->show($id);
+
+            if ($dto->getTagIds() !== null) {
+                $tagIds = $dto->getTagIds();
                 $dish->tags()->sync($tagIds);
             }
-            
 
-            //TODO задача со звёздочкой, ну звездачка для тупых. Сделать это в цикле.!!!
-            if ($dto->getPreviewImage() !== null) {
-                $previewImage['image'] = Storage::disk('public')->put('/images', $dto->getPreviewImage());
-                $previewImage['type_id'] = DishImage::TYPE_PREVIEW;
-                $previewImage['dish_id'] = $dish->id;
-                //никакого array !!!!!!!!!!!!!!!!!никакого array. ТУТ DTO
-                $updatedImage = $this->updateImage(image: $previewImage, dish: $dish);
+            if ($dto->getImages() !== null) {
+                foreach ($dto->getImages() as $key => $value) {
+                    $dishImage = new dto(
+                        dishId: $dish->id,
+                        typeId: (int)$this->dishImage::getTypeConst($key),
+                        path: (string)$this->storage::disk('public')->put('/images', $value)
+                    );
+                    $this->updateImage(dto: $dishImage, dish: $dish);
+                }
             }
 
-            if ($dto->getMainImage() !== null) {
-                $mainImage['image'] = Storage::disk('public')->put('/images', $dto->getMainImage());
-                $mainImage['type_id'] = DishImage::TYPE_MAIN;
-                $mainImage['dish_id'] = $dish->id;
-                $updatedImage = $this->updateImage(image: $mainImage, dish: $dish);
-            }
-            
-
-            //TODO подлный бред. Не нужно обновлять данные, которые не пришки с обновления.
-            //1. У тебя все данные обязательные
-            //2. 
-
-
-            // 
-
-            $dish->update([
-                //TODO обновлять только то, что пришло. 
-                // 'title' => $dto->getTitle() ?? $dish->title,
-                // 'ingredients' => $dto->getIngredients() ?? $dish->ingredients,
-                // 'description' => $dto->getDescription() ?? $dish->description,
-                // 'price' => $dto->getPrice() ?? $dish->price
-            ]);
+            $dish->fill([
+                'title' => $dto->getTitle(),
+                'ingredients' => $dto->getIngredients(),
+                'description' => $dto->getDescription(),
+                'price' => $dto->getPrice()
+            ])->save();
 
             return $dish;
         });
     }
 
-    public function getData(int $id): Dish
+    public final function delete(int $id): bool
     {
-        return Dish::with('dishImages', 'tags')->find($id);
+        return Dish::find($id)->delete();
     }
 
-    public function delete(int $id): bool
+    public final function updateImage(dto $dto, Dish $dish): bool
     {
-        return DB::transaction(function () use ($id) {
-            // удалить одним запросом!!!!!
-            // И еща прочитать как это удалять через события в модели. ТО есть если мы удаляем запись в моделе, то должны удалить и то, что укажем ещё в событие. Или же 7не удалить, а что то сделаем. Одним словом, почитать про события модели в laravel.
-            auth()->user()->favoriteDishes()->getByDishId(dish_id: $id)->delete();
-            Dish::find($id)->delete();
+        // $images = DishImage::getByDishId(dishId: $dto->getDishId())->getByTypeId(typeId: $dto->getTypeId())->update('image'=>$dto->getPath());
+        $image = DishImage::getByDishId(dishId: $dto->getDishId())->getByTypeId(typeId: $dto->getTypeId())->first();
 
-            return true;
-        });
-    }
+        if (Storage::exists($image['path'])) {
+            Storage::delete($image['path']);
+        }
 
-    public function updateImage(array $image, Dish $dish): DishImage
-    {   
-        //TODO поменять на ОБНОВЛДЕНИЕ, КАРТИНКА ОБНОВЛЯЕТСЯ. ЗНАЧИТ тут нужно обновить!
-        // DishImage::findIdAndType($image['dish_id'], $image['type_id'])->delete();
-        // DishImage::getByDishId(dishId: $image['dish_id'])->getByTуpeId(typeId: $image['type_id'])->delete();
-
-        $newImage = DishImage::firstOrCreate($image);
-        //TODO подсказка для ненормальных, обновить именно тут. 
-        return $dish->dishImages()->save($newImage);
+        return $image->update(['path' => $dto->getPath()]);
     }
 }
+// DishImage::getByDishId(dishId: $image['dish_id'])->getByTуpeId(typeId: $image['type_id'])->delete();
+
+//            if ($dto->getPreviewImage() !== null) {
+//                $previewImage['image'] = $this->storage::disk('public')->put('/images', $dto->getPreviewImage());
+//                $previewImage['type_id'] = $this->dishImage::TYPE_PREVIEW;
+//                $previewImage['dish_id'] = $dish->id;
+//                //никакого array !!!!!!!!!!!!!!!!!никакого array. ТУТ DTO
+//                $updatedImage = $this->updateImage(image: $previewImage, dish: $dish);
+//            }
+//
+//            if ($dto->getMainImage() !== null) {
+//                $mainImage['image'] = $this->storage::disk('public')->put('/images', $dto->getMainImage());
+//                $mainImage['type_id'] = $this->dishImage::TYPE_MAIN;
+//                $mainImage['dish_id'] = $dish->id;
+//                $updatedImage = $this->updateImage(image: $mainImage, dish: $dish);
+//            }
