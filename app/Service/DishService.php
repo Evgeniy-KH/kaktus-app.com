@@ -36,16 +36,6 @@ class DishService
     public final function store(StoreDto $dto): Dish
     {
         return DB::transaction(function () use ($dto) {
-            //TODO через цикл.
-
-            $previewImage['path'] = $this->storage::disk('public')->put('/images', $dto->getPreviewImage());
-            $previewImage['type_id'] = $this->dishImage::TYPE_PREVIEW;
-
-            $mainImage['path'] = $this->storage::disk('public')->put('/images', $dto->getMainImage());
-            $mainImage['type_id'] = $this->dishImage::TYPE_MAIN;
-
-            $allImages = [$previewImage, $mainImage];
-
             $dish = Dish::create([
                 'user_id' => $dto->getUserId(),
                 'title' => $dto->getTitle(),
@@ -53,28 +43,29 @@ class DishService
                 'description' => $dto->getDescription(),
                 'price' => $dto->getPrice(),
             ]);
-            // переделать на креат а не апдейт
-//            if ($dto->getImages() !== null) {
-//                foreach ($dto->getImages() as $key => $value) {
-//                    $dishImage = new dto(
-//                        dishId: $dish->id,
-//                        typeId: (int)$this->dishImage::getTypeConst($key),
-//                        path: (string)$this->storage::disk('public')->put('/images', $value)
-//                    );
-//                    $this->updateImage(dto: $dishImage, dish: $dish);
-//                }
-//            }
+
+            $images = [
+                'main' => $dto->getMainImage(),
+                'preview' => $dto->getPreviewImage()
+            ];
+
+            foreach ($images as $key => $value) {
+                $image = new dto(
+                    dishId: $dish->id,
+                    typeId: (int)$this->dishImage::getTypeConst($key),
+                    path: (string)$this->storage::disk('public')->put('/images', $value)
+                );
+                $dishImage = $this->dishImage::create([
+                    'dish_id' => $image->getDishId(),
+                    'type_id' => $image->getTypeId(),
+                    'path' => $image->getPath()
+                ]);
+                $dish->dishImages()->save($dishImage);
+            }
 
             if ($dto->getTagIds() !== null) {
                 $tagIds = $dto->getTagIds();
                 $dish->tags()->sync($tagIds);
-            }
-
-            foreach ($allImages as $image) {
-                $image['dish_id'] = $dish->id;
-                // firstOrCreate почему тут опять этот гдскитй firstOrCreate. Почему это тут может быть ? ведь мы только создаём блюдо.
-                $image = $this->dishImage::create($image);
-                $dish->dishImages()->save($image);
             }
 
             return $dish;
@@ -85,21 +76,27 @@ class DishService
     {
         return DB::transaction(function () use ($id, $dto) {
             $dish = $this->show($id);
+            $images = array();
 
             if ($dto->getTagIds() !== null) {
                 $tagIds = $dto->getTagIds();
                 $dish->tags()->sync($tagIds);
             }
 
-            if ($dto->getImages() !== null) {
-                foreach ($dto->getImages() as $key => $value) {
-                    $dishImage = new dto(
-                        dishId: $dish->id,
-                        typeId: (int)$this->dishImage::getTypeConst($key),
-                        path: (string)$this->storage::disk('public')->put('/images', $value)
-                    );
-                    $this->updateImage(dto: $dishImage, dish: $dish);
-                }
+            if ($dto->getMainImage() !== null) {
+                $images['main'] = $dto->getMainImage();
+            }
+            if ($dto->getPreviewImage() !== null) {
+                $images['preview'] = $dto->getPreviewImage();
+            }
+
+            foreach ($images as $key => $value) {
+                $dishImage = new dto(
+                    dishId: $dish->id,
+                    typeId: (int)$this->dishImage::getTypeConst($key),
+                    path: (string)$this->storage::disk('public')->put('/images', $value)
+                );
+                $this->updateImage(dto: $dishImage, dish: $dish);
             }
 
             $dish->fill([

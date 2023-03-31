@@ -18,6 +18,7 @@ class DishImage extends Model
     protected $table = 'dish_images';
 
     protected $fillable = [
+        'dish_id',
         'path',
         'type_id'
     ];
