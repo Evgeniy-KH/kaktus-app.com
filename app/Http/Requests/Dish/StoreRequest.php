@@ -31,7 +31,6 @@ class StoreRequest extends FormRequest
         ];
     }
 
-    // нужно писатьс маленькой. dto() dTO()
     public final function dto(): StoreDto
     {
         return new StoreDto(

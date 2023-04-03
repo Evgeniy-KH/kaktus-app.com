@@ -18,6 +18,13 @@ use mysql_xdevapi\Collection;
 
 class UserService
 {
+    public function __construct(
+        private readonly Hash     $hash,
+        private readonly Storage   $storage,
+    )
+    {
+    }
+
     public final function update(UpdateDto $dto, int $id): User|string
     {
         $user = $this->show(id: $id);
@@ -30,9 +37,9 @@ class UserService
         }
 
         if ($dto->getCurrentPassword() !== null && $dto->getPassword() !== null) {
-            if (Hash::check($dto->getCurrentPassword(), $user->password)) {
+            if ($this->hash::check($dto->getCurrentPassword(), $user->password)) {
                 $user->update([
-                    'password' => Hash::make($dto->getPassword())
+                    'password' => $this->hash::make($dto->getPassword())
                 ]);
             } else {
                 return $message = 'Your current password is incorrect';
@@ -41,7 +48,7 @@ class UserService
 
         if ($dto->getAvatarPath() !== null) {
             if ($user->avatar_path) {
-                Storage::delete('public/images/' . $user->avatar_path);
+                $this->storage::delete('public/images/' . $user->avatar_path);
             }
 
             $file = $dto->getAvatarPath();

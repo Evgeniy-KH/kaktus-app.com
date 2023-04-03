@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Dish extends Model implements Likeable
 {
+
     use HasFactory;
     use SoftDeletes;
     use Likes;
@@ -19,17 +20,17 @@ class Dish extends Model implements Likeable
     protected $table = 'dishes';
     protected $guarded = false;
 
-    public function dishImages(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public final function dishImages(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(DishImage::class, 'dish_id', 'id');
     }
 
-    public function tags(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public final function tags(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'dishes_tags', 'dish_id', 'tag_id');
     }
 
-    public function favorites(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public final function favorites(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(FavoriteDish::class, 'favorite_dishes' );
     }

@@ -1,21 +1,15 @@
 <?php
-
+declare(strict_types=1);
 namespace App\ModelFilters;
 
 use EloquentFilter\ModelFilter;
-use http\QueryString;
+
 
 class DishFilter extends ModelFilter
 {
-    /**
-     * Related Models that have ModelFilters as well as the method on the ModelFilter
-     * As [relationMethod => [input_key1, input_key2]].
-     *
-     * @var array
-     */
     public $relations = [];
 
-    public function keyword(string $keyword)
+    public final function keyword(string $keyword): self
     {
         return $this->where(function ($query) use ($keyword) {
             return $query->where('title', 'LIKE', "%$keyword%")
@@ -23,7 +17,7 @@ class DishFilter extends ModelFilter
         });
     }
 
-    public function price(string $price)
+    public final function price(string $price): self
     {
         list($min, $max) = explode(",", $price);
 
@@ -32,7 +26,7 @@ class DishFilter extends ModelFilter
             ->with('dishImages', 'tags');
     }
 
-    public function tagsId(string $tagsId)
+    public final function tagsId(string $tagsId): self
     {
         $filter = function ($query) use ($tagsId) {
             $query->where('tag_id', $tagsId);
@@ -41,9 +35,8 @@ class DishFilter extends ModelFilter
         return $this->whereHas('tags', $filter);
     }
 
-    public function userId ( int $userId )
+    public function userId(int $userId)
     {
         return $this->where('user_id', $userId);
     }
-
 }

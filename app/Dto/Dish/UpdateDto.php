@@ -65,18 +65,19 @@ class UpdateDto extends Data
     {
         return $this->tagIds;
     }
-
-    public final function getImages(): array|null
-    {
-        if ($this->previewImage)
-        {
-            $data['preview'] = $this->previewImage;
-        }
-
-        if ($this->mainImage)
-        {
-            $data['main'] = $this->mainImage;
-        }
-        return $data;
-    }
 }
+
+
+//public final function getImages(): array|null
+//{
+//    if ($this->previewImage)
+//    {
+//        $data['preview'] = $this->previewImage;
+//    }
+//
+//    if ($this->mainImage)
+//    {
+//        $data['main'] = $this->mainImage;
+//    }
+//    return $data;
+//}

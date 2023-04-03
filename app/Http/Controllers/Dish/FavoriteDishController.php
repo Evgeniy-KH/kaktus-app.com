@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Dish;
 
 use App\Filters\Dish\DishFilter;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\User\BaseController;
 use App\Http\Requests\Dish\AddToFavoriteDishRequest;
 use App\Http\Resources\DishCollection;
 use App\Http\Resources\FavoriteDishIdResource;
@@ -15,28 +14,21 @@ use App\Models\Dish;
 use App\Models\FavoriteDish;
 use App\Service\UserService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\DB;
 
 class FavoriteDishController extends Controller
 {
     public function __construct(
-        protected UserService  $userService,
-        protected FavoriteDish $favoriteDishes
+        protected readonly UserService  $userService,
+        protected readonly FavoriteDish $favoriteDishes,
+        protected readonly Dish $dish
     )
     {
     }
 
-    //store
     public final function store(AddToFavoriteDishRequest $request): ResponseResource|JsonResponse
     {
         $dish =auth()->user()->favoriteDishes()->updateOrCreate(['dish_id' => $request->dto()->getId()]);
 
-//        if (!$dish) {
-//            return new MessageResource(message: 'Failed to create favorite', statusCode: 500);
-//        } else {
-//            return new MessageResource(resource: $dish, message: 'Store successfully', statusCode: 200);
-//        }
         return new ResponseResource(
             resource: !$dish  ? '' : $dish,
             message:  !$dish  ? 'Failed to create favorite' : 'Store successfully',
@@ -44,7 +36,7 @@ class FavoriteDishController extends Controller
         );
     }
 
-    public final function delete(AddToFavoriteDishRequest $request): ResponseResource|JsonResponse
+    public final function delete(AddToFavoriteDishRequest $request): ResponseResource
     {
         $dishId = $request->dto()->getId();;
         auth()->user()->favoriteDishes()->findById(dishId: $dishId)->delete();
@@ -56,7 +48,7 @@ class FavoriteDishController extends Controller
         );
     }
 
-    public final function show(): AnonymousResourceCollection|ResponseResource
+    public final function show(): ResponseResource
     {
         $favoriteDishesId = auth()->user()->favoriteDishes()->get();
 
@@ -67,7 +59,7 @@ class FavoriteDishController extends Controller
 
     public final function index(DishFilter $filters): ResponseResource
     {
-        $dishes = Dish::select('dishes.*')
+        $dishes = $this->dish::select('dishes.*')
             ->join('favorite_dishes', 'favorite_dishes.dish_id', '=', 'dishes.id')
             ->where('favorite_dishes.user_id', auth()->user()->id)
             ->with('dishImages', 'tags')
