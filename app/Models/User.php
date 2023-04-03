@@ -13,6 +13,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Contracts\Likeable;
 use App\Models\Like;
+use function Composer\Autoload\includeFile;
 
 class User extends Authenticatable
 {

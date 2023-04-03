@@ -31,7 +31,7 @@ class AddToFavoriteDishRequest extends FormRequest
         ];
     }
 
-    public final function DTO(): FavoriteDto
+    public final function dto(): FavoriteDto
     {
         return new FavoriteDto(
             (int)$this->input('id')

@@ -10,25 +10,25 @@ class likeableDto extends Data
 {
 
     public function __construct(
-        private readonly int          $dishId,
-        private readonly int          $typeId,
-        private readonly string       $path,
+        private readonly int          $userId,
+        private readonly int          $likeableId,
+        private readonly string       $likeableType,
     )
     {
     }
 
-    public final function getDishId(): int
+    public final function getUserId(): int
     {
-        return $this->dishId;
+        return $this->userId;
     }
 
-    public final function getTypeId(): int
+    public final function getLikeableId(): int
     {
-        return $this->typeId;
+        return $this->likeableId;
     }
 
-    public final function getPath(): string
+    public final function getLikeableType(): string
     {
-        return $this->path;
+        return $this->likeableType;
     }
 }
