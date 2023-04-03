@@ -9,7 +9,6 @@ use App\Http\Requests\Dish\StoreRequest;
 use App\Http\Requests\Dish\UpdateRequest;
 use App\Http\Resources\DishCollection;
 use App\Http\Resources\DishResource;
-use App\Http\Resources\ErrorResource;
 use App\Http\Resources\ResponseResource;
 use App\Service\DishService;
 use Illuminate\Http\JsonResponse;

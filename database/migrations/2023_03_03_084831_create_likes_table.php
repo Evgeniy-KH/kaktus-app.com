@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->bigIncrements('id');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
 //            $table->morphs('likeable');
-            $table->unsignedSmallInteger("likeable_id");
+            $table->unsignedBigInteger("likeable_id");
             $table->unsignedSmallInteger("likeable_type_id");
             $table->index(["likeable_id", "likeable_type_id"]);
 

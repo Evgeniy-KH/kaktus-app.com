@@ -17,7 +17,6 @@ class LikeService
     public function __construct(
         private readonly User $user,
         private readonly Dish $dish,
-
     )
     {
     }
@@ -39,33 +38,32 @@ class LikeService
 
     public final function showDishes(int $id): \Illuminate\Database\Eloquent\Collection
     {
-//        $likedDishes = auth()->user()->likes()->dishLikes()->get();
-//        $dishes = $this->service->getDishes(likedDishes: $likedDishes);
-//
-//        if (!$dishes) {
-//            $dishes = array();
-//        }
-
-        //1. Поменять на with
-        //2. СКАЗАТЬ ТОЧНО И ОТЧËТЛИВО чем будет отличаться запрос, результат и форма результата при запросе с with  и join.
-        return $this->dish::select('dishes.*')
-            ->join('likes', 'likes.likeable_id', '=', 'dishes.id')
-            //TODO какой то бред.
-            ->where('likes.likeable_type_id', 1)
-            ->where('likes.user_id', $id)
-            ->with('dishImages', 'tags')
+       return  $this->dish->with('dishImages', 'tags')
+            ->whereHas('likes', function ($query) use ($id) {
+                $query->where('likes.likeable_type_id', 1)
+                    ->where('likes.user_id', $id);
+            })
             ->get();
-    }
-
-    public final function getDishes(object $likedDishes): Collection
-    {
-        $likedDishesId = [];
-
-        foreach ($likedDishes as $likedDish) {
-            array_push($likedDishesId, $likedDish['likeable_id']);
-        }
-
-        return $this->dish::with('dishImages', 'tags')->whereIn('id', $likedDishesId)->get();
     }
 }
 
+
+//1. Поменять на with
+//2. СКАЗАТЬ ТОЧНО И ОТЧËТЛИВО чем будет отличаться запрос, результат и форма результата при запросе с with  и join.
+//        return $this->dish::select('dishes.*')
+//            ->join('likes', 'likes.likeable_id', '=', 'dishes.id')
+//            ->where('likes.likeable_type_id', 1)
+//            ->where('likes.user_id', $id)
+//            ->with('dishImages', 'tags')
+//            ->get();
+
+//    public final function getDishes(object $likedDishes): Collection
+//    {
+//        $likedDishesId = [];
+//
+//        foreach ($likedDishes as $likedDish) {
+//            array_push($likedDishesId, $likedDish['likeable_id']);
+//        }
+//
+//        return $this->dish::with('dishImages', 'tags')->whereIn('id', $likedDishesId)->get();
+//    }

@@ -9,9 +9,6 @@ use Illuminate\Http\UploadedFile;
 
 class StoreDto extends Data
 {
-
-    //выучить чем отличается пхп 7 версии от 8.
-
     public function __construct(
         private readonly int          $userId,
         private readonly string       $title,
@@ -63,9 +60,4 @@ class StoreDto extends Data
     {
         return $this->tagIds;
     }
-
-//    public final function getImages(): array
-//    {
-//        return (['preview'=> $this->previewImage,'main'=> $this->mainImage]);
-//    }
 }

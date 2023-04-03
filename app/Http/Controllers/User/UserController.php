@@ -27,11 +27,12 @@ class UserController extends Controller
     {
         $dto = $request->dto();
         $returnData = $this->service->update(dto: $dto, id: $id);
+        $isUserData = $returnData instanceof User;
 
         return new ResponseResource(
-            resource: $returnData instanceof User ? new UserResource($returnData) : '',
-            message: $returnData instanceof User ? '' : $returnData,
-            statusCode: $returnData instanceof User ? 200 : 422
+            resource:  $isUserData ? new UserResource($returnData) : '',
+            message:  $isUserData ? '' : $returnData,
+            statusCode:  $isUserData ? 200 : 422
         );
     }
 

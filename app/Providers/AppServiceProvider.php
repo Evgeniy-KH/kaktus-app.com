@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
     {
         JsonResource::withoutWrapping();
 
-        Relation::enforceMorphMap([
+        Relation::morphMap([
             1 => Dish::class,
         ]);
     }

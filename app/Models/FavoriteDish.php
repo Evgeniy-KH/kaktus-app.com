@@ -31,6 +31,6 @@ class FavoriteDish extends Model
 
     public function scopeFindById($query, $dishId)
     {
-        return $query->where('dish_id', $dishId);
+        return $query->where('dish_id', "=", $dishId);
     }
 }

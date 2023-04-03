@@ -20,7 +20,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 class LikeController extends Controller
 {
     public function __construct(
-        protected LikeService $service
+        protected readonly LikeService $service
     )
     {
     }
@@ -52,19 +52,5 @@ class LikeController extends Controller
 
         return new ResponseResource(resource: DishResource::collection($dishes));
 
-    }
-
-    public final function returnMessage(object $dataReturn): ResponseResource|JsonResponse
-    {
-        if ($dataReturn) {
-            return new ResponseResource([
-                "success" => true,
-            ]);
-        } else {
-            return (new ResponseResource([
-                'success' => false,
-            ]))->response()
-                ->setStatusCode(500);
-        }
     }
 }
