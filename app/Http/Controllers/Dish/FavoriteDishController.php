@@ -46,7 +46,7 @@ class FavoriteDishController extends Controller
 
     public final function delete(AddToFavoriteDishRequest $request): ResponseResource|JsonResponse
     {
-        $dishId = $request->DTO()->getId();;
+        $dishId = $request->dto()->getId();;
         auth()->user()->favoriteDishes()->findById(dishId: $dishId)->delete();
         $isSuccess = auth()->user()->favoriteDishes()->findById(dishId: $dishId)->doesntExist();
 

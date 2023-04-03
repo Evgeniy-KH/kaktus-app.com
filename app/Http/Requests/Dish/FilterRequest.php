@@ -26,8 +26,8 @@ class FilterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'price' => ["sometimes", "nullable"],
-            'keyword' => ["sometimes", "nullable", "string", "min:2", "max:100"],
+            'price' => ["sometimes"],  //"nullable"
+            'keyword' => ["sometimes", "string", "min:2", "max:100"],//"nullable"
         ];
     }
 }

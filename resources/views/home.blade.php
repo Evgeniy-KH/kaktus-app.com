@@ -58,7 +58,6 @@
         }
 
         function checkImages(images) {
-            console.log(images);
             let previewImage = '';
             let mainImage = '';
 
@@ -459,13 +458,14 @@
 
             $(document).on('click', '.likeable', function (event) {
                 let dishId = $(this).attr('id').split('_')[1];
+                console.log(dishId);
 
                 $.ajax({
                     type: 'post',
                     url: '/user/dish/like',
                     data: {
                         'id': dishId,
-                        'likeable_type': 'Dish'
+                        'likeable_type_id': 0
                     },
                     success: function (data) {
                         initCatalog();
@@ -487,7 +487,7 @@
                     data: {
                         _method: 'delete',
                         'id': dishId,
-                        'likeable_type': 'Dish'
+                        'likeable_type_id': 0
                     },
                     success: function (data) {
                         initCatalog();

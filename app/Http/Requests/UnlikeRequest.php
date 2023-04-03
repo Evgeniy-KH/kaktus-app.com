@@ -10,7 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class UnlikeRequest extends FormRequest
 {
     protected array $likeableClass = [
-        'Dish' => Dish::class,
+        Dish::class,
     ];
 
     /**
@@ -32,10 +32,10 @@ class UnlikeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'likeable_type' => [
+            'likeable_type_id' => [
                 "bail",
                 "required",
-                "string",
+                "integer",
             ],
             // the id of the liked object
             'id' => [
@@ -47,9 +47,8 @@ class UnlikeRequest extends FormRequest
 
     public final function likeable(): Likeable
     {
-        $className = $this->input('likeable_type');
-        $class = new $this->likeableClass[$className];
+        $class = new $this->likeableClass[(int) $this->input('likeable_type_id')];
 
-        return $class::findOrFail($this->input('id'));
+        return $class::find($this->input('id'));
     }
 }

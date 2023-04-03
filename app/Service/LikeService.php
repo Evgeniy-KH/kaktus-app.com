@@ -14,6 +14,13 @@ use Illuminate\Support\Collection;
 
 class LikeService
 {
+    public function __construct(
+        private readonly User $user,
+        private readonly Dish $dish,
+
+    )
+    {
+    }
 
     public final function store(Likeable $likeable): User
     {
@@ -27,7 +34,7 @@ class LikeService
 
     public final function showUsers(array $ids): \Illuminate\Database\Eloquent\Collection
     {
-        return User::find(id: $ids)->take(4);
+        return $this->user::find(id: $ids)->take(4);
     }
 
     public final function showDishes(int $id): \Illuminate\Database\Eloquent\Collection
@@ -41,10 +48,10 @@ class LikeService
 
         //1. Поменять на with
         //2. СКАЗАТЬ ТОЧНО И ОТЧËТЛИВО чем будет отличаться запрос, результат и форма результата при запросе с with  и join.
-        return Dish::select('dishes.*')
+        return $this->dish::select('dishes.*')
             ->join('likes', 'likes.likeable_id', '=', 'dishes.id')
             //TODO какой то бред.
-            ->where('likes.likeable_type', 'App\Models\Dish')
+            ->where('likes.likeable_type_id', 1)
             ->where('likes.user_id', $id)
             ->with('dishImages', 'tags')
             ->get();
@@ -58,7 +65,7 @@ class LikeService
             array_push($likedDishesId, $likedDish['likeable_id']);
         }
 
-        return Dish::with('dishImages', 'tags')->whereIn('id', $likedDishesId)->get();
+        return $this->dish::with('dishImages', 'tags')->whereIn('id', $likedDishesId)->get();
     }
 }
 

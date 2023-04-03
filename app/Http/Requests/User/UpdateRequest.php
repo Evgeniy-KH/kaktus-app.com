@@ -18,10 +18,10 @@ class UpdateRequest extends FormRequest
     public final function rules(): array
     {
         return [
-            'name' => ['sometimes', 'required', 'alpha_dash', 'string'],
-            'birthday' => ['sometimes', 'required', 'date', 'before:today'],
-            'email' => ['sometimes', 'required', 'string', 'email',],
-            'password' => ['sometimes', 'required', 'string', 'min:8', 'confirmed', 'different:current_password',
+            'name' => ['sometimes', 'alpha_dash', 'string'],
+            'birthday' => ['sometimes', 'date', 'before:today'],
+            'email' => ['sometimes', 'string', 'email',],
+            'password' => ['sometimes', 'string', 'min:8', 'confirmed', 'different:current_password',
 //                Password::min(8)
 //                    ->letters()
 //                    ->mixedCase()
@@ -29,8 +29,8 @@ class UpdateRequest extends FormRequest
 //                    ->symbols()
 //                    ->uncompromised()
             ],
-            'current_password' => ['sometimes', 'required', 'string', 'min:8'],
-            'avatar_path' => ['sometimes', 'required', 'image', 'mimes:jpg,png,jpeg,gif,svg', 'max:20480'],
+            'current_password' => ['sometimes', 'string', 'min:8'],
+            'avatar_path' => ['sometimes', 'image', 'mimes:jpg,png,jpeg,gif,svg', 'max:20480'],
         ];
     }
 

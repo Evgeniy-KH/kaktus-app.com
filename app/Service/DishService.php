@@ -36,7 +36,7 @@ class DishService
     public final function store(StoreDto $dto): Dish
     {
         return DB::transaction(function () use ($dto) {
-            $dish = Dish::create([
+            $dish =  $this->dish::create([
                 'user_id' => $dto->getUserId(),
                 'title' => $dto->getTitle(),
                 'ingredients' => $dto->getIngredients(),
@@ -60,6 +60,14 @@ class DishService
                     'type_id' => $image->getTypeId(),
                     'path' => $image->getPath()
                 ]);
+
+               ///without DTO
+//                $dishImage = $this->dishImage::create([
+//                    'dish_id' => $dish->id,
+//                    'type_id' => (int)$this->dishImage::getTypeConst($key),
+//                    'path' => (string)$this->storage::disk('public')->put('/images', $value)
+//                ]);
+
                 $dish->dishImages()->save($dishImage);
             }
 
@@ -112,13 +120,13 @@ class DishService
 
     public final function delete(int $id): bool
     {
-        return Dish::find($id)->delete();
+        return $this->dish::find($id)->delete();
     }
 
     public final function updateImage(dto $dto, Dish $dish): bool
     {
         // $images = DishImage::getByDishId(dishId: $dto->getDishId())->getByTypeId(typeId: $dto->getTypeId())->update('image'=>$dto->getPath());
-        $image = DishImage::getByDishId(dishId: $dto->getDishId())->getByTypeId(typeId: $dto->getTypeId())->first();
+        $image = $this->dishImage::getByDishId(dishId: $dto->getDishId())->getByTypeId(typeId: $dto->getTypeId())->first();
 
         if (Storage::exists($image['path'])) {
             Storage::delete($image['path']);
@@ -127,6 +135,11 @@ class DishService
         return $image->update(['path' => $dto->getPath()]);
     }
 }
+
+
+
+
+
 // DishImage::getByDishId(dishId: $image['dish_id'])->getByTуpeId(typeId: $image['type_id'])->delete();
 
 //            if ($dto->getPreviewImage() !== null) {

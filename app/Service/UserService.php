@@ -60,10 +60,7 @@ class UserService
 
     public final function delete(int $id): bool
     {
-        return DB::transaction(function () use ($id) {
-            User::find($id)->delete();
-            return true;
-        });
+        return User::find($id)->delete();
     }
 }
 
