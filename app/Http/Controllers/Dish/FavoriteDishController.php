@@ -38,6 +38,7 @@ class FavoriteDishController extends Controller
 
     public final function delete(AddToFavoriteDishRequest $request): ResponseResource
     {
+        //Мы же уже говорили, и можно прсомотреть в документации и ларавель и вообще rest api. Что при удалении ИД передается в качестве параметра урла, а не в теле запроса.
         $dishId = $request->dto()->getId();;
         auth()->user()->favoriteDishes()->findById(dishId: $dishId)->delete();
         $isSuccess = auth()->user()->favoriteDishes()->findById(dishId: $dishId)->doesntExist();
@@ -50,6 +51,9 @@ class FavoriteDishController extends Controller
 
     public final function show(): ResponseResource
     {
+        // В целом по уму, тут было бы праивльно, что бы ты передавала параметр user id  для того что бы показать  блюда. Ведь ты показываешь любимые блюда пользователя. И параметр который характеризует именно то, что нам нужно, является userid
+        // Я понимаюб, что ты только покзаываешь для "себя" эти бблюда. Но тем не менее, канонично и правильно со стороны разработки было бы делать, согласно КРУД. А круд требует в этом запросе параметр. Этот параметр юзер ид.
+        // Ну и само собой, что ыт должно проверять, имеет ли право этот пользователь, смотреть за этим блюдом.
         $favoriteDishesId = auth()->user()->favoriteDishes()->get();
 
         return new ResponseResource(
@@ -59,6 +63,8 @@ class FavoriteDishController extends Controller
 
     public final function index(DishFilter $filters): ResponseResource
     {
+        //ИЛИ JOIN или WITH .  подсказка для даунов, что есть ещё такой метод как whereHas и в документации он описан. 
+        
         $dishes = $this->dish::select('dishes.*')
             ->join('favorite_dishes', 'favorite_dishes.dish_id', '=', 'dishes.id')
             ->where('favorite_dishes.user_id', auth()->user()->id)
