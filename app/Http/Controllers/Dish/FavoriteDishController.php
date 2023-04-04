@@ -25,7 +25,7 @@ class FavoriteDishController extends Controller
     {
     }
 
-    public final function store(AddToFavoriteDishRequest $request): ResponseResource|JsonResponse
+    public final function store(AddToFavoriteDishRequest $request): ResponseResource
     {
         $dish =auth()->user()->favoriteDishes()->updateOrCreate(['dish_id' => $request->dto()->getId()]);
 

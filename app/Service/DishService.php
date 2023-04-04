@@ -50,6 +50,7 @@ class DishService
             ];
 
             foreach ($images as $key => $value) {
+                //with DTO
                 $image = new dto(
                     dishId: $dish->id,
                     typeId: (int)$this->dishImage::getTypeConst($key),

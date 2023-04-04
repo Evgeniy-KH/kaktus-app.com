@@ -6,6 +6,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use http\QueryString;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -64,12 +65,12 @@ class User extends Authenticatable
         return $this->hasMany(FavoriteDish::class);
     }
 
-    public function likes()
+    public final function likes(): HasMany
     {
         return $this->hasMany(Like::class);
     }
 
-    public function like(Likeable $likeable): self
+    public final function like(Likeable $likeable): self
     {
         if ($this->hasLiked($likeable)) {
             return $this;
@@ -83,7 +84,7 @@ class User extends Authenticatable
         return $this;
     }
 
-    public function unlike(Likeable $likeable): self
+    public final function unlike(Likeable $likeable): self
     {
         if (!$this->hasLiked($likeable)) {
             return $this;
@@ -96,7 +97,7 @@ class User extends Authenticatable
         return $this;
     }
 
-    public function hasLiked(Likeable $likeable): bool
+    public final function hasLiked(Likeable $likeable): bool
     {
         if (!$likeable->exists) {
             return false;
@@ -107,7 +108,7 @@ class User extends Authenticatable
             ->exists();
     }
 
-    public function scopeHasDish($query, $id): \Illuminate\Database\Eloquent\Builder
+    public final function scopeHasDish($query, $id): \Illuminate\Database\Eloquent\Builder
     {
         return $query->whereHas('dishes', function ($query) use ( $id) {
             $query->where('id', $id);

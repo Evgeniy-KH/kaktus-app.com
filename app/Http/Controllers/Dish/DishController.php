@@ -39,7 +39,7 @@ class DishController extends Controller
         );
     }
 
-    public final function store(StoreRequest $request): JsonResponse|ResponseResource
+    public final function store(StoreRequest $request): ResponseResource
     {
         $dish = $this->service->store(dto: $request->DTO());
         $isExistsDish = $dish->exists();
