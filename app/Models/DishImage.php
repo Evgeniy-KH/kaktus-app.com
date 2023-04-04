@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder;
 
 class DishImage extends Model
 {
@@ -42,12 +43,12 @@ class DishImage extends Model
         return $this->belongsTo(Dish::class, 'dish_id', 'id');
     }
 
-    public function scopeGetByDishId($query, int $dishId)
+    public function scopeGetByDishId($query, int $dishId): Builder
     {
         return $query->where('dish_id', '=', $dishId);
     }
 
-    public function scopeGetByTypeId($query, int $typeId)
+    public function scopeGetByTypeId($query, int $typeId): Builder
     {
         return $query->where('type_id', '=', $typeId);
     }

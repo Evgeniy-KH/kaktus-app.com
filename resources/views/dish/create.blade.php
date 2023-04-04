@@ -146,19 +146,19 @@
                 let tags = $('.select-tags').val();
                 console.log(tags);
 
-                for (let i = 0; i < tags.length; i++) {
-                    formData.append('tag_ids[]',  tags[i]);
-                }
+                // for (let i = 0; i < tags.length; i++) {
+                //     formData.append('tag_ids[]', tags[i]);
+                // }
 
                 formData.append("user_id", $('#user-edit').attr('data-id'));
                 formData.append("title", title);
-                formData.append("description",  description);
+                formData.append("description", description);
                 formData.append("ingredients", ingredients);
                 formData.append("price", $('#price').val());
                 formData.append("preview_image", $('#preview_image')[0].files[0]);
                 formData.append("main_image", $('#main_image')[0].files[0]);
 
-                for (let [key, value] of  formData) {
+                for (let [key, value] of formData) {
                     console.log(`${key}: ${value}`)
                 }
                 $.ajax({

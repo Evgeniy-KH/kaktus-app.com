@@ -4,13 +4,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Contracts\Likeable;
-use App\Http\Requests\UnlikeRequest;
-use App\Http\Resources\ResponseResource;
 use App\Models\Dish;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Collection;
-
 
 class LikeService
 {

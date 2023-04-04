@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder;
 
 class FavoriteDish extends Model
 {
@@ -29,7 +30,7 @@ class FavoriteDish extends Model
         return $this->belongsToMany(Dish::class, 'favorite_dishes');
     }
 
-    public function scopeFindById($query, $dishId)
+    public function scopeFindById($query, $dishId): Builder
     {
         return $query->where('dish_id', "=", $dishId);
     }
