@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace App\ModelFilters;
 
 use EloquentFilter\ModelFilter;
@@ -20,6 +21,8 @@ class DishFilter extends ModelFilter
     public final function price(string $price): self
     {
         list($min, $max) = explode(",", $price);
+        $max = number_format((float)$max, 2);
+        $min = number_format((float)$min, 2);
 
         return $this->where('price', '>=', $min)
             ->where('price', '<=', $max)

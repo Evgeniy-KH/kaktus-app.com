@@ -27,7 +27,7 @@
             }
         });
 
-        let user_id = $('#user-edit').attr('data-id');
+        let userId = $('#user-edit').attr('data-id');
 
         function checkImages(images) {
             let previewImage = '';
@@ -110,7 +110,7 @@
 
         function initCatalog(filters = {}) {
             $.ajax({
-                url: '/user/favorite/dishes',
+                url: '/user/' + userId + '/favorite/dishes/list',
                 type: 'get',
                 data: {
                     price: filters['price'],
@@ -121,8 +121,7 @@
                     catalog(data['data']['data']);
                     pagination(data['data']['links']);
 
-                    if (data['data'] ==='')
-                    {
+                    if (data['data'] === '') {
                         alert(data['message']);
                     }
                 },

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Dish;
 
+use App\Dto\Dish\FilterDto;
 use Illuminate\Foundation\Http\FormRequest;
 
 
@@ -26,8 +27,16 @@ class FilterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'price' => ["sometimes"],  //"nullable"
-            'keyword' => ["sometimes", "string", "min:2", "max:100"],//"nullable"
+            'price' => ["sometimes","string"],  //"nullable"
+            'keywords.*' => ["sometimes","string"],
+            'tag_ids' => ["sometimes", "string"]
         ];
+    }
+
+    public final function dto(): FilterDto
+    {
+        return new FilterDto(
+            data: $this->input(),
+        );
     }
 }

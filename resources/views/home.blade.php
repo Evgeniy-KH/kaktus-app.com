@@ -42,7 +42,7 @@
             }
         });
 
-        let user_id = $('#user-edit').attr('data-id');
+        let userId = $('#user-edit').attr('data-id');
 
         $('.search_tag').SumoSelect({
             placeholder: 'Tags',
@@ -186,7 +186,8 @@
                 type: 'get',
                 dataType: 'json',
                 data: {
-                    usersId: data
+                    usersId: data,
+                    usersNumber: 4
                 },
                 success: function (data) {
                     data = data['data'];
@@ -246,7 +247,7 @@
             let classLikes = 'likeable far';
             let usersIds = getLikedUsersIds(likes);
 
-            if ($.inArray(parseInt(user_id), usersIds) > -1) {
+            if ($.inArray(parseInt(userId), usersIds) > -1) {
                 classLikes = 'unlikeable fas';
             }
 
@@ -254,6 +255,8 @@
         }
 
         function initCatalog(filters = {}) {
+
+            console.log(filters);
             if (filters['tagsId']) {
                 filters['tagsId'] = filters['tagsId'].toString()
             }
@@ -305,7 +308,7 @@
 
             if ($('#keyword').val()) {
                 let keyword = $('#keyword').val().match(/[\wа-я]+/ig);
-                filters['keyword'] = keyword;
+                filters['keyword'] = keyword[0];
             }
 
             if ($('#min-price').val() != '' || $('#max-price').val() != '') {
@@ -322,8 +325,9 @@
                 });
 
                 filters['tagsId'] = tagsId;
-            }
 
+            }
+            console.log(filters)
             return filters;
         }
 
@@ -334,6 +338,7 @@
             for (let [key, value] of urlParams) {
                 if (key === 'keyword') {
                     value = value.match(/^[a-zA-Z]*$/);
+                    value = value[0];
 
                 } else if (key === 'price') {
                     value = value.replace(/[^0-9.,]/g, '');
@@ -353,7 +358,7 @@
             });
 
             $.each(filtersUrl, function (key, value) {
-                if (key === 'tagsId') {
+                if (key === 'tag_ids') {
                     value = parseInt(value);
                     // $('.search_tag')[0].sumo.selectItem(value);/// not working
                 } else if (key === 'keyword') {
@@ -392,7 +397,8 @@
                 type: 'post',
                 url: '/user/dish/favorite',
                 data: {
-                    'id': dishId,
+                    'dishId': dishId,
+                    'userId': userId
                 },
                 success: function (data) {
                     if (data['status'] === 200) {
@@ -410,9 +416,9 @@
         function removeFromFavourites(dishId, element) {
             $.ajax({
                 type: 'post',
-                url: '/user/dish/disfavouring',
+                url: '/user/dish/disfavouring/'+userId+'/'+dishId,
                 data: {
-                    'id': dishId,
+                    // 'id': dishId,
                 },
                 success: function (data) {
                     if (data['status'] === 200) {
@@ -429,7 +435,7 @@
 
         function favoriteDish(data = {}) {
             $.ajax({
-                url: `/user/favorite/dishId`,
+                url: '/user/'+userId+'/favorite/dishes',
                 type: 'get',
                 dataType: 'json',
                 data: data,
@@ -481,12 +487,11 @@
                 let dishId = $(this).attr('id').split('_')[1];
 
                 $.ajax({
-                    url: '/user/dish/unlike',
+                    url:  '/user/dish/unlike/'+userId+'/'+dishId,
                     type: 'delete',
                     dataType: 'json',
                     data: {
                         _method: 'delete',
-                        'id': dishId,
                         'likeable_type_id': 0
                     },
                     success: function (data) {
@@ -539,7 +544,7 @@
                     data: {
                         price: filters['price'],
                         keyword: filters['keyword'],
-                        tagsId: filters['tagsId'],
+                        tag_ids: filters['tag_ids'],
                     },
                     success: function (data) {
                         catalog(data['data']['data']);

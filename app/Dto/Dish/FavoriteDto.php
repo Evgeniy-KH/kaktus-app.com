@@ -9,13 +9,19 @@ class FavoriteDto extends Data
 {
 
     public function __construct(
-        private readonly int $id,
+        private readonly int $userId,
+        private readonly int $dishId,
     )
     {
     }
 
-    public final function getId(): int
+    public final function getUserId(): int
     {
-        return $this->id;
+        return $this->userId;
+    }
+
+    public final function getDishId(): int
+    {
+        return $this->dishId;
     }
 }

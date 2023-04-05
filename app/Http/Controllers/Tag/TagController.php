@@ -19,7 +19,6 @@ class TagController extends Controller
 
     public final function index(): ResponseResource
     {
-
         //TODO прочитать и запомнить чем отличается all() от get()  в моделях Eloquent
         return new ResponseResource(
             resource: TagResource::collection($this->tag->all()),

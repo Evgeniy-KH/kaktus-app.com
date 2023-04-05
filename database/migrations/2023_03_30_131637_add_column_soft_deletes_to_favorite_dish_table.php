@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('favorite_dishes', function (Blueprint $table) {
+        Schema::table('favorite_dish', function (Blueprint $table) {
             $table->softDeletes();
         });
     }
@@ -25,7 +25,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('favorite_dishes', function (Blueprint $table) {
+        Schema::table('favorite_dish', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
     }

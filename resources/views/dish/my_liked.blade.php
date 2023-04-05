@@ -43,7 +43,7 @@
             }
         });
 
-        let user_id = $('#user-edit').attr('data-id');
+        let id = $('#user-edit').attr('data-id');
 
         function checkImages(images) {
             let previewImage = '';
@@ -73,11 +73,8 @@
 
         function initCatalog() {
             $.ajax({
-                url: '/user/dish/liked',
-                type: 'post',
-                data: {
-                    "id": user_id
-                },
+                url: '/user/dish/liked/'+ id,
+                type: 'get',
                 success: function (data) {
                     list(data['data'])
                 },

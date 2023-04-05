@@ -57,6 +57,7 @@
                     mainImage = image['path']
                 }
             })
+            console.log(mainImage)
 
             return {"previewImage": previewImage, "mainImage": mainImage}
         }
@@ -69,6 +70,7 @@
                 data: data,
                 success: function (data) {
                     data = data['data'];
+                    console.log(data)
                     data['created_at'] = new Date(data['created_at']).toLocaleDateString("en-US", {
                         day: 'numeric',
                         month: 'short',
@@ -76,11 +78,13 @@
                     });
 
                     let images = checkImages(data['dish_images']);// return of this function let variables
-                    let mainImage = images["mainImage"];
+                   // let mainImage = images["mainImage"];
+                    let mainImage = '/storage/'+images["mainImage"];
+                    console.log(mainImage);
 
                     let title = `<h1 class="col-12 tm-text-primary">${data['title']}</h1>`;
                     let image = `<figure class="effect-ming tm-video-item main-image">
-                    <img src="/storage/${mainImage}" alt="Image" class="img-fluid" style="width: 1155px; height: 650px ;">
+                    <img src="${mainImage}" alt="Image" class="img-fluid" style="width: 1155px; height: 650px ;">
                     <figcaption class="d-flex align-items-center justify-content-center action">
                        <h2 class="dish-action justify-content-between">
                        <div class="row mt-3 mb-0" style="color:inherit; font-size: 5rem">
@@ -110,7 +114,7 @@
 
                     if (data['user_id'] != userId) {
                         $('.main-image').remove();
-                        let image = `<img src="/storage/${data['dish_images'][1]['image']}" alt="Image" class="img-fluid" style="width: 1155px; height: 650px ;">`
+                        let image = `<img src="${mainImage}" alt="Image" class="img-fluid" style="width: 1155px; height: 650px ;">`
                         $('.dish-image').append(image);
                     }
 

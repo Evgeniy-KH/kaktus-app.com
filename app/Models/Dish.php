@@ -30,9 +30,9 @@ class Dish extends Model implements Likeable
         return $this->belongsToMany(Tag::class, 'dishes_tags', 'dish_id', 'tag_id');
     }
 
-    public final function favorites(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public final function favorites(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->belongsToMany(FavoriteDish::class, 'favorite_dishes' );
+        return $this->hasMany(FavoriteDish::class,'dish_id','id' );
     }
 
     protected static function boot()
@@ -41,7 +41,7 @@ class Dish extends Model implements Likeable
         static::deleted(function ($fileToDelete) {
             $fileToDelete->dishImages()->delete();
             $fileToDelete->tags()->detach();
-            $fileToDelete->favorites()->detach();
+            $fileToDelete->favorites()->delete();
         });
     }
 }

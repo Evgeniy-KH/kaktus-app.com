@@ -21,44 +21,24 @@ class LikeService
         return auth()->user()->like($likeable);
     }
 
-    public final function delete(Likeable $likeable): User
+    public final function delete(int $id, Likeable $likeable): User
     {
-        return auth()->user()->unlike($likeable);
+        return $this->user->find($id)->unlike($likeable);
     }
 
     public final function showUsers(array $ids): \Illuminate\Database\Eloquent\Collection
     {
-        return $this->user::find(id: $ids)->take(4);
+        return $this->user->find(id: $ids)->take(4);
     }
 
     public final function showDishes(int $id): \Illuminate\Database\Eloquent\Collection
     {
-       return  $this->dish->with('dishImages', 'tags')
+        return $this->dish->with('dishImages', 'tags')
             ->whereHas('likes', function ($query) use ($id) {
-                $query->where('likes.likeable_type_id', 1)
-                    ->where('likes.user_id', $id);
+                $query->where('likes.likeable_type_id', '=', 1)
+                    ->where('likes.user_id', '=', $id);
             })
             ->get();
     }
 }
 
-
-//1. Поменять на with
-//2. СКАЗАТЬ ТОЧНО И ОТЧËТЛИВО чем будет отличаться запрос, результат и форма результата при запросе с with  и join.
-//        return $this->dish::select('dishes.*')
-//            ->join('likes', 'likes.likeable_id', '=', 'dishes.id')
-//            ->where('likes.likeable_type_id', 1)
-//            ->where('likes.user_id', $id)
-//            ->with('dishImages', 'tags')
-//            ->get();
-
-//    public final function getDishes(object $likedDishes): Collection
-//    {
-//        $likedDishesId = [];
-//
-//        foreach ($likedDishes as $likedDish) {
-//            array_push($likedDishesId, $likedDish['likeable_id']);
-//        }
-//
-//        return $this->dish::with('dishImages', 'tags')->whereIn('id', $likedDishesId)->get();
-//    }

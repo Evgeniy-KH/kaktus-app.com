@@ -41,21 +41,20 @@ Route::group(['namespace' => 'App\Http\Controllers\User', 'prefix' => 'user', 'm
     Route::view('/my_dishes', 'dish.my_dishes');
     Route::view('{id}', 'user.edit');
     Route::post('{id}', [UserController::class, 'update']);
-    Route::get('/favorite/dishId', [FavoriteDishController::class, 'show']);
-    Route::get('/favorite/dishes', [FavoriteDishController::class, 'index']);
+    Route::get('/{userId}/favorite/dishes', [FavoriteDishController::class, 'show']);
+    Route::get('/{userId}/favorite/dishes/list', [FavoriteDishController::class, 'index']);
 
     Route::group(['prefix' => 'dish'], function () {
         Route::view('/create', 'dish.create');
         Route::post('/like', [LikeController::class, 'store']);
-        Route::get('/users', [LikeController::class, 'showUsers']);
-        Route::post('/liked', [LikeController::class, 'showDishes']);
-        Route::delete('/unlike', [LikeController::class, 'delete']);
-        Route::post('/store', [DishController::class, 'store']);
+        Route::get('/users', [UserController::class, 'show']);
+        Route::get('/liked/{id}', [LikeController::class, 'show']);
+        Route::delete('/unlike/{userId}/{dishId}', [LikeController::class, 'delete'])->middleware('dish.exist');
         Route::post('/favorite', [FavoriteDishController::class, 'store']);
-        Route::post('/disfavouring', [FavoriteDishController::class, 'delete']);
+        Route::post('/disfavouring/{userId}/{dishId}', [FavoriteDishController::class, 'delete'])->middleware('dish.exist');
         Route::group(['middleware' => ['dish.verified']], function () {
             Route::view('/{id}/edit', 'dish.edit');
-            Route::get('/{id}/editData', [DishController::class, 'edit'])->name('user.dish.edit');
+            Route::get('/{id}/editData', [DishController::class, 'edit']);
             Route::patch('/{id}', [DishController::class, 'update']);
             Route::delete('/{id}', [DishController::class, 'delete']);
         });

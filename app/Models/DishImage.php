@@ -43,12 +43,12 @@ class DishImage extends Model
         return $this->belongsTo(Dish::class, 'dish_id', 'id');
     }
 
-    public function scopeGetByDishId($query, int $dishId): Builder
+    public function scopeGetByDishId($query, int $dishId): \Illuminate\Database\Eloquent\Builder
     {
         return $query->where('dish_id', '=', $dishId);
     }
 
-    public function scopeGetByTypeId($query, int $typeId): Builder
+    public function scopeGetByTypeId($query, int $typeId): \Illuminate\Database\Eloquent\Builder
     {
         return $query->where('type_id', '=', $typeId);
     }

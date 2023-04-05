@@ -111,6 +111,21 @@
 
         let user_id = $('#user-edit').attr('data-id');
 
+        function checkImages(images) {
+            let previewImage = '';
+            let mainImage = '';
+
+            $.each(images, function (i, image) {
+                if (image['type_id'] == '0') {/// delete preview image or not ???
+                    previewImage = image['path']
+                } else if (image['type_id'] == '1') {
+                    mainImage = image['path']
+                }
+            })
+            console.log(mainImage)
+
+            return {"previewImage": previewImage, "mainImage": mainImage}
+        }
         function yourDish(data = {}) {
             $.ajax({
                 url: '/user/dish/{{$id}}/editData',
@@ -118,9 +133,10 @@
                 dataType: 'json',
                 data: data,
                 success: function (data) {
-                    console.log(data);
                     data = data['data'];
                     showTags(data['tags']);
+                    let images = checkImages(data['dish_images']);
+                    console.log(images);
                     let title = `<input id="title" type="text"
                                        class="form-control rounded-0" name="title"
                                        value="${data['title']}" required autocomplete="Recipe title" autofocus>`
@@ -130,8 +146,8 @@
                                   name="description" required autocomplete="description">${data['description']}</textarea>`
                     let price = ` <input type="number" min="0.00" max="10000.00" step="0.01"  name="price"  value="${data['price']}" id="price"/>`
 
-                    let preview_image = `<img src="/storage/${data['dish_images'][0]['path']}" width="200" class="img-fluid img-thumbnail">`
-                    let main_image = `<img src="/storage/${data['dish_images'][1]['path']}" width="200" class="img-fluid img-thumbnail">`
+                    let preview_image = `<img src="/storage/${images["previewImage"]}" width="200" class="img-fluid img-thumbnail">`
+                    let main_image = `<img src="/storage/${images["mainImage"]}" width="200" class="img-fluid img-thumbnail">`
 
                     $('#input-group-title').append(title);
                     $('#input-group-ingredients').append(ingredients);
@@ -224,7 +240,7 @@
                     contentType: false,
                     success: function (data) {
                         alert('New dish has been create successfully');
-                        window.location.href = "/home";
+                      ///  window.location.href = "/home";
                     },
                     error: function (data) {
                         if (data.status === 422) {
