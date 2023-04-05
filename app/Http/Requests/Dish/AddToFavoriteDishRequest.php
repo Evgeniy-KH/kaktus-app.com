@@ -27,14 +27,16 @@ class AddToFavoriteDishRequest extends FormRequest
     public final function rules(): array
     {
         return [
-            'id' => ["required", "exists:dishes,id"],
+            'dishId' => ["required", "exists:dishes,id"],
+            'userId' => ["required"],
         ];
     }
 
     public final function dto(): FavoriteDto
     {
         return new FavoriteDto(
-            (int)$this->input('id')
+            userId: (int)$this->input('userId'),
+            dishId: (int)$this->input('dishId')
         );
     }
 }

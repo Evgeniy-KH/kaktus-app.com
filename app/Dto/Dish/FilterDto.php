@@ -10,54 +10,26 @@ use Illuminate\Http\UploadedFile;
 class FilterDto extends Data
 {
     public function __construct(
-        private readonly int          $userId,
-        private readonly string       $title,
-        private readonly string       $ingredients,
-        private readonly string       $description,
-        private readonly float        $price,
-        private readonly UploadedFile $previewImage,
-        private readonly UploadedFile $mainImage,
-        private readonly array|null   $tagIds)
+
+        private readonly array|null $data,
+//        private readonly array|null  $keyword,
+//        private readonly string|null $tagIds,
+    )
     {
     }
 
-    public final function getUserId(): int
+    public final function getData(): array|null
     {
-        return $this->userId;
+        return $this->data;
     }
 
-    public final function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    public final function getIngredients(): string
-    {
-        return $this->ingredients;
-    }
-
-    public final function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    public final function getPrice(): float
-    {
-        return $this->price;
-    }
-
-    public final function getPreviewImage(): UploadedFile
-    {
-        return $this->previewImage;
-    }
-
-    public final function getMainImage(): UploadedFile
-    {
-        return $this->mainImage;
-    }
-
-    public final function getTagIds(): array|null
-    {
-        return $this->tagIds;
-    }
+//    public final function getKeyword(): array|null
+//    {
+//        return $this->keyword;
+//    }
+//
+//    public final function getTagIds(): string|null
+//    {
+//        return $this->tagIds;
+//    }
 }

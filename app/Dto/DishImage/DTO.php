@@ -6,7 +6,7 @@ namespace App\Dto\DishImage;
 use Spatie\LaravelData\Data;
 use Illuminate\Http\UploadedFile;
 
-class dto extends Data
+class DTO extends Data
 {
 
     public function __construct(

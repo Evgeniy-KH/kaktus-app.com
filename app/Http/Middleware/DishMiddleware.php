@@ -17,16 +17,8 @@ class DishMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $id = $request->route('id');
-
-//        $isExistsDish = Auth::user()
-//        ->whereHas('dishes', function ($query) use ($id) {
-//            $query->first($id);
-//        })
-//        ->doesntExist(); ////Column not found: 1054 Unknown column 'users.id' in 'where clause
-
         $isExistsDish = Auth::user()
-            ->hasDish(id: $id)
+            ->hasDish(id:  $request->route('id'))
             ->doesntExist();
 
         if ($isExistsDish) {

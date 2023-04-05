@@ -26,8 +26,6 @@ class ShowRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ["required", "integer", "exists:users,id"],
-            'id' => ["required", "integer", "exists:dishes,id"],
             'title' => ["sometimes", "string", "min:4", "max:255"],
             'ingredients' => ["sometimes", "string", "min:1", "max:1250"],
             'description' => ["sometimes", "string", "min:3", "max:4000"],

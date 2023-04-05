@@ -11,15 +11,16 @@ use mysql_xdevapi\Collection;
 class UserService
 {
     public function __construct(
-        private readonly Hash     $hash,
-        private readonly Storage   $storage,
+        private readonly Hash    $hash,
+        private readonly Storage $storage,
+        private readonly User    $user,
     )
     {
     }
 
     public final function update(UpdateDto $dto, int $id): User|string
     {
-        $user = $this->show(id: $id);
+        $user = $this->user->find(id: $id);
 
         if ($dto->getName() !== null || $dto->getBirthday() !== null) {
             $user->update([
@@ -54,14 +55,22 @@ class UserService
 
     public final function show(int $id): User
     {
-        return User::find($id);
+        return $this->user->find($id);
     }
 
     public final function delete(int $id): bool
     {
-        return User::find($id)->delete();
+        return $this->user->find($id)->delete();
+    }
+
+    public final function list(array $ids, int|null $number = null): User
+    {
+        $user = $this->user->find(id: $ids);
+
+        if ($number != null) {
+            return $user->take($number);
+        }
+
+        return $user;
     }
 }
-
-
-//          $birthday = Carbon::createFromFormat('m/d/Y', $data['birthday'])->format('Y-m-d');

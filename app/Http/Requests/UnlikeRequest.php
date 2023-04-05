@@ -23,6 +23,10 @@ class UnlikeRequest extends FormRequest
         return $this->user()->can('unlike', $this->likeable());
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge(['id' => $this->route('dishId')]);
+    }
 
     /**
      * Get the validation rules that apply to the request.

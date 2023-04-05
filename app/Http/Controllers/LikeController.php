@@ -32,23 +32,16 @@ class LikeController extends Controller
         return new ResponseResource(resource: $user);
     }
 
-    public final function delete(UnlikeRequest $request): ResponseResource|JsonResponse
+    public final function delete(int $userId, int $dishId, UnlikeRequest $request): ResponseResource|JsonResponse
     {
-        $user = $this->service->delete(likeable: $request->likeable());
+        $user = $this->service->delete(id:$userId,  likeable: $request->likeable());
 
         return new ResponseResource(resource: $user);
     }
 
-    public final function showUsers(Request $request): ResponseResource
+    public final function show(int $id): ResponseResource
     {
-        $users = $this->service->showUsers(ids: $request->usersId);
-
-        return new ResponseResource(resource: UserResource::collection($users));
-    }
-
-    public final function showDishes(Request $request): ResponseResource
-    {
-        $dishes = $this->service->showDishes(id: (int)$request->id);
+        $dishes = $this->service->showDishes(id: $id);
 
         return new ResponseResource(resource: DishResource::collection($dishes));
 

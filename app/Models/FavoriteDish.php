@@ -12,7 +12,7 @@ class FavoriteDish extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $table = 'favorite_dishes';
+    protected $table = 'favorite_dish';
     protected $guarded = false;
 
     protected $fillable = [
@@ -27,10 +27,10 @@ class FavoriteDish extends Model
 
     public function dishes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Dish::class, 'favorite_dishes');
+        return $this->belongsToMany(Dish::class, 'favorite_dish');
     }
 
-    public function scopeFindById($query, $dishId): Builder
+    public function scopeFindById($query, $dishId): \Illuminate\Database\Eloquent\Builder
     {
         return $query->where('dish_id', "=", $dishId);
     }
