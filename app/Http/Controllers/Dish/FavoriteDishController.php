@@ -25,6 +25,22 @@ class FavoriteDishController extends Controller
     {
     }
 
+    public final function index(int $userId): ResponseResource
+    {
+        $user = $this->user->find($userId);
+        //Использоватье SCOPE.
+        $dishes = $this->dish->with('dishImages', 'tags')
+            ->whereHas('favorites', function ($query) use ($userId) {
+                $query->where('favorite_dish.user_id', '=', $userId);
+            })
+            ->paginate(8);
+
+        return new ResponseResource(
+            resource: new DishCollection($dishes),
+            message: !$dishes->isEmpty() ? '' : 'Your list of favorites dishes are empty',
+        );
+    }
+
     public final function store(AddToFavoriteDishRequest $request): ResponseResource
     {
         $dish = $this->user->find($request->dto()->getUserId())->favoriteDishes()->updateOrCreate(['dish_id' => $request->dto()->getDishId()]);
@@ -40,7 +56,8 @@ class FavoriteDishController extends Controller
     {
         $user = $this->user->find($userId);
         //Мы же уже говорили, и можно прсомотреть в документации и ларавель и вообще rest api. Что при удалении ИД передается в качестве параметра урла, а не в теле запроса.
-        $user->favoriteDishes()->findById(dishId: $dishId)->delete();
+        $user->favoriteDishes()->findById(dishId: $dishId)->delete(); // - посмотри что она возвращает и в каких ситуациях.!!!!!!!! Потому что она возвраещает количество удаленных строк. 
+
         $isSuccess = $user->favoriteDishes()->findById(dishId: $dishId)->doesntExist();
 
         return new ResponseResource(
@@ -58,21 +75,6 @@ class FavoriteDishController extends Controller
 
         return new ResponseResource(
             resource: FavoriteDishIdResource::collection($favoriteDishesId),
-        );
-    }
-
-    public final function index(int $userId): ResponseResource
-    {
-        $user = $this->user->find($userId);
-        $dishes = $this->dish->with('dishImages', 'tags')
-            ->whereHas('favorites', function ($query) use ($userId) {
-                $query->where('favorite_dish.user_id', '=', $userId);
-            })
-            ->paginate(8);
-
-        return new ResponseResource(
-            resource: !$dishes->isEmpty() ? new DishCollection($dishes) : '',
-            message: !$dishes->isEmpty() ? '' : 'Your list of favorites dishes are empty',
         );
     }
 }

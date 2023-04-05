@@ -39,6 +39,7 @@ class LikeController extends Controller
         return new ResponseResource(resource: $user);
     }
 
+    //ЭТОТ МЕТОД НЕ НА СВОËМ МЕСТЕ
     public final function show(int $id): ResponseResource
     {
         $dishes = $this->service->showDishes(id: $id);

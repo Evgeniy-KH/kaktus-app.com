@@ -24,6 +24,7 @@ class DishController extends Controller
     public final function index(FilterRequest $request): ResponseResource
     {
         $dishes = $this->service->list(dto: $request->dto());
+        //TODO подумать почему это совсем не правильно и совсем не годится. ПРосто не правильно. И Дам подсказку для дауна, дело не в коде.!!!!!!!!!!!!!!
         $isDishEmpty = $dishes->isEmpty();
 
         return new ResponseResource(
@@ -43,7 +44,6 @@ class DishController extends Controller
     public final function store(StoreRequest $request): ResponseResource
     {
         $dish = $this->service->store(dto: $request->dto());
-        // Сверху в методе индекс, у тебя проверка идёт isEmpty  а тут Exists  какая в них разница и почему они используютс? Ну то есть почему в одном случае именно этот метод, а в другом другой.
         $isExistsDish = $dish->exists();
 
         return new ResponseResource(
@@ -55,7 +55,6 @@ class DishController extends Controller
 
     public final function edit(int $id): ResponseResource
     {
-        //ТОЧНо есть  //Тут должен быть мидлвар перед этим методом, который проверит, если ли вообще такое блюдо для данного пользователя. Может быть он и есть, но проверить что бы он был точно !!!!!!!!!!!!!!!!!
         return new ResponseResource(
             resource: new DishResource($this->service->show(id: $id))
         );
@@ -63,20 +62,20 @@ class DishController extends Controller
 
     public final function update(int $id, UpdateRequest $request): ResponseResource
     {
-        // и тут ТОЧНо есть мидлвар //
         $dish = $this->service->update(dto: $request->dto(), id: $id);
+        // Прошло оюновленгие или нет. 
+        //Какой смысл проверять запиьс после обновления. 
         $isExistsDish = $dish->exists();
 
         return new ResponseResource(
-            resource: $isExistsDish ? new DishResource($dish) : null,
-            message: $isExistsDish ? 'You dish have been successfully updated' : 'Failed to update',
-            statusCode: $isExistsDish ? 200 : 500
+            resource: new DishResource($dish),
+            message: 'You dish have been successfully updated',
+            statusCode: 200
         );
     }
 
     public final function delete(int $id): ResponseResource
     {
-        // и тут тоже ТОЧНо есть мидлвар //
         $deleted = $this->service->delete(id: $id);
 
         return new ResponseResource(

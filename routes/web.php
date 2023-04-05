@@ -48,8 +48,10 @@ Route::group(['namespace' => 'App\Http\Controllers\User', 'prefix' => 'user', 'm
         Route::view('/create', 'dish.create');
         Route::post('/like', [LikeController::class, 'store']);
         Route::get('/users', [UserController::class, 'show']);
+
         Route::get('/liked/{id}', [LikeController::class, 'show']);
-        Route::delete('/unlike/{userId}/{dishId}', [LikeController::class, 'delete'])->middleware('dish.exist');
+        
+        cRoute::delete('/liked/{userId}/{dishId}', [LikeController::class, 'delete'])->middleware('dish.exist');
         Route::post('/favorite', [FavoriteDishController::class, 'store']);
         Route::post('/disfavouring/{userId}/{dishId}', [FavoriteDishController::class, 'delete'])->middleware('dish.exist');
         Route::group(['middleware' => ['dish.verified']], function () {
